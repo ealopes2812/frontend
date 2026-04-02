@@ -1,0 +1,18 @@
+/* ===================================================================
+   POSICIONAMENTO CORRIGIDO DO MENU FLUTUANTE
+   ================================================================== */
+
+/* Menu flutuante reposicionado para ficar no canto superior direito */
+.floating-action-menu {
+    position: fixed !important;
+    top: 1.25rem !important; /* Alinhado com o header */
+    right: 1.5rem !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: 1010 !important; /* Acima do header */
+}
+
+/* Garantir que não há duplicação */
+.floating-action-menu:nth-of-type(n+2) {
+    display: none !important;
+}

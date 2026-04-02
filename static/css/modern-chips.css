@@ -1,0 +1,506 @@
+/* ===================================================================
+   MODERN CHIPS FILTER SYSTEM - Material Design 3.0 Inspired
+   ================================================================== */
+
+/* Container Principal - Glassmorphism Centralizado MELHORADO */
+.modern-filters-container {
+    padding: 30px 25px; /* Aumentado */
+    margin-bottom: 25px;
+    background: rgba(255, 255, 255, 0.15); /* Mais transparente */
+    border-radius: 25px; /* Mais arredondado */
+    backdrop-filter: blur(20px); /* Blur mais forte */
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25); /* Border mais visível */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Sombra mais forte */
+    text-align: center;
+    max-width: 1200px; /* Aumentado significativamente */
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de brilho no topo */
+.modern-filters-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0.8;
+}
+
+/* Grid de Filtros RESPONSIVO - Melhor layout */
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Minimo maior */
+    gap: 20px; /* Gap maior */
+    margin-bottom: 20px;
+    max-width: 1000px; /* Largura maior */
+    margin-left: auto;
+    margin-right: auto;
+    justify-items: center;
+    align-items: center;
+    padding: 0 10px; /* Padding lateral */
+}
+
+/* Wrapper do Chip */
+.filter-chip-wrapper {
+    width: 100%;
+}
+
+/* Chip Base Design - Glassmorphism */
+.filter-chip {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 12px 16px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 56px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-chip:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.filter-chip.active {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.filter-chip.active .chip-label {
+    color: #ffffff;
+}
+
+.filter-chip.active .chip-icon i {
+    color: #ffffff;
+}
+
+/* Ícone do Chip - Glassmorphism */
+.chip-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.chip-icon i {
+    font-size: 16px;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+/* Conteúdo do Chip */
+.chip-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.chip-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+/* Select dentro do Chip - Glassmorphism */
+.chip-select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    padding: 0;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.chip-select:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.chip-select option {
+    background: rgba(255, 255, 255, 0.95);
+    color: #212529;
+    padding: 8px;
+}
+
+/* Chip de Busca Especial */
+.search-chip {
+    position: relative;
+}
+
+.search-controls {
+    width: 100%;
+}
+
+.search-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    width: 100%;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #212529;
+    cursor: pointer;
+}
+
+.search-trigger:hover {
+    color: #007bff;
+}
+
+.search-trigger i {
+    font-size: 12px;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+}
+
+.search-trigger[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+/* Container do Input de Busca */
+.search-input-container {
+    position: relative;
+    margin-top: 8px;
+}
+
+.chip-input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 12px 40px 12px 16px;
+    font-size: 14px;
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.chip-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.chip-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #6c757d;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+/* Dropdown Moderno */
+.modern-dropdown {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    margin-top: 8px;
+}
+
+.modern-dropdown .dropdown-header {
+    padding: 12px 20px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #007bff;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 4px;
+}
+
+.modern-dropdown .dropdown-item {
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 2px 8px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.modern-dropdown .dropdown-item:hover {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+    transform: translateX(4px);
+}
+
+/* Filtros Ativos Display */
+.active-filters-display {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.active-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    gap: 8px;
+}
+
+.active-filter-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.clear-all-filters {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 4px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-all-filters:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* ===================================================================
+   RESPONSIVIDADE E BREAKPOINTS
+   ================================================================== */
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+    .filters-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+    
+    .modern-filters-container {
+        padding: 20px;
+    }
+    
+    .filter-chip {
+        min-height: 64px;
+        padding: 16px 20px;
+    }
+    
+    .chip-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 16px;
+    }
+    
+    .chip-icon i {
+        font-size: 18px;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .modern-filters-container {
+        padding: 24px;
+        border-radius: 24px;
+    }
+    
+    .filter-chip {
+        min-height: 72px;
+        padding: 20px 24px;
+    }
+    
+    .chip-label {
+        font-size: 13px;
+    }
+    
+    .chip-select,
+    .search-trigger {
+        font-size: 15px;
+    }
+}
+
+/* ===================================================================
+   ANIMAÇÕES E MICRO-INTERAÇÕES
+   ================================================================== */
+
+/* Animação de entrada */
+@keyframes chipSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-chip-wrapper {
+    animation: chipSlideIn 0.4s ease-out;
+}
+
+.filter-chip-wrapper:nth-child(1) { animation-delay: 0.1s; }
+.filter-chip-wrapper:nth-child(2) { animation-delay: 0.2s; }
+.filter-chip-wrapper:nth-child(3) { animation-delay: 0.3s; }
+.filter-chip-wrapper:nth-child(4) { animation-delay: 0.4s; }
+
+/* Ripple Effect */
+.filter-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 123, 255, 0.3) 0%, transparent 70%);
+    border-radius: inherit;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.6s ease;
+    pointer-events: none;
+}
+
+.filter-chip:active::before {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.2s ease;
+}
+
+/* ===================================================================
+   DARK MODE SUPPORT
+   ================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .modern-filters-container {
+        background: rgba(33, 37, 41, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .filter-chip {
+        background: rgba(52, 58, 64, 0.9);
+        color: #f8f9fa;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .filter-chip:hover {
+        background: rgba(52, 58, 64, 1);
+        border-color: #0d6efd;
+    }
+    
+    .chip-select,
+    .search-trigger {
+        color: #f8f9fa;
+    }
+    
+    .chip-input {
+        background: rgba(52, 58, 64, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f8f9fa;
+    }
+    
+    .modern-dropdown {
+        background: rgba(33, 37, 41, 0.95);
+    }
+}
+
+/* ===================================================================
+   ESTADOS DE LOADING E FEEDBACK
+   ================================================================== */
+
+.filter-chip.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.filter-chip.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e9ecef;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Feedback visual para seleção */
+.filter-chip.has-selection {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.filter-chip.has-selection .chip-icon {
+    background: rgba(40, 167, 69, 0.1);
+}
+
+.filter-chip.has-selection .chip-icon i {
+    color: #28a745;
+}

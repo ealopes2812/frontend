@@ -1,0 +1,62 @@
+{
+  "name": "WiFiMaxx Monitor",
+  "short_name": "WiFiMaxx",
+  "description": "Sistema de monitoramento e controle WiFiMaxx",
+  "start_url": "/mobile",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/static/icons/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Minhas RATs",
+      "short_name": "RATs",
+      "description": "Acessar lista de RATs",
+      "url": "/mobile",
+      "icons": [
+        {
+          "src": "/static/icons/logo-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Web",
+      "short_name": "Dashboard",
+      "description": "Acesso ao dashboard administrativo",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/static/icons/logo-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

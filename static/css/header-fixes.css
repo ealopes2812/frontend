@@ -1,0 +1,233 @@
+/* ===================================================================
+   HEADER FIXES - Corrigindo Layout Superior
+   WifiMaxx Monitor - Header Improvements
+   ================================================================== */
+
+/* ===================================================================
+   HEADER PRINCIPAL - LAYOUT MELHORADO
+   ================================================================== */
+
+header.main-header {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%) !important;
+    padding: 1rem 0 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    border-bottom: none !important;
+    position: relative !important;
+    min-height: 80px !important;
+}
+
+/* Container do header melhorado */
+header.main-header .container-fluid {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+}
+
+/* Row do header */
+header.main-header .row {
+    align-items: center !important;
+    min-height: 60px !important;
+}
+
+/* ===================================================================
+   LOGO E TITULO PRINCIPAL
+   ================================================================== */
+
+header.main-header .navbar-brand {
+    color: white !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+    margin-bottom: 0 !important;
+}
+
+header.main-header .logo-image {
+    height: 40px !important;
+    width: auto !important;
+    margin-right: 15px !important;
+    filter: brightness(1.1) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2)) !important;
+}
+
+/* ===================================================================
+   BOTÕES DO HEADER - LADO ESQUERDO
+   ================================================================== */
+
+.header-buttons {
+    display: flex !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+.header-buttons .btn {
+    border-radius: 25px !important;
+    padding: 8px 20px !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+    text-transform: none !important;
+    letter-spacing: 0.5px !important;
+}
+
+.header-buttons .btn-success {
+    background: rgba(40, 167, 69, 0.8) !important;
+    border-color: rgba(40, 167, 69, 0.6) !important;
+    color: white !important;
+}
+
+.header-buttons .btn-success:hover {
+    background: rgba(40, 167, 69, 1) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4) !important;
+}
+
+.header-buttons .btn-warning {
+    background: rgba(255, 193, 7, 0.9) !important;
+    border-color: rgba(255, 193, 7, 0.7) !important;
+    color: #000 !important;
+}
+
+.header-buttons .btn-warning:hover {
+    background: rgba(255, 193, 7, 1) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4) !important;
+}
+
+/* ===================================================================
+   DATA PICKER - LADO DIREITO
+   ================================================================== */
+
+.date-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 30px !important;
+    padding: 8px 16px !important;
+    margin-right: 100px !important; /* Espaço para theme toggle */
+}
+
+.date-controls label {
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+.date-controls input[type="date"] {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 15px !important;
+    color: white !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+}
+
+.date-controls input[type="date"]:focus {
+    outline: none !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Color scheme for date inputs */
+.date-controls input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) !important;
+    cursor: pointer !important;
+}
+
+/* ===================================================================
+   MENU ADMIN - LADO DIREITO
+   ================================================================== */
+
+.admin-menu {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+.admin-info {
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.admin-info i {
+    font-size: 16px !important;
+    opacity: 0.8 !important;
+}
+
+/* ===================================================================
+   RESPONSIVIDADE MOBILE
+   ================================================================== */
+
+@media (max-width: 768px) {
+    header.main-header .container-fluid {
+        padding: 0 1rem !important;
+    }
+    
+    .header-buttons {
+        gap: 8px !important;
+    }
+    
+    .header-buttons .btn {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+    }
+    
+    .date-controls {
+        margin-right: 60px !important; /* Menos espaço em mobile */
+        padding: 6px 12px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .date-controls label {
+        font-size: 12px !important;
+    }
+    
+    .date-controls input[type="date"] {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+    
+    header.main-header .navbar-brand {
+        font-size: 1.4rem !important;
+    }
+    
+    .logo-image {
+        height: 30px !important;
+        margin-right: 10px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    header.main-header .row {
+        flex-direction: column !important;
+        gap: 15px !important;
+        text-align: center !important;
+    }
+    
+    .date-controls {
+        margin-right: 0 !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 300px !important;
+    }
+    
+    .theme-toggle {
+        top: 10px !important;
+        right: 10px !important;
+    }
+}

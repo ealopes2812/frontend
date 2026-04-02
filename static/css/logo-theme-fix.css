@@ -1,0 +1,24 @@
+/* ===================================================================
+   CORREÇÃO DA LOGO POR TEMA
+   ================================================================== */
+
+/* Logo colorida no modo claro - sem filtro */
+html:not([data-theme="dark"]) body .header-logo-section img.logo-image,
+body:not([data-theme="dark"]) .header-logo-section img.logo-image,
+.header-logo-section img.logo-image {
+    filter: none !important;
+    height: 44px !important; /* compatível com header compacto */
+    width: auto !important;
+}
+
+/* Logo branca APENAS no modo escuro */
+html[data-theme="dark"] body .header-logo-section img.logo-image,
+body[data-theme="dark"] .header-logo-section img.logo-image,
+[data-theme="dark"] .header-logo-section img.logo-image {
+    filter: brightness(0) invert(1) contrast(1) saturate(0) !important;
+}
+
+/* Remover todos os estilos inline que possam estar conflitando */
+style[data-force-overrides="true"] {
+    display: none !important;
+}

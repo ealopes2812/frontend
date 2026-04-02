@@ -1,0 +1,22 @@
+/* ===================================================================
+   ESTILIZAÇÃO ESPECIAL PARA O MENU FLUTUANTE NO CANTO SUPERIOR
+   ================================================================== */
+
+/* Reduz o tamanho do botão quando está no topo */
+.floating-action-menu {
+    transform: scale(0.8);
+    transform-origin: top right;
+}
+
+/* Mais sutil quando no topo */
+.floating-action-menu .floating-btn.main-btn {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
+}
+
+/* Altera a direção de abertura do menu */
+.floating-action-menu .floating-menu-items {
+    top: 100%;
+    bottom: auto;
+    right: 0;
+}

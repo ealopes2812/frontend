@@ -1,0 +1,866 @@
+/* ============================================================================
+   CCO Operations Hub - Dashboard Styles
+   Tema dark inspirado no design CCO Operations Hub (React/Tailwind)
+   Adaptado para Bootstrap 5 + vanilla CSS
+   ============================================================================ */
+
+/* ---------- CSS Variables ---------- */
+:root {
+    --cco-bg: #0f172a;
+    --cco-card: #1e293b;
+    --cco-card-bg: #1e293b;
+    --cco-card-hover: #253346;
+    --cco-border: #2d3548;
+    --cco-text: #e9ecef;
+    --cco-text-muted: #94a3b8;
+    --cco-primary: #3b82f6;
+    --cco-primary-light: #60a5fa;
+    --cco-success: #34d399;
+    --cco-warning: #f59e0b;
+    --cco-danger: #ef4444;
+    --cco-sidebar-bg: #0b1220;
+    --cco-sidebar-border: #1e293b;
+    --cco-sidebar-hover: #1e293b;
+    --cco-sidebar-active: #1e293b;
+    --cco-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --cco-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --cco-radius: 12px;
+    --cco-radius-sm: 8px;
+    --cco-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    --cco-glow: 0 0 0 1px rgba(59, 130, 246, 0.15), 0 0 20px -5px rgba(59, 130, 246, 0.1);
+}
+
+/* ---------- Layout Base ---------- */
+.cco-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--cco-bg);
+    font-family: var(--cco-font);
+    color: var(--cco-text);
+    overflow: hidden;
+}
+
+.cco-layout *,
+.cco-layout *::before,
+.cco-layout *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- Top Navigation ---------- */
+.cco-topnav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 32px;
+    height: 56px;
+    background: var(--cco-sidebar-bg);
+    border-bottom: 1px solid var(--cco-sidebar-border);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.cco-topnav-brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--cco-text);
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    margin-right: 16px;
+}
+
+.cco-topnav-brand .brand-accent {
+    color: var(--cco-primary);
+}
+
+.cco-topnav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cco-topnav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--cco-radius-sm);
+    color: var(--cco-text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.cco-topnav-item:hover {
+    background: var(--cco-sidebar-hover);
+    color: var(--cco-text);
+    text-decoration: none;
+}
+
+.cco-topnav-item i {
+    font-size: 1.05rem;
+}
+
+.cco-topnav-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cco-topnav-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--cco-radius-sm);
+    color: var(--cco-text-muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+}
+
+.cco-topnav-logout:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--cco-danger);
+}
+
+.cco-topnav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--cco-text);
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-left: auto;
+}
+
+/* ---------- Main Content ---------- */
+.cco-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    height: calc(100vh - 56px);
+}
+
+/* ---------- Header ---------- */
+.cco-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cco-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--cco-text);
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.cco-header .subtitle {
+    font-size: 0.9rem;
+    color: var(--cco-text-muted);
+    margin-top: 4px;
+}
+
+.cco-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cco-user-info .user-name {
+    font-size: 0.95rem;
+    color: var(--cco-text-muted);
+}
+
+.cco-user-info .user-name strong {
+    color: var(--cco-text);
+    font-weight: 600;
+}
+
+.cco-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--cco-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ---------- KPI Cards ---------- */
+.cco-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.cco-kpi-card {
+    background: var(--cco-card);
+    border-radius: var(--cco-radius);
+    padding: 20px;
+    border: 1px solid var(--cco-border);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: var(--cco-glow);
+}
+
+.cco-kpi-card:hover {
+    background: var(--cco-card-hover);
+    transform: translateY(-2px);
+}
+
+.cco-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.cco-kpi-card.kpi-primary::before { background: var(--cco-primary); }
+.cco-kpi-card.kpi-success::before { background: var(--cco-success); }
+.cco-kpi-card.kpi-warning::before { background: var(--cco-warning); }
+.cco-kpi-card.kpi-danger::before { background: var(--cco-danger); }
+
+.cco-kpi-card .kpi-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.cco-kpi-card .kpi-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cco-text-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cco-kpi-card .kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: var(--cco-font-mono);
+    color: var(--cco-text);
+    line-height: 1;
+}
+
+.cco-kpi-card .kpi-subtitle {
+    font-size: 0.8rem;
+    color: var(--cco-text-muted);
+    margin-top: 6px;
+}
+
+.cco-kpi-card .kpi-icon {
+    padding: 8px;
+    border-radius: var(--cco-radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--cco-text-muted);
+    font-size: 1.1rem;
+}
+
+/* ---------- Dashboard Cards ---------- */
+.cco-card {
+    background: var(--cco-card);
+    border-radius: var(--cco-radius);
+    border: 1px solid var(--cco-border);
+    padding: 20px;
+}
+
+.cco-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cco-text);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--cco-border);
+}
+
+/* ---------- Charts Row ---------- */
+.cco-charts-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    min-height: 300px;
+}
+
+.cco-chart-container {
+    position: relative;
+    width: 100%;
+    height: 250px;
+}
+
+/* ---------- Bottom Row ---------- */
+.cco-bottom-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    flex: 1;
+    min-height: 280px;
+}
+
+/* ---------- Kanban ---------- */
+.cco-kanban {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    height: 100%;
+}
+
+.cco-kanban::-webkit-scrollbar {
+    height: 6px;
+}
+
+.cco-kanban::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cco-kanban::-webkit-scrollbar-thumb {
+    background: var(--cco-border);
+    border-radius: 3px;
+}
+
+.cco-kanban-column {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--cco-radius-sm);
+    padding: 12px;
+    min-width: 240px;
+    min-height: 250px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cco-kanban-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.cco-kanban-column-header .col-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--cco-text);
+}
+
+.cco-kanban-column-header .col-count {
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--cco-text-muted);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-family: var(--cco-font-mono);
+}
+
+.cco-kanban-task {
+    background: #ffffff;
+    border-radius: var(--cco-radius-sm);
+    padding: 12px;
+    margin-bottom: 8px;
+    border-left: 4px solid;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    color: #1e293b;
+}
+
+.cco-kanban-task:hover {
+    background: #f8fafc;
+    transform: translateX(2px);
+}
+
+.cco-kanban-task.task-urgent { border-left-color: var(--cco-danger); }
+.cco-kanban-task.task-normal { border-left-color: var(--cco-primary); }
+.cco-kanban-task.task-progress { border-left-color: var(--cco-warning); }
+.cco-kanban-task.task-done { border-left-color: var(--cco-success); opacity: 0.75; }
+
+/* Drag-and-drop states */
+.cco-kanban-task.dragging { opacity: 0.4; transform: rotate(2deg); }
+.cco-kanban-task[draggable="true"] * { pointer-events: none; }
+.cco-kanban-task[draggable="true"] button,
+.cco-kanban-task[draggable="true"] .task-title { pointer-events: auto; }
+.drag-over { background: rgba(59, 130, 246, 0.12); border-radius: 8px; outline: 2px dashed rgba(59, 130, 246, 0.4); outline-offset: -2px; transition: background 0.15s, outline 0.15s; }
+
+.cco-kanban-task .task-title {
+    color: #1e293b;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.cco-kanban-task .task-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    color: #475569;
+    font-weight: 500;
+}
+
+.cco-kanban-task .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* ---------- Mini Calendar ---------- */
+.cco-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.cco-calendar-header {
+    color: var(--cco-text-muted);
+    font-weight: 600;
+    padding: 4px 0;
+}
+
+.cco-calendar-day {
+    padding: 6px 0;
+    border-radius: 6px;
+    color: var(--cco-text-muted);
+    font-weight: 500;
+    cursor: default;
+    transition: background 0.2s;
+}
+
+.cco-calendar-day:hover:not(.day-empty) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.cco-calendar-day.day-today {
+    background: var(--cco-primary);
+    color: #fff;
+    font-weight: 700;
+}
+
+.cco-calendar-day.day-event {
+    background: var(--cco-primary);
+    color: #fff;
+    cursor: pointer;
+}
+
+.cco-calendar-day.day-empty {
+    pointer-events: none;
+}
+
+.cco-calendar-events {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cco-calendar-event {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: var(--cco-text-muted);
+}
+
+.cco-calendar-event .event-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cco-calendar-event .event-dot.dot-primary { background: var(--cco-primary); }
+.cco-calendar-event .event-dot.dot-warning { background: var(--cco-warning); }
+.cco-calendar-event .event-dot.dot-success { background: var(--cco-success); }
+.cco-calendar-event .event-dot.dot-danger { background: var(--cco-danger); }
+
+/* ---------- Chat Widget ---------- */
+.cco-chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 320px;
+}
+
+.cco-chat-btn {
+    width: 100%;
+    background: var(--cco-sidebar-bg);
+    color: var(--cco-text);
+    padding: 12px 16px;
+    border-radius: var(--cco-radius);
+    border: 1px solid var(--cco-sidebar-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.cco-chat-btn:hover {
+    background: var(--cco-sidebar-hover);
+}
+
+.cco-chat-btn i {
+    margin-right: 8px;
+}
+
+.cco-chat-panel {
+    display: none;
+    background: var(--cco-card);
+    border: 1px solid var(--cco-border);
+    border-radius: var(--cco-radius) var(--cco-radius) 0 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.cco-chat-panel.open {
+    display: block;
+}
+
+.cco-chat-messages {
+    height: 280px;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.cco-chat-bubble {
+    padding: 8px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.cco-chat-bubble.received {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--cco-text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.cco-chat-bubble.sent {
+    background: var(--cco-primary);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.cco-chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid var(--cco-border);
+}
+
+.cco-chat-input input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    color: var(--cco-text);
+    border-radius: var(--cco-radius-sm);
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.cco-chat-input input::placeholder {
+    color: var(--cco-text-muted);
+}
+
+.cco-chat-input button {
+    padding: 8px 12px;
+    background: var(--cco-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--cco-radius-sm);
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.cco-chat-input button:hover {
+    opacity: 0.9;
+}
+
+/* ---------- Loading Skeleton ---------- */
+.cco-skeleton {
+    background: linear-gradient(90deg, var(--cco-card) 25%, var(--cco-card-hover) 50%, var(--cco-card) 75%);
+    background-size: 200% 100%;
+    animation: cco-shimmer 1.5s infinite;
+    border-radius: var(--cco-radius-sm);
+}
+
+@keyframes cco-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ---------- Status Indicators ---------- */
+.cco-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.cco-status-dot.online { background: var(--cco-success); }
+.cco-status-dot.alerta { background: var(--cco-warning); }
+.cco-status-dot.inativo { background: var(--cco-danger); }
+.cco-status-dot.manutencao { background: var(--cco-primary); }
+
+/* ---------- Responsive ---------- */
+
+/* Tablets e telas médias */
+@media (max-width: 1200px) {
+    .cco-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cco-charts-row {
+        grid-template-columns: 1fr;
+    }
+    .cco-bottom-row {
+        grid-template-columns: 1fr;
+    }
+    .cco-main {
+        padding: 20px 24px;
+        gap: 24px;
+    }
+}
+
+/* Tablets pequenos */
+@media (max-width: 992px) {
+    .cco-kpi-card .kpi-value {
+        font-size: 1.6rem;
+    }
+    .cco-kpi-card {
+        padding: 16px;
+    }
+    .cco-kanban {
+        flex-direction: column;
+        overflow-x: visible;
+    }
+    .cco-kanban-column {
+        min-width: auto;
+        width: 100%;
+    }
+    .cco-chat-toggle {
+        width: 280px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .cco-topnav {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 16px;
+    }
+    .cco-topnav-links {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 8px;
+    }
+    .cco-topnav.open .cco-topnav-links {
+        display: flex;
+    }
+    .cco-topnav-item {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    .cco-topnav-right {
+        display: none;
+    }
+    .cco-topnav-toggle {
+        display: block;
+    }
+    .cco-main {
+        padding: 16px;
+        gap: 16px;
+        height: auto;
+    }
+    .cco-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .cco-kpi-card {
+        padding: 14px;
+    }
+    .cco-kpi-card .kpi-value {
+        font-size: 1.4rem;
+    }
+    .cco-kpi-card .kpi-label {
+        font-size: 0.7rem;
+    }
+    .cco-kpi-card .kpi-icon {
+        display: none;
+    }
+    .cco-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .cco-header h1 {
+        font-size: 1.3rem;
+    }
+    .cco-user-info .user-name {
+        font-size: 0.8rem;
+    }
+    .cco-card {
+        padding: 14px;
+    }
+    .cco-card-title {
+        font-size: 0.9rem;
+    }
+    .cco-chart-container {
+        height: 200px;
+    }
+    .cco-bottom-row {
+        min-height: auto;
+    }
+    .cco-calendar-grid {
+        font-size: 0.75rem;
+        gap: 2px;
+    }
+    .cco-calendar-day {
+        padding: 5px 0;
+        min-height: 28px;
+    }
+    .cco-chat-toggle {
+        width: calc(100% - 32px);
+        left: 16px;
+        right: 16px;
+        bottom: 12px;
+    }
+    /* Modal responsivo */
+    .cco-modal-content {
+        width: 95% !important;
+        max-width: 95vw !important;
+        margin: 12px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Mobile pequeno */
+@media (max-width: 480px) {
+    .cco-kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .cco-kpi-card {
+        padding: 12px;
+    }
+    .cco-kpi-card .kpi-value {
+        font-size: 1.3rem;
+    }
+    .cco-main {
+        padding: 12px;
+        gap: 12px;
+    }
+    .cco-header h1 {
+        font-size: 1.1rem;
+    }
+    .cco-chart-container {
+        height: 180px;
+    }
+    .cco-kanban-task {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    .cco-calendar-day {
+        padding: 4px 0;
+        font-size: 0.7rem;
+        min-height: 24px;
+    }
+    .cco-chat-messages {
+        height: 220px;
+    }
+}
+
+/* ---------- Mobile Menu Toggle (legacy — hidden) ---------- */
+.cco-mobile-toggle {
+    display: none !important;
+}
+
+/* ---------- Scrollbar Styling ---------- */
+.cco-main::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cco-main::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cco-main::-webkit-scrollbar-thumb {
+    background: var(--cco-border);
+    border-radius: 4px;
+}
+
+.cco-main::-webkit-scrollbar-thumb:hover {
+    background: var(--cco-text-muted);
+}
+
+/* ---------- Refresh indicator ---------- */
+.cco-refresh-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--cco-text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.cco-refresh-badge .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cco-success);
+    animation: cco-pulse 2s infinite;
+}
+
+@keyframes cco-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}

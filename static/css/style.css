@@ -1,0 +1,823 @@
+/* MOBILE AJUSTES */
+@media (max-width: 576px) {
+    /* Header mobile: menus verticais canto superior esquerdo */
+    .main-header .position-relative > div[style*='left:0'] {
+        left: 0 !important;
+        top: 0 !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+    /* Ícones usuário/logout topo direito */
+    .main-header .position-relative > div[style*='right:0'] {
+        right: 0 !important;
+        top: 0 !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    /* Logo centralizada no topo */
+    .main-header .d-flex.justify-content-center {
+        margin-top: 48px !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    /* Filtros em linha, centralizados */
+    .row.align-items-center.d-block.d-sm-none .d-flex.flex-row {
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+    .row.align-items-center.d-block.d-sm-none select.form-select {
+        min-width: 90px !important;
+        max-width: 120px !important;
+        font-size: 0.95rem !important;
+        padding: 2px 8px !important;
+    }
+    /* Campo de pesquisa: lupa, seta, input ao lado */
+    .row.align-items-center.d-block.d-sm-none .dropdown .btn {
+        min-width: 40px !important;
+        max-width: 40px !important;
+        padding: 0 8px !important;
+        font-size: 1.1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .row.align-items-center.d-block.d-sm-none input#searchInput {
+        min-width: 120px !important;
+        max-width: 180px !important;
+        font-size: 0.95rem !important;
+        padding: 2px 8px !important;
+        margin-left: 4px !important;
+    }
+    /* Remove data do mobile */
+    .data-controle-container {
+        display: none !important;
+    }
+    .main-header {
+        top: unset !important;
+        width: 100% !important;
+        z-index: 1 !important;
+        background: #21243b !important;
+    }
+    .flex-wrap-mobile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .data-controle-container {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+    }
+    #startDateShort, #endDateShort {
+        font-size: 1rem;
+        background: #23243b;
+        color: #fff;
+        border-radius: 8px;
+        border: 1px solid #444;
+        padding: 2px 8px;
+        width: 80px;
+        min-width: 70px;
+        text-align: center;
+    }
+    .user-email-desktop {
+        font-size: 0.95rem;
+    }
+}
+/* Custom CSS for WifiMaxx Monitor Web */
+
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 2rem 0 rgba(58, 59, 69, 0.2);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+/* Status Cards */
+.border-left-success {
+    border-left: 4px solid var(--success-color) !important;
+}
+
+.border-left-warning {
+    border-left: 4px solid var(--warning-color) !important;
+}
+
+.border-left-danger {
+    border-left: 4px solid var(--danger-color) !important;
+}
+
+.border-left-info {
+    border-left: 4px solid var(--info-color) !important;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e3e6f0;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    box-shadow: 0 0.5rem 1rem rgba(102, 126, 234, 0.25);
+}
+
+/* Tables */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th {
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+}
+
+/* Badges */
+.badge {
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
+
+/* Modals */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+.modal-header {
+    border-radius: 15px 15px 0 0;
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Charts */
+.chart-area {
+    position: relative;
+    height: 300px;
+}
+
+.chart-pie {
+    position: relative;
+    height: 250px;
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: 10px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: var(--success-color);
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.alert-danger {
+    border-left-color: var(--danger-color);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.alert-warning {
+    border-left-color: var(--warning-color);
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.alert-info {
+    border-left-color: var(--info-color);
+    background-color: rgba(23, 162, 184, 0.1);
+}
+
+/* Loading */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        max-height: 70vh;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    /* Mobile table improvements */
+    .table {
+        white-space: nowrap !important;
+        min-width: 700px !important; /* Força largura mínima */
+        margin-bottom: 0;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.4rem 0.25rem !important;
+        font-size: 0.75rem !important;
+        vertical-align: middle;
+    }
+    
+    /* Hide less important columns on small screens */
+    .table .mobile-hide {
+        display: none !important;
+    }
+    
+    /* Cards status responsivos */
+    .row.mb-4 .col-xl-3 {
+        margin-bottom: 1rem;
+    }
+    
+    /* Força barra de scroll visível */
+    .table-responsive::-webkit-scrollbar {
+        height: 16px !important;
+        width: 16px !important;
+        display: block !important;
+    }
+    
+    .table-responsive {
+        scrollbar-width: thick !important;
+        scrollbar-color: #007bff #f1f1f1 !important;
+    }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.6rem 0.4rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .h5 {
+        font-size: 1.1rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Extra small screens - very compact table */
+    .table-responsive {
+        font-size: 0.7rem !important;
+        max-height: 60vh;
+        border-radius: 8px;
+        overflow: auto !important;
+    }
+    
+    .table {
+        min-width: 600px !important; /* Menor para telas muito pequenas */
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.2rem 0.1rem !important;
+        font-size: 0.65rem !important;
+        line-height: 1.1;
+    }
+    
+    /* Cards status mais compactos */
+    .row.mb-4 .col-xl-3 {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .card.h-100.py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    
+    .card.h-100.py-2 .card-body {
+        padding: 0.5rem;
+    }
+    
+    /* Filtros mais compactos */
+    .col-md-3 {
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Força scroll ainda mais visível */
+    .table-responsive::-webkit-scrollbar {
+        height: 18px !important;
+        width: 18px !important;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #dc3545 !important; /* Vermelho para chamar atenção */
+    }
+}
+
+/* Status-specific colors */
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-warning {
+    color: var(--warning-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.text-info {
+    color: var(--info-color) !important;
+}
+
+/* Utility classes */
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.rounded-lg {
+    border-radius: 15px !important;
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Custom scrollbar */
+.table-responsive {
+    /* Força a exibição da barra de rolagem em todos os navegadores */
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+}
+
+.table-responsive::-webkit-scrollbar-corner {
+    background: #f1f1f1;
+}
+
+/* Mobile scrollbar - mais visível */
+@media (max-width: 768px) {
+    .table-responsive {
+        /* Garante que o scroll seja sempre visível */
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+    
+    .table-responsive::-webkit-scrollbar {
+        height: 16px;
+        width: 16px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #007bff;
+        border: 3px solid #f1f1f1;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #0056b3;
+    }
+    
+    /* Adiciona uma sombra para indicar scroll disponível */
+    .table-responsive::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 20px;
+        background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+        pointer-events: none;
+        z-index: 1;
+    }
+}
+
+/* Indicador visual de scroll */
+.table-container {
+    position: relative;
+}
+
+.scroll-indicator {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: rgba(0, 123, 255, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    z-index: 10;
+    display: none;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.8; }
+}
+
+@media (max-width: 768px) {
+    .scroll-indicator {
+        display: block;
+    }
+}
+
+/* Vista alternativa em cards para mobile */
+.mobile-card-view {
+    display: none;
+}
+
+/* Para telas muito pequenas, sempre mostrar cards */
+@media (max-width: 480px) {
+    .table-view {
+        display: none !important;
+    }
+    
+    .mobile-card-view {
+        display: block !important;
+    }
+    
+    #viewToggle {
+        display: none !important;
+    }
+}
+
+/* Para telas médias, permitir toggle */
+@media (min-width: 481px) and (max-width: 768px) {
+    #viewToggle {
+        display: inline-block !important;
+    }
+}
+
+.equipment-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid #007bff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.equipment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.equipment-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.equipment-card .prefixo {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #007bff;
+}
+
+.equipment-card .status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.equipment-card .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.equipment-card .detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.equipment-card .detail-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+}
+
+.equipment-card .detail-value {
+    color: #333;
+    word-break: break-word;
+}
+
+/* ==============================================
+   FORÇA RESPONSIVIDADE TOTAL - PRIORIDADE MÁXIMA
+   ============================================== */
+
+/* Força tabela responsiva em qualquer tela <= 768px */
+@media screen and (max-width: 768px) {
+    /* Container da tabela */
+    #tableContainer,
+    .table-responsive {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        border: 2px solid #007bff !important;
+        border-radius: 10px !important;
+        max-height: 70vh !important;
+        background: white !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Tabela principal */
+    #dataTable,
+    .table {
+        min-width: 800px !important;
+        width: 800px !important;
+        white-space: nowrap !important;
+        margin-bottom: 0 !important;
+        font-size: 0.75rem !important;
+        table-layout: fixed !important;
+    }
+    
+    /* Cabeçalhos e células */
+    #dataTable th,
+    #dataTable td,
+    .table th,
+    .table td {
+        padding: 0.3rem 0.2rem !important;
+        font-size: 0.7rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        border: 1px solid #dee2e6 !important;
+    }
+    
+    /* Larguras específicas das colunas */
+    #dataTable th:nth-child(1),
+    #dataTable td:nth-child(1) {
+        width: 120px !important;
+        min-width: 120px !important;
+    }
+    
+    #dataTable th:nth-child(2),
+    #dataTable td:nth-child(2) {
+        width: 150px !important;
+        min-width: 150px !important;
+    }
+    
+    #dataTable th:nth-child(3),
+    #dataTable td:nth-child(3) {
+        width: 120px !important;
+        min-width: 120px !important;
+    }
+    
+    #dataTable th:nth-child(4),
+    #dataTable td:nth-child(4) {
+        width: 100px !important;
+        min-width: 100px !important;
+    }
+    
+    #dataTable th:nth-child(5),
+    #dataTable td:nth-child(5) {
+        width: 140px !important;
+        min-width: 140px !important;
+    }
+    
+    #dataTable th:nth-child(6),
+    #dataTable td:nth-child(6) {
+        width: 110px !important;
+        min-width: 110px !important;
+    }
+    
+    #dataTable th:nth-child(7),
+    #dataTable td:nth-child(7) {
+        width: 110px !important;
+        min-width: 110px !important;
+    }
+    
+    /* Força barra de rolagem visível */
+    #tableContainer::-webkit-scrollbar,
+    .table-responsive::-webkit-scrollbar {
+        height: 12px !important;
+        background-color: #f8f9fa !important;
+        border-radius: 6px !important;
+    }
+    
+    #tableContainer::-webkit-scrollbar-thumb,
+    .table-responsive::-webkit-scrollbar-thumb {
+        background-color: #007bff !important;
+        border-radius: 6px !important;
+        border: 2px solid #f8f9fa !important;
+    }
+    
+    #tableContainer::-webkit-scrollbar-thumb:hover,
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background-color: #0056b3 !important;
+    }
+    
+    /* Card view para telas muito pequenas */
+    @media screen and (max-width: 576px) {
+        #dataTable,
+        .table {
+            min-width: 700px !important;
+            width: 700px !important;
+            font-size: 0.65rem !important;
+        }
+        
+        #dataTable th,
+        #dataTable td,
+        .table th,
+        .table td {
+            padding: 0.25rem 0.15rem !important;
+            font-size: 0.6rem !important;
+        }
+    }
+}
+
+/* Indicador de scroll forçado */
+#scrollIndicator {
+    display: block !important;
+    text-align: center !important;
+    font-size: 0.7rem !important;
+    color: #007bff !important;
+    margin-top: 10px !important;
+    padding: 5px !important;
+    background: #f8f9fa !important;
+    border-radius: 5px !important;
+    font-weight: 600 !important;
+}
+
+/* Desktop - esconder indicador */
+@media screen and (min-width: 769px) {
+    #scrollIndicator {
+        display: none !important;
+    }
+}

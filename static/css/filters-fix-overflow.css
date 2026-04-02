@@ -1,0 +1,37 @@
+/* ===================================================================
+   CORREÇÃO DEFINITIVA DOS FILTROS
+   ================================================================== */
+
+/* Garantir que NÃO haja rolagem horizontal em nenhum nível */
+.filter-panel-glass,
+.modern-filters-container,
+.filters-grid {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Layout horizontal com quebra obrigatória */
+.modern-filters-container .filters-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+    padding: 0.5rem 0 !important;
+}
+
+/* Tamanho reduzido para os filtros */
+.filter-chip-wrapper {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: 200px !important;
+}
+
+.chip-select {
+    width: 100% !important;
+    max-width: 150px !important;
+    min-width: 0 !important;
+}

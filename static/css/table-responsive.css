@@ -1,0 +1,76 @@
+/* ===================================
+   CSS OTIMIZADO PARA TABELA RESPONSIVA
+   Criado em: 04/09/2025
+   =================================== */
+
+/* Configuração da tabela com scroll horizontal */
+.table-responsive, #tableContainer {
+    overflow-x: auto !important;
+    width: 100% !important;
+    display: block !important;
+    border: 1px solid #dee2e6 !important;
+    margin-bottom: 1rem !important;
+    border-radius: 0.25rem !important;
+}
+
+/* Garantir que a tabela tenha uma largura mínima */
+.table-responsive table,
+#dataTable {
+    min-width: 1200px !important;
+    white-space: nowrap !important;
+    margin-bottom: 0 !important;
+}
+
+/* Estilos para a barra de rolagem */
+.table-responsive::-webkit-scrollbar,
+#tableContainer::-webkit-scrollbar {
+    height: 8px !important;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+#tableContainer::-webkit-scrollbar-thumb {
+    background: #0d6efd !important;
+    border-radius: 4px !important;
+}
+
+.table-responsive::-webkit-scrollbar-track,
+#tableContainer::-webkit-scrollbar-track {
+    background: #f0f0f0 !important;
+}
+
+/* Estilos para controles de paginação */
+.pagination {
+    margin-bottom: 0 !important;
+    flex-wrap: wrap !important;
+}
+
+.pagination .page-item .page-link {
+    padding: 0.25rem 0.5rem !important;
+    margin: 2px !important;
+    font-size: 0.875rem !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+/* Indicador de scroll para mobile */
+#scrollIndicator {
+    display: none;
+    background-color: #cff4fc;
+    border: 1px solid #b6effb;
+    color: #055160;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 0.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+/* Mostrar indicador apenas em dispositivos móveis */
+@media (max-width: 768px) {
+    #scrollIndicator {
+        display: block !important;
+    }
+}

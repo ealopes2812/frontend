@@ -1,0 +1,52 @@
+/* ===================================================================
+   REMOÇÃO DEFINITIVA DA BARRA DE ROLAGEM HORIZONTAL DOS FILTROS
+   ================================================================== */
+
+/* Forçar contêineres de filtros a não terem rolagem horizontal */
+.filters-grid,
+.filters-container,
+.filters-wrapper,
+.filters-section,
+.filter-row,
+div[class*="filter"],
+div[class*="dashboard-filter"] {
+    overflow-x: visible !important;
+    max-width: 100% !important;
+    width: auto !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Garantir que elementos filhos não ultrapassem a largura */
+.filters-grid > *,
+.filters-container > *,
+.filters-wrapper > *,
+.filter-row > *,
+div[class*="filter"] > * {
+    max-width: 100% !important;
+    flex: 0 1 auto !important;
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+}
+
+/* Impedir que elementos venham com width fixo ou max-width muito grande */
+select, input, button {
+    max-width: 200px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Desativar qualquer scrollbar horizontal nos contêineres pais */
+body, html, main, div.container, div.content-wrapper, div.dashboard-container {
+    overflow-x: hidden !important;
+}
+
+/* Compactação adicional da área acima dos cards */
+.main-content-container {
+    margin-top: 0.25rem !important;
+}

@@ -1,0 +1,456 @@
+/* ===================================================================
+   MODERN CREATIVE HEADER 2025
+   WifiMaxx Monitor - Header Futurístico e Inovador
+   ================================================================== */
+
+/* ===================================================================
+   HEADER PRINCIPAL - DESIGN FUTURÍSTICO
+   ================================================================== */
+
+header.main-header {
+    background: linear-gradient(135deg, 
+        #0f172a 0%,           /* Slate 900 */
+        #1e293b 25%,          /* Slate 800 */
+        #334155 50%,          /* Slate 700 */
+        #475569 75%,          /* Slate 600 */
+        #64748b 100%          /* Slate 500 */
+    ) !important;
+    position: relative !important;
+    padding: 0 !important;
+    min-height: 100px !important;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(100, 116, 139, 0.1) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    overflow: hidden !important;
+}
+
+/* Efeito de partículas/grade no fundo */
+header.main-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    animation: float-particles 20s ease-in-out infinite alternate;
+}
+
+/* Linha de luz no topo */
+header.main-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #3b82f6 25%, 
+        #8b5cf6 50%, 
+        #ec4899 75%, 
+        transparent 100%);
+    animation: shimmer-light 3s ease-in-out infinite;
+}
+
+@keyframes float-particles {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-10px) rotate(1deg); }
+}
+
+@keyframes shimmer-light {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ===================================================================
+   CONTAINER PRINCIPAL DO HEADER
+   ================================================================== */
+
+header.main-header .container-fluid {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 1.5rem 2rem !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+header.main-header .row {
+    align-items: center !important;
+    min-height: 70px !important;
+    gap: 1rem !important;
+}
+
+/* ===================================================================
+   LOGO E MARCA - SIDE ESQUERDO
+   ================================================================== */
+
+.header-brand-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+}
+
+header.main-header .navbar-brand {
+    color: #ffffff !important;
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    text-shadow: 
+        0 0 20px rgba(59, 130, 246, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.3) !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px !important;
+    position: relative !important;
+}
+
+header.main-header .navbar-brand::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    transition: width 0.3s ease;
+}
+
+header.main-header .navbar-brand:hover::after {
+    width: 100%;
+}
+
+.logo-image {
+    height: 50px !important;
+    width: auto !important;
+    filter: 
+        brightness(1.1) 
+        drop-shadow(0 0 15px rgba(59, 130, 246, 0.3))
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) !important;
+    transition: all 0.3s ease !important;
+}
+
+.logo-image:hover {
+    transform: scale(1.05) !important;
+    filter: 
+        brightness(1.2) 
+        drop-shadow(0 0 25px rgba(59, 130, 246, 0.5))
+        drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* ===================================================================
+   BOTÕES DE AÇÃO - MODERNOS
+   ================================================================== */
+
+.header-buttons {
+    display: flex !important;
+    gap: 15px !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+.header-buttons .btn {
+    border-radius: 50px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    border: 2px solid transparent !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    text-transform: none !important;
+    letter-spacing: 0.3px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.header-buttons .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.header-buttons .btn:hover::before {
+    left: 100%;
+}
+
+/* Botão Relatórios - Verde Neon */
+.header-buttons .btn-success {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border: 2px solid rgba(16, 185, 129, 0.5) !important;
+    color: white !important;
+    box-shadow: 
+        0 0 20px rgba(16, 185, 129, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.header-buttons .btn-success:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    border-color: #10b981 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 0 30px rgba(16, 185, 129, 0.5),
+        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Botão Gerenciar - Azul Neon */
+.header-buttons .btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    border: 2px solid rgba(59, 130, 246, 0.5) !important;
+    color: white !important;
+    box-shadow: 
+        0 0 20px rgba(59, 130, 246, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.header-buttons .btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    border-color: #3b82f6 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 0 30px rgba(59, 130, 246, 0.5),
+        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Botão Admin - Roxo Neon */
+.header-buttons .btn-warning {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+    border: 2px solid rgba(139, 92, 246, 0.5) !important;
+    color: white !important;
+    box-shadow: 
+        0 0 20px rgba(139, 92, 246, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.header-buttons .btn-warning:hover {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+    border-color: #8b5cf6 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 0 30px rgba(139, 92, 246, 0.5),
+        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ===================================================================
+   CONTROLES DE DATA - FUTURÍSTICOS
+   ================================================================== */
+
+.date-controls {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 50px !important;
+    padding: 15px 25px !important;
+    margin-right: 120px !important; /* Espaço para theme toggle */
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.date-controls::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.date-controls label {
+    color: #e2e8f0 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.date-controls input[type="date"] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 25px !important;
+    color: #ffffff !important;
+    padding: 8px 15px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.date-controls input[type="date"]:focus {
+    outline: none !important;
+    border-color: rgba(59, 130, 246, 0.6) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 
+        0 0 0 3px rgba(59, 130, 246, 0.2),
+        0 0 20px rgba(59, 130, 246, 0.3) !important;
+    transform: scale(1.02) !important;
+}
+
+.date-controls input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.2) !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.date-controls input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    transform: scale(1.1) !important;
+}
+
+/* ===================================================================
+   MENU ADMIN - CANTO DIREITO
+   ================================================================== */
+
+.admin-menu {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    position: relative !important;
+}
+
+.admin-info {
+    color: #e2e8f0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 8px 16px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 25px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+}
+
+.admin-info i {
+    font-size: 16px !important;
+    color: #3b82f6 !important;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* ===================================================================
+   RESPONSIVIDADE AVANÇADA
+   ================================================================== */
+
+@media (max-width: 1200px) {
+    .date-controls {
+        margin-right: 80px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    header.main-header .container-fluid {
+        padding: 1rem !important;
+    }
+    
+    header.main-header .navbar-brand {
+        font-size: 1.8rem !important;
+    }
+    
+    .header-buttons {
+        gap: 10px !important;
+    }
+    
+    .header-buttons .btn {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+    }
+    
+    .date-controls {
+        margin-right: 60px !important;
+        padding: 10px 15px !important;
+        gap: 10px !important;
+    }
+    
+    .logo-image {
+        height: 40px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    header.main-header .row {
+        flex-direction: column !important;
+        gap: 20px !important;
+        text-align: center !important;
+    }
+    
+    .date-controls {
+        margin-right: 0 !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 350px !important;
+    }
+    
+    .header-buttons {
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    .admin-menu {
+        justify-content: center !important;
+    }
+}
+
+/* ===================================================================
+   ANIMAÇÕES ESPECIAIS
+   ================================================================== */
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+}
+
+/* Aplicar efeito glow em hover nos elementos principais */
+.header-buttons .btn:hover,
+.date-controls:hover,
+.admin-info:hover {
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ===================================================================
+   TEMA CLARO - ADAPTAÇÕES
+   ================================================================== */
+
+[data-theme="light"] header.main-header {
+    background: linear-gradient(135deg, 
+        #f8fafc 0%,           /* Slate 50 */
+        #f1f5f9 25%,          /* Slate 100 */
+        #e2e8f0 50%,          /* Slate 200 */
+        #cbd5e1 75%,          /* Slate 300 */
+        #94a3b8 100%          /* Slate 400 */
+    ) !important;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 60px rgba(148, 163, 184, 0.2) !important;
+}
+
+[data-theme="light"] header.main-header .navbar-brand {
+    color: #1e293b !important;
+    text-shadow: 
+        0 0 20px rgba(59, 130, 246, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .date-controls label,
+[data-theme="light"] .admin-info {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .date-controls input[type="date"] {
+    color: #1e293b !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}

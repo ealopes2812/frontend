@@ -1,0 +1,394 @@
+/* ===================================================================
+   CLEAN MINIMAL HEADER 2025
+   WifiMaxx Monitor - Header Limpo e Harmonioso
+   ================================================================== */
+
+/* ===================================================================
+   HEADER MINIMALISTA E ELEGANTE
+   ================================================================== */
+
+header.main-header {
+    background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.95) 0%,    /* Slate 900 transparente */
+        rgba(30, 41, 59, 0.90) 50%,   /* Slate 800 transparente */
+        rgba(51, 65, 85, 0.85) 100%   /* Slate 700 transparente */
+    ) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.15),
+        0 0 40px rgba(59, 130, 246, 0.05) !important;
+    padding: 0 !important;
+    min-height: 52px !important; /* ainda mais compacto */
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Linha de luz sutil no topo */
+header.main-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(59, 130, 246, 0.3) 50%, 
+        transparent 100%);
+    opacity: 0.6;
+}
+
+/* ===================================================================
+   CONTAINER PRINCIPAL - LAYOUT SIMPLES
+   ================================================================== */
+
+header.main-header .container-fluid {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 1.25rem !important; /* padding lateral menor */
+    height: 52px !important; /* ainda mais compacto */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* ===================================================================
+   LOGO - CENTRALIZADA E TEMA ADAPTATIVO
+   ================================================================== */
+
+.header-logo-section {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.logo-image {
+    height: 40px !important; /* reduzido ainda mais */
+    width: auto !important;
+    filter: none !important; /* Cores originais no modo claro */
+    transition: all 0.3s ease !important;
+}
+
+.logo-image:hover {
+    transform: scale(1.05) !important;
+}
+
+/* Logo branca APENAS no tema escuro */
+[data-theme="dark"] .header-logo-section .logo-image {
+    filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) !important;
+}
+
+[data-theme="dark"] .logo-image:hover {
+    filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4)) !important;
+}
+
+header.main-header .navbar-brand {
+    display: none !important; /* Oculta o texto */
+}
+
+/* ===================================================================
+   ÁREA DO USUÁRIO - CANTO SUPERIOR DIREITO
+   ================================================================== */
+
+.header-user-section {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Container do usuário */
+.user-info-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 50px !important;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+.user-info-container:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Informações do usuário */
+.user-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    color: #e2e8f0 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.user-info i {
+    font-size: 16px !important;
+    color: #3b82f6 !important;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.4) !important;
+}
+
+.user-name {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Botão de logout */
+.logout-btn {
+    background: rgba(220, 53, 69, 0.15) !important;
+    border: 1px solid rgba(220, 53, 69, 0.3) !important;
+    color: #ef4444 !important;
+    border-radius: 50px !important;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.logout-btn:hover {
+    background: rgba(220, 53, 69, 0.25) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2) !important;
+}
+
+.logout-btn i {
+    font-size: 14px !important;
+    color: inherit !important;
+}
+
+/* ===================================================================
+   THEME TOGGLE - INTEGRADO NA ÁREA DO USUÁRIO
+   ================================================================== */
+
+.theme-toggle {
+    position: static !important;
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 50px !important;
+    padding: 10px 15px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-size: 13px !important;
+    color: #e2e8f0 !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+}
+
+.theme-toggle::before,
+.theme-toggle::after {
+    display: none !important;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-toggle i {
+    font-size: 14px !important;
+    color: inherit !important;
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+.theme-toggle .theme-text {
+    display: inline-block !important;
+}
+
+/* ===================================================================
+   RESPONSIVIDADE MOBILE
+   ================================================================== */
+
+@media (max-width: 768px) {
+    header.main-header .container-fluid {
+        padding: 0 1rem !important;
+        height: 60px !important;
+    }
+    
+    .logo-image {
+        height: 45px !important;
+    }
+    
+    header.main-header .navbar-brand {
+        font-size: 1.5rem !important;
+    }
+    
+    .header-user-section {
+        gap: 15px !important;
+    }
+    
+    .user-info-container {
+        padding: 6px 15px !important;
+        gap: 10px !important;
+    }
+    
+    .user-info {
+        font-size: 13px !important;
+    }
+    
+    .logout-btn {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+    }
+    
+    .theme-toggle {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+    
+    .theme-toggle .theme-text {
+        display: none !important;
+    }
+}
+
+@media (max-width: 576px) {
+    header.main-header .container-fluid {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 1rem !important;
+        gap: 15px !important;
+    }
+    
+    .header-logo-section {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    
+    .header-user-section {
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+    
+    .user-info-container {
+        flex: 1 !important;
+        justify-content: center !important;
+        max-width: 200px !important;
+    }
+    
+    .user-name {
+        display: none !important; /* Ocultar nome em telas muito pequenas */
+    }
+}
+
+/* ===================================================================
+   TEMA CLARO - ADAPTAÇÕES
+   ================================================================== */
+
+[data-theme="light"] header.main-header {
+    background: linear-gradient(135deg, 
+        rgba(248, 250, 252, 0.95) 0%,    /* Slate 50 transparente */
+        rgba(241, 245, 249, 0.90) 50%,   /* Slate 100 transparente */
+        rgba(226, 232, 240, 0.85) 100%   /* Slate 200 transparente */
+    ) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 0 40px rgba(59, 130, 246, 0.02) !important;
+}
+
+[data-theme="light"] header.main-header::before {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(59, 130, 246, 0.2) 50%, 
+        transparent 100%);
+}
+
+[data-theme="light"] header.main-header .navbar-brand {
+    color: #1e293b !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .user-info-container,
+[data-theme="light"] .theme-toggle {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .user-info,
+[data-theme="light"] .theme-toggle {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .user-name {
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .logout-btn {
+    background: rgba(220, 53, 69, 0.1) !important;
+    border-color: rgba(220, 53, 69, 0.2) !important;
+    color: #dc2626 !important;
+}
+
+/* ===================================================================
+   OCULTAR ELEMENTOS DESNECESSÁRIOS
+   ================================================================== */
+
+/* Ocultar botões de menu principais */
+.header-buttons {
+    display: none !important;
+}
+
+/* Ocultar controles de data */
+.date-controls {
+    display: none !important;
+}
+
+/* Ocultar qualquer row antiga do Bootstrap */
+header.main-header .row {
+    display: none !important;
+}
+
+/* ===================================================================
+   ANIMAÇÕES SUAVES
+   ================================================================== */
+
+@keyframes header-glow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 40px rgba(59, 130, 246, 0.05); }
+    50% { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2), 0 0 50px rgba(59, 130, 246, 0.1); }
+}
+
+header.main-header:hover {
+    animation: header-glow 2s ease-in-out infinite;
+}
+
+/* Transições suaves para todos os elementos */
+.header-logo-section *,
+.header-user-section * {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}

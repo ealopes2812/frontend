@@ -1,0 +1,91 @@
+/* ===================================================================
+   ORGANIZAÇÃO DOS FILTROS EM BLOCOS SEPARADOS E COMPACTOS
+   ================================================================== */
+
+/* Espaçamento otimizado entre filtros */
+.filters-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important; /* gaps menores */
+    align-items: center !important;
+    justify-content: flex-start !important;
+    background: none !important;
+    padding: 0.25rem 0 !important; /* padding vertical menor */
+}
+
+/* Cada filtro como bloco independente */
+.filter-chip-wrapper {
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Espaçamento interno dos filtros reduzido */
+.filter-chip {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important; /* reduzir espaçamento interno */
+    white-space: nowrap !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important; /* chips mais enxutos */
+}
+
+/* Labels compactos */
+.chip-label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--text-primary, #1e293b) !important;
+    margin-right: 4px !important;
+    white-space: nowrap !important;
+}
+
+/* Ícones menores */
+.chip-icon i {
+    font-size: 14px !important;
+    color: var(--text-secondary, #64748b) !important;
+}
+
+/* Painel de filtros mais estreito */
+.modern-filters-container {
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+}
+
+/* Ocultar o display de filtros ativos */
+.active-filters-display,
+.active-filter-chip,
+.active-filter-count,
+.active-filter-text,
+.clear-all-filters {
+    display: none !important;
+}
+
+/* Responsivo - ajustar no mobile */
+@media (max-width: 768px) {
+    .filters-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+        padding: 1rem 0 !important;
+    }
+    
+    .chip-select,
+    .chip-input {
+        min-width: auto !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+}
+
+/* Ajustes para tema escuro */
+[data-theme="dark"] .chip-label {
+    color: var(--text-primary, #f1f5f9) !important;
+}
+
+[data-theme="dark"] .chip-icon i {
+    color: var(--text-secondary, #94a3b8) !important;
+}

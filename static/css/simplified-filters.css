@@ -1,0 +1,284 @@
+[data-theme="dark"] #searchInput {
+    background-color: #fff !important;
+    color: #111827 !important;
+}
+[data-theme="dark"] #searchInput::placeholder {
+    color: #6b7280 !important;
+}
+/* ===================================================================
+   FILTROS SIMPLIFICADOS - UMA LINHA SEM FUNDOS SEPARADOS
+   ================================================================== */
+
+/* FORÇA LAYOUT HORIZONTAL - IMPORTANTE */
+.filter-panel-glass,
+.modern-filters-container {
+    display: block !important;
+}
+
+.modern-filters-container .filters-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important; /* Permite que os filtros quebrem para a próxima linha */
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1.5rem !important; /* Espaçamento reduzido */
+    
+    /* Remove qualquer grid */
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    grid-auto-flow: unset !important;
+    grid-gap: unset !important;
+    
+    /* Garante flexbox */
+    width: 100% !important;
+    overflow-x: visible !important; /* Remove a rolagem horizontal */
+}
+
+/* Remover todos os fundos e glassmorphism */
+.filter-panel-glass {
+    background: none !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 1rem 0 !important;
+}
+
+.modern-filters-container {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+/* Layout em uma linha horizontal - FORÇA HORIZONTAL */
+.modern-filters-container .filters-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 2rem !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    background: none !important;
+    padding: 0 !important;
+    overflow-x: auto !important;
+    grid-template-columns: none !important; /* Remove qualquer grid */
+    grid-template-rows: none !important; /* Remove qualquer grid */
+}
+
+/* Filtros em blocos separados visualmente - horizontais */
+.modern-filters-container .filter-chip-wrapper {
+    flex: none !important;
+    background: rgba(255, 255, 255, 0.02) !important; /* Fundo quase imperceptível */
+    border-radius: 10px !important;
+    padding: 0.5rem 1rem !important;
+    margin-right: 0.25rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02) !important;
+    min-width: auto !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    width: auto !important;
+    position: relative !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Separador visual entre filtros */
+.modern-filters-container .filter-chip-wrapper::after {
+    content: "" !important;
+    position: absolute !important;
+    height: 60% !important; 
+    width: 1px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    right: -1.25rem !important;
+    top: 20% !important;
+}
+
+.modern-filters-container .filter-chip-wrapper:last-child::after {
+    display: none !important;
+}
+
+.modern-filters-container .filter-chip-wrapper:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.filter-chip {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.filter-chip:hover {
+    background: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ícones simplificados */
+.chip-icon {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.chip-icon i {
+    font-size: 16px !important;
+    color: var(--text-secondary, #64748b) !important;
+}
+
+/* Labels e selects simplificados */
+.chip-content {
+    background: none !important;
+    padding: 0 !important;
+}
+
+/* Labels ocultos - nomes vão nos placeholders */
+.chip-label {
+    display: none !important;
+}
+
+.chip-select {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    color: #374151 !important;
+    min-width: 140px !important;
+    height: 36px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+.chip-select:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.chip-select:hover {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Busca simplificada */
+.search-chip {
+    background: none !important;
+}
+
+.search-input-container {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.chip-input {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 8px 35px 8px 12px !important;
+    font-size: 14px !important;
+    color: #374151 !important;
+    width: 200px !important;
+    height: 36px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+.chip-input:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.chip-input:hover {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* No modo escuro, manter fundo branco e texto preto como os selects */
+[data-theme="dark"] .chip-input {
+    background: #ffffff !important;
+    color: #111827 !important; /* quase preto */
+    border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .chip-input::placeholder {
+    color: #6b7280 !important; /* cinza médio */
+}
+
+.search-clear {
+    position: absolute !important;
+    right: 8px !important;
+    background: none !important;
+    border: none !important;
+    color: var(--text-secondary, #64748b) !important;
+    cursor: pointer !important;
+    padding: 2px !important;
+    border-radius: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.search-clear:hover {
+    color: var(--text-primary, #1e293b) !important;
+    background: rgba(0,0,0,0.05) !important;
+}
+
+/* Responsivo - mobile */
+@media (max-width: 768px) {
+    .filters-grid {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 1rem !important;
+        justify-content: space-between !important;
+    }
+    
+    .filter-chip-wrapper {
+        flex: 1 1 calc(50% - 0.5rem) !important;
+        min-width: 0 !important;
+    }
+    
+    .chip-select,
+    .search-trigger,
+    .chip-input {
+        min-width: auto !important;
+        width: 100% !important;
+    }
+}
+
+/* Tema escuro */
+[data-theme="dark"] .chip-select,
+[data-theme="dark"] .chip-input {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border-color: rgba(71, 85, 105, 0.6) !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .chip-select:focus,
+[data-theme="dark"] .chip-input:focus {
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .chip-select:hover,
+[data-theme="dark"] .chip-input:hover {
+    border-color: rgba(148, 163, 184, 0.6) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .chip-icon i {
+    color: #94a3b8 !important;
+}

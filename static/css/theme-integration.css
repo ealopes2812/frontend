@@ -1,0 +1,487 @@
+/* ===================================================================
+   FINAL INTEGRATION STYLES
+   WifiMaxx Monitor - Theme Integration Final Touches
+   ================================================================== */
+
+/* ===================================================================
+   THEME TOGGLE BUTTON POSITIONING
+   ================================================================== */
+
+.theme-toggle {
+    /* Ensure it's above everything */
+    z-index: 1050 !important;
+}
+
+/* Mobile positioning adjustment for PWA install button */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+    }
+    /* Hide search clear button on mobile */
+    #clearSearchBtn { display: none !important; }
+    
+    /* Adjust PWA button if theme toggle exists */
+    .btn.position-fixed[style*="bottom: 20px; right: 20px"] {
+        bottom: 20px !important;
+        right: 90px !important; /* Move left to avoid theme toggle */
+    }
+    
+    /* Force theme application on mobile devices */
+    [data-theme="light"] body,
+    body[data-theme="light"],
+    .light-theme body,
+    body.light-theme {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%) !important;
+        color: #2c3e50 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-theme="dark"] body,
+    body[data-theme="dark"],
+    .dark-theme body,
+    body.dark-theme {
+        background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+        color: #e9ecef !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Force HTML element theme too */
+    html[data-theme="light"],
+    html.light-theme {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%) !important;
+        color: #2c3e50 !important;
+    }
+    
+    html[data-theme="dark"],
+    html.dark-theme {
+        background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+        color: #e9ecef !important;
+    }
+}
+
+/* ===================================================================
+   IMPROVED LIGHT THEME SUPPORT
+   ================================================================== */
+
+[data-theme="light"] {
+    /* Enhanced light theme variables with reduced brightness for comfort */
+    --bs-body-bg: #f5f7fa;
+    --bs-body-color: #2c3e50;
+    --bs-border-color: #dee2e6;
+}
+
+/* Light theme body override */
+[data-theme="light"] body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%) !important;
+    color: #2c3e50 !important;
+}
+
+/* Explicit dark theme base to avoid UA/OS overrides on mobile */
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+    color: #e9ecef !important;
+}
+
+/* Light theme header enhancement */
+[data-theme="light"] header.main-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] header.main-header .navbar-brand,
+[data-theme="light"] header.main-header label,
+[data-theme="light"] header.main-header .text-muted {
+    color: #212529 !important;
+}
+
+/* ===================================================================
+   STATUS CARDS LIGHT THEME IMPROVEMENTS
+   ================================================================== */
+
+[data-theme="light"] .status-cards-grid .status-card-glass {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Aplicar superfícies claras nos cartões (todas as larguras) */
+html[data-theme="light"] .status-card-glass.glass-card-success { background: rgba(40,167,69,0.12) !important; border-color: rgba(40,167,69,0.3) !important; }
+html[data-theme="light"] .status-card-glass.glass-card-warning { background: rgba(255,193,7,0.14) !important; border-color: rgba(255,193,7,0.32) !important; }
+html[data-theme="light"] .status-card-glass.glass-card-danger { background: rgba(220,53,69,0.12) !important; border-color: rgba(220,53,69,0.32) !important; }
+html[data-theme="light"] .status-card-glass.glass-card-info { background: rgba(108,117,125,0.12) !important; border-color: rgba(108,117,125,0.3) !important; }
+html[data-theme="light"] .status-card-glass.glass-card-maintenance { background: rgba(255,126,20,0.14) !important; border-color: rgba(255,126,20,0.35) !important; }
+html[data-theme="light"] .status-card-glass.glass-card-divergence { background: rgba(138,43,226,0.12) !important; border-color: rgba(138,43,226,0.35) !important; }
+
+[data-theme="light"] .glass-card-online {
+    background: rgba(40, 167, 69, 0.1) !important;
+    border-color: rgba(40, 167, 69, 0.3) !important;
+}
+
+[data-theme="light"] .glass-card-attention {
+    background: rgba(255, 193, 7, 0.1) !important;
+    border-color: rgba(255, 193, 7, 0.3) !important;
+}
+
+[data-theme="light"] .glass-card-alert {
+    background: rgba(220, 53, 69, 0.1) !important;
+    border-color: rgba(220, 53, 69, 0.3) !important;
+}
+
+[data-theme="light"] .glass-card-inactive {
+    background: rgba(108, 117, 125, 0.1) !important;
+    border-color: rgba(108, 117, 125, 0.3) !important;
+}
+
+[data-theme="light"] .glass-card-maintenance {
+    background: rgba(253, 126, 20, 0.1) !important;
+    border-color: rgba(253, 126, 20, 0.3) !important;
+}
+
+[data-theme="light"] .glass-card-divergence {
+    background: rgba(138, 43, 226, 0.1) !important;
+    border-color: rgba(138, 43, 226, 0.3) !important;
+}
+
+/* ===================================================================
+   SEARCH SYSTEM LIGHT THEME
+   ================================================================== */
+
+[data-theme="light"] .chip-input {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    color: #212529 !important;
+}
+
+[data-theme="light"] .chip-input:focus {
+    background: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(0, 123, 255, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+[data-theme="light"] .chip-input::placeholder {
+    color: #6c757d !important;
+}
+
+/* ===================================================================
+   TABLE LIGHT THEME IMPROVEMENTS
+   ================================================================== */
+
+[data-theme="light"] .table-container-glass {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .table-container-glass .table th {
+    background: rgba(248, 249, 250, 0.8) !important;
+    color: #495057 !important;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .table-container-glass .table td {
+    color: #212529 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .table-container-glass .table tbody tr:hover {
+    background: rgba(0, 123, 255, 0.05) !important;
+}
+
+/* ===================================================================
+   FILTER CHIPS LIGHT THEME
+   ================================================================== */
+
+[data-theme="light"] .filter-chip {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #212529 !important;
+}
+
+[data-theme="light"] .filter-chip:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(0, 123, 255, 0.3) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .filter-chip.active {
+    background: rgba(0, 123, 255, 0.1) !important;
+    border-color: rgba(0, 123, 255, 0.5) !important;
+    color: #0056b3 !important;
+}
+
+[data-theme="light"] .chip-icon {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: #495057 !important;
+}
+
+[data-theme="light"] .chip-label {
+    color: #212529 !important;
+}
+
+/* ===================================================================
+   DASHBOARD FILTER LABELS - THEME ADAPTIVE WITH FORCED SPECIFICITY
+   ================================================================== */
+
+/* Theme adaptive classes for filter labels with high specificity */
+body .filter-label-adaptive,
+html .filter-label-adaptive {
+    color: #2c3e50 !important; /* Default light theme - stronger dark color */
+    opacity: 0.9 !important;
+    font-weight: 500 !important;
+    transition: color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease !important;
+}
+
+html[data-theme="dark"] .filter-label-adaptive,
+body[data-theme="dark"] .filter-label-adaptive,
+[data-theme="dark"] body .filter-label-adaptive {
+    color: #ffffff !important; /* Pure white for better visibility in dark theme */
+    opacity: 0.95 !important;
+}
+
+body .filter-icon-adaptive,
+html .filter-icon-adaptive {
+    color: #374151 !important; /* Default light theme - stronger dark color */
+    opacity: 0.85 !important;
+    transition: color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease !important;
+}
+
+html[data-theme="dark"] .filter-icon-adaptive,
+body[data-theme="dark"] .filter-icon-adaptive,
+[data-theme="dark"] body .filter-icon-adaptive {
+    color: #f8fafc !important; /* Near-white for icons in dark theme */
+    opacity: 0.9 !important;
+}
+
+/* Enhanced visibility for important filter elements with forced specificity */
+body .filter-group-label,
+html .filter-group-label {
+    color: #1f2937 !important; /* Default light theme - very strong dark */
+    font-weight: 600 !important;
+    opacity: 0.95 !important;
+    transition: color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease !important;
+}
+
+html[data-theme="dark"] .filter-group-label,
+body[data-theme="dark"] .filter-group-label,
+[data-theme="dark"] body .filter-group-label {
+    color: #ffffff !important; /* Pure white for titles in dark theme */
+    opacity: 1 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow for better contrast */
+}
+
+/* Force override any Bootstrap or conflicting styles */
+.filters-container .filter-label-adaptive,
+.filters-container .filter-icon-adaptive,
+.filters-container .filter-group-label {
+    transition: color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* NUCLEAR CSS OVERRIDES - Maximum specificity for theme switching */
+html[data-theme="dark"] body .filters-container .filter-label-adaptive,
+html[data-theme="dark"] .filters-container .filter-label-adaptive,
+body[data-theme="dark"] .filters-container .filter-label-adaptive,
+[data-theme="dark"] .filters-container .filter-label-adaptive {
+    color: #ffffff !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="dark"] body .filters-container .filter-icon-adaptive,
+html[data-theme="dark"] .filters-container .filter-icon-adaptive,
+body[data-theme="dark"] .filters-container .filter-icon-adaptive,
+[data-theme="dark"] .filters-container .filter-icon-adaptive {
+    color: #f8fafc !important;
+    opacity: 0.9 !important;
+    filter: brightness(1.1) !important;
+}
+
+html[data-theme="dark"] body .filters-container .filter-group-label,
+html[data-theme="dark"] .filters-container .filter-group-label,
+body[data-theme="dark"] .filters-container .filter-group-label,
+[data-theme="dark"] .filters-container .filter-group-label {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Light theme overrides with maximum specificity */
+html:not([data-theme="dark"]) body .filters-container .filter-label-adaptive,
+html:not([data-theme="dark"]) .filters-container .filter-label-adaptive,
+body:not([data-theme="dark"]) .filters-container .filter-label-adaptive {
+    color: #2c3e50 !important;
+    opacity: 0.9 !important;
+    text-shadow: none !important;
+    font-weight: 500 !important;
+}
+
+html:not([data-theme="dark"]) body .filters-container .filter-icon-adaptive,
+html:not([data-theme="dark"]) .filters-container .filter-icon-adaptive,
+body:not([data-theme="dark"]) .filters-container .filter-icon-adaptive {
+    color: #374151 !important;
+    opacity: 0.85 !important;
+    filter: none !important;
+}
+
+html:not([data-theme="dark"]) body .filters-container .filter-group-label,
+html:not([data-theme="dark"]) .filters-container .filter-group-label,
+body:not([data-theme="dark"]) .filters-container .filter-group-label {
+    color: #1f2937 !important;
+    opacity: 0.95 !important;
+    text-shadow: none !important;
+}
+
+/* Additional contrast boosters for dark theme readability */
+[data-theme="dark"] .filter-label-adaptive {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 600 !important; /* Slightly bolder in dark theme */
+}
+
+[data-theme="dark"] .filter-icon-adaptive {
+    filter: brightness(1.1) !important; /* Slightly brighter icons */
+}
+
+/* Force update class for theme transitions */
+.theme-force-update {
+    opacity: 0.99 !important;
+    transform: translateZ(0) !important;
+}
+
+/* Ensure labels are always visible during theme transitions */
+.theme-transitioning .filter-label-adaptive,
+.theme-transitioning .filter-icon-adaptive,
+.theme-transitioning .filter-group-label {
+    transition: none !important;
+}
+
+/* Badge visibility improvements */
+.badge.bg-light {
+    background-color: rgba(248, 249, 250, 0.9) !important;
+    color: #495057 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .badge.bg-light {
+    background-color: rgba(52, 58, 64, 0.9) !important;
+    color: #e9ecef !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Improved brightness control - more comfortable for eyes */
+[data-theme="light"] {
+    --filter-brightness: 0.92;
+    --filter-contrast: 1.05;
+    --bs-body-bg: #f5f7fa;
+    --bs-body-color: #2c3e50;
+}
+
+[data-theme="dark"] {
+    --filter-brightness: 0.95;
+    --filter-contrast: 1.05;
+}
+
+/* Apply brightness control to dashboard container */
+[data-theme="light"] .dashboard-container {
+    filter: brightness(var(--filter-brightness)) contrast(var(--filter-contrast));
+}
+
+/* ===================================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ================================================================== */
+
+/* Focus indicators for light theme */
+[data-theme="light"] .theme-toggle:focus {
+    outline: 2px solid #0056b3 !important;
+    outline-offset: 2px;
+}
+
+[data-theme="light"] .filter-chip:focus {
+    outline: 2px solid #0056b3 !important;
+    outline-offset: 2px;
+}
+
+[data-theme="light"] .chip-input:focus {
+    outline: none !important; /* Bootstrap handles this */
+}
+
+/* ===================================================================
+   SMOOTH TRANSITIONS
+   ================================================================== */
+
+/* Enhanced transitions for theme changes */
+.theme-toggle,
+.status-card-glass,
+.filter-chip,
+.chip-input,
+.table-container-glass,
+.glass-card {
+    transition: 
+        background-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* ===================================================================
+   RESPONSIVE ENHANCEMENTS
+   ================================================================== */
+
+@media (max-width: 576px) {
+    .theme-toggle {
+        width: 45px;
+        height: 45px;
+        padding: 8px;
+    }
+    
+    .theme-toggle i {
+        font-size: 18px;
+    }
+    
+    [data-theme="light"] .status-cards-grid {
+        gap: 10px !important;
+    }
+    
+    [data-theme="light"] .filters-grid {
+        gap: 8px !important;
+    }
+}
+
+/* ===================================================================
+   PRINT STYLES
+   ================================================================== */
+
+@media print {
+    .theme-toggle {
+        display: none !important;
+    }
+    
+    [data-theme="light"] .glass-card,
+    [data-theme="light"] .status-card-glass,
+    [data-theme="light"] .table-container-glass {
+        background: white !important;
+        border: 1px solid #333 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+}
+
+/* ===================================================================
+     MOBILE LIGHT THEME CARD SURFACE TWEAKS
+     Ensure full card surface color changes in light theme on mobile
+     ================================================================== */
+@media (max-width: 768px) {
+    html[data-theme="light"] .status-card-glass.glass-card-success { background: rgba(40,167,69,0.15) !important; border-color: rgba(40,167,69,0.35) !important; }
+    html[data-theme="light"] .status-card-glass.glass-card-warning { background: rgba(255,193,7,0.18) !important; border-color: rgba(255,193,7,0.4) !important; }
+    html[data-theme="light"] .status-card-glass.glass-card-danger { background: rgba(220,53,69,0.15) !important; border-color: rgba(220,53,69,0.4) !important; }
+    html[data-theme="light"] .status-card-glass.glass-card-info { background: rgba(108,117,125,0.15) !important; border-color: rgba(108,117,125,0.35) !important; }
+    html[data-theme="light"] .status-card-glass.glass-card-maintenance { background: rgba(255,126,20,0.17) !important; border-color: rgba(255,126,20,0.4) !important; }
+    html[data-theme="light"] .status-card-glass .status-title,
+    html[data-theme="light"] .status-card-glass .status-count { color: #212529 !important; text-shadow: none !important; }
+
+    /* Dark theme: slightly stronger tint for readability on mobile */
+    html[data-theme="dark"] .status-card-glass.glass-card-success { background: rgba(40,167,69,0.28) !important; }
+    html[data-theme="dark"] .status-card-glass.glass-card-warning { background: rgba(255,193,7,0.28) !important; }
+    html[data-theme="dark"] .status-card-glass.glass-card-danger { background: rgba(220,53,69,0.28) !important; }
+    html[data-theme="dark"] .status-card-glass.glass-card-info { background: rgba(108,117,125,0.28) !important; }
+    html[data-theme="dark"] .status-card-glass.glass-card-maintenance { background: rgba(255,126,20,0.28) !important; }
+}

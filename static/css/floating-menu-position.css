@@ -1,0 +1,82 @@
+/* ===================================================================
+   POSICIONAMENTO CORRIGIDO DO MENU FLUTUANTE
+   ================================================================== */
+
+/* Menu flutuante no canto inferior direito (posição original correta) */
+.floating-action-menu {
+    position: fixed !important;
+    bottom: 2rem !important;
+    right: 2rem !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 9999 !important;
+}
+
+/* Garantir que não há duplicação */
+.floating-action-menu:nth-of-type(n+2) {
+    display: none !important;
+}
+    justify-content: center !important;
+    color: white !important;
+}
+
+.floating-action-menu .floating-btn.main-btn:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.4),
+        0 0 0 8px rgba(59, 130, 246, 0.1) !important;
+}
+
+.floating-action-menu .floating-btn.main-btn.active {
+    transform: rotate(45deg) !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+/* Itens do menu - expandir para baixo */
+.floating-action-menu .floating-menu-items {
+    position: absolute !important;
+    top: 60px !important;
+    right: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    opacity: 0 !important;
+    transform: translateY(-10px) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    pointer-events: none !important;
+}
+
+.floating-action-menu .floating-menu-items.active {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: all !important;
+}
+
+/* Botões do menu menores */
+.floating-action-menu .floating-btn:not(.main-btn) {
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 16px !important;
+}
+
+/* Dropdowns reposicionados */
+.floating-action-menu .floating-dropdown {
+    position: absolute !important;
+    top: 0 !important;
+    right: 55px !important;
+    min-width: 200px !important;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .floating-action-menu {
+        top: 70px !important;
+        right: 15px !important;
+    }
+    
+    .floating-action-menu .floating-btn.main-btn {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 16px !important;
+    }
+}

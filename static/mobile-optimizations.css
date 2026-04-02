@@ -1,0 +1,1221 @@
+/*
+ * 📱 OTIMIZAÇÕES MOBILE - WiFiMaxx Monitor
+ * Melhorias para dispositivos móveis e touch
+ * Criado em: 08-09-2025
+ */
+
+/* ===== VARIÁVEIS MOBILE ===== */
+:root {
+    --mobile-header-height: 60px;
+    --mobile-padding: 12px;
+    --mobile-margin: 8px;
+    --touch-target-size: 44px;
+    --mobile-font-size: 14px;
+    --mobile-small-font: 12px;
+}
+
+/* ===== ESTILOS GLOBAIS PARA INPUTS DE DATA (TODAS AS RESOLUÇÕES) ===== */
+/* Força cor preta em todos os inputs de data para melhor legibilidade */
+input[type="date"] {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    font-weight: 500 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none !important;
+    opacity: 0.8 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1 !important;
+}
+
+/* ===== MEDIA QUERIES RESPONSIVAS ===== */
+
+/* Extra small devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+    
+    /* === HEADER MOBILE === */
+    header.main-header {
+        padding: 0.3rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        backdrop-filter: blur(10px);
+    }
+    
+    .logo-image {
+        max-width: 100px !important;
+        max-height: 60px !important;
+    }
+    
+    .logo-icon {
+        font-size: 2rem !important;
+    }
+    
+    /* === MENUS MOBILE RESPONSIVOS === */
+    .dropdown .btn {
+        min-width: 40px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+    
+    .dropdown .btn span {
+        display: none !important;
+    }
+    
+    .dropdown .btn i {
+        font-size: 16px;
+    }
+    
+    .dropdown-menu {
+        font-size: 14px;
+        min-width: 180px;
+    }
+    
+    /* === CONTROLE DE DATA MOBILE === */
+    .data-controle-container {
+        flex-direction: column !important;
+        gap: 4px !important;
+        padding: 6px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .data-controle-container span {
+        font-size: 10px !important;
+        text-align: center;
+    }
+    
+    .data-controle-container input {
+        font-size: 12px !important;
+        padding: 2px 4px !important;
+        height: 28px !important;
+        width: 100px !important;
+        text-align: center;
+    }
+    
+    /* === USUÁRIO MOBILE - SEM EMAIL === */
+    .user-info-mobile {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .user-info-mobile .user-email {
+        display: none !important;
+    }
+    
+    .user-info-mobile .logout-btn {
+        padding: 4px 8px !important;
+        font-size: 14px !important;
+        min-width: 36px;
+        min-height: 36px;
+    }
+    
+    /* === FILTROS RESPONSIVOS MOBILE === */
+    .filters-container {
+        gap: 12px !important;
+        flex-direction: column;
+        align-items: stretch !important;
+        padding: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Empurrar filtros/Busca para baixo dos botões do topo */
+    #filtersToolbar {
+        margin-top: 64px !important; /* header-menus ~52px + espaçamento */
+    }
+    
+    .filter-group {
+        width: 100% !important;
+        margin-bottom: 0;
+        position: relative;
+    }
+    
+    .filter-group::before {
+        content: attr(data-mobile-label);
+        position: absolute;
+        top: -8px;
+        left: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.8);
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        padding: 2px 6px;
+        border-radius: 8px;
+        z-index: 10;
+        letter-spacing: 0.5px;
+    }
+    
+    .filter-group .form-select::before {
+        content: attr(data-mobile-label);
+        position: absolute;
+        top: -8px;
+        left: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.9);
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        padding: 2px 6px;
+        border-radius: 8px;
+        z-index: 10;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-select {
+        font-size: 14px !important;
+        padding: 12px 16px !important;
+        min-height: 48px !important;
+        border-radius: 25px !important;
+        border: 2px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.95) !important;
+        width: 100% !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        font-weight: 500 !important;
+        color: #495057 !important;
+        position: relative;
+        margin-top: 8px;
+    }
+    
+    .form-select:focus {
+        border-color: #007bff !important;
+        box-shadow: 0 6px 20px rgba(0,123,255,0.25) !important;
+        transform: translateY(-2px) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* === LAYOUT DE FILTROS MOBILE MELHORADO === */
+    .row.align-items-center {
+        margin: 0 -8px !important;
+    }
+    
+    .row.align-items-center .col-lg-10,
+    .row.align-items-center .col-md-4 {
+        padding: 0 8px !important;
+        margin-bottom: 16px;
+    }
+    
+    .d-flex.align-items-center.gap-2 {
+        gap: 0 !important;
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    /* === FILTRO DE BUSCA MOBILE ESPECÍFICO === */
+    .search-filter-group {
+        margin-top: 8px !important;
+    }
+
+    /* Centralizar o campo de busca e limitar a largura para melhor percepção visual */
+    .filters-container .filter-group[data-mobile-label="Buscar"] {
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .filters-container .filter-group[data-mobile-label="Buscar"] .position-relative {
+        width: 100% !important;
+        max-width: 520px !important;
+        margin: 0 auto !important;
+    }
+    .filters-container .filter-group[data-mobile-label="Buscar"] input#searchInput {
+        text-align: center;
+    }
+    /* Esconde o ícone de lupa à esquerda para não puxar o campo para a esquerda */
+    .filters-container .filter-group[data-mobile-label="Buscar"] > i {
+        display: none !important;
+    }
+    
+    .search-filter-btn {
+        min-width: 100% !important;
+        width: 100% !important;
+        padding: 12px 20px !important;
+        font-size: 15px !important;
+        min-height: 50px !important;
+        border-radius: 25px !important;
+        border: 2px solid rgba(255,255,255,0.4) !important;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,245,255,0.95)) !important;
+        color: #495057 !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        font-weight: 600 !important;
+        text-align: left !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-top: 8px !important;
+    }
+    
+    .search-filter-btn::before {
+        content: "BUSCA";
+        position: absolute;
+        top: -8px;
+        left: 16px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.9);
+        background: linear-gradient(135deg, #28a745, #20c997);
+        padding: 2px 6px;
+        border-radius: 8px;
+        z-index: 10;
+        letter-spacing: 0.5px;
+    }
+    
+    .search-filter-btn:hover,
+    .search-filter-btn:focus,
+    .search-filter-btn.show {
+        border-color: #28a745 !important;
+        box-shadow: 0 8px 25px rgba(40,167,69,0.3) !important;
+        transform: translateY(-2px) !important;
+        transition: all 0.3s ease !important;
+        background: linear-gradient(135deg, rgba(255,255,255,1), rgba(232,245,233,1)) !important;
+    }
+    
+    .search-filter-text {
+        flex-grow: 1;
+        text-align: left;
+        margin-left: 8px;
+    }
+    
+    #searchInput {
+        min-height: 50px !important;
+        padding: 12px 20px !important;
+        font-size: 15px !important;
+        color: #212529 !important; /* Cor do texto */
+        border-radius: 25px !important;
+        border: 2px solid rgba(255,255,255,0.4) !important;
+        background: rgba(255,255,255,0.95) !important;
+        width: 100% !important;
+        margin-top: 12px !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        font-weight: 500 !important;
+    }
+    
+    #searchInput:focus {
+        border-color: #17a2b8 !important;
+        color: #212529 !important; /* Manter cor escura no foco */
+        box-shadow: 0 8px 25px rgba(23,162,184,0.3) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    #clearSearch {
+        margin-top: 12px !important;
+        min-height: 48px !important;
+        padding: 12px 20px !important;
+        border-radius: 25px !important;
+        border: 2px solid rgba(255,255,255,0.6) !important;
+        background: rgba(220,53,69,0.1) !important;
+        color: white !important;
+        width: 100% !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+    }
+    
+    #clearSearch:hover {
+        background: rgba(220,53,69,0.2) !important;
+        border-color: #dc3545 !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    /* === DROPDOWN MENU DE BUSCA MOBILE === */
+    .search-dropdown-menu {
+        border-radius: 20px !important;
+        border: none !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        padding: 12px !important;
+        margin-top: 8px !important;
+        background: rgba(255,255,255,0.98) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    
+    .dropdown-item {
+        padding: 12px 18px !important;
+        border-radius: 15px !important;
+        margin: 3px 0 !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #495057 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background: linear-gradient(135deg, #007bff, #0056b3) !important;
+        color: white !important;
+        transform: translateX(6px) scale(1.02) !important;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3) !important;
+    }
+    
+    .dropdown-header {
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        color: #6c757d !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.8px !important;
+        padding: 10px 18px 6px 18px !important;
+        border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .dropdown-divider {
+        margin: 8px 0 !important;
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+    
+    /* === CARDS MOBILE OTIMIZADOS === */
+    .status-card {
+        margin: 4px 0 !important;
+        padding: 8px 12px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        min-height: 70px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        position: relative !important;
+    }
+    
+    .status-card h3 {
+        font-size: 20px !important;
+        margin-bottom: 2px !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+    }
+    
+    .status-card p {
+        font-size: 11px !important;
+        margin: 0 !important;
+        text-align: center !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    /* === GRID DE CARDS MOBILE === */
+    .row .col-md-3 {
+        padding: 2px 4px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    /* === BUSCA MOBILE OTIMIZADA === */
+    .search-controls {
+        margin: 8px 0 !important;
+        padding: 8px !important;
+        background: rgba(255,255,255,0.95) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+    
+    .search-controls label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        color: #495057 !important;
+    }
+    
+    .search-controls .form-control,
+    .search-controls .form-select {
+        font-size: 13px !important;
+        padding: 6px 10px !important;
+        border-radius: 8px !important;
+        border: 1px solid #dee2e6 !important;
+        min-height: 36px !important;
+    }
+    
+    /* === CONTAINER PRINCIPAL MOBILE === */
+    .container-fluid {
+        padding: 6px !important;
+    }
+    
+    /* === MARGENS E ESPAÇAMENTOS MOBILE === */
+    .row {
+        margin: 0 -2px !important;
+    }
+    
+    .col, .col-12, .col-md-3, .col-md-9 {
+        padding: 0 2px !important;
+    }
+    
+    /* === ESPACAMENTO VERTICAL === */
+    .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    
+    .mb-3 {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .gap-3 {
+        gap: 0.5rem !important;
+    }
+    
+    .gap-2 {
+        gap: 0.25rem !important;
+    }
+    
+    /* === TABELA MOBILE OTIMIZADA === */
+    .table-responsive {
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        margin: 8px 0 !important;
+    }
+    
+    .table th,
+    .table td {
+        padding: 6px 4px !important;
+        font-size: 11px !important;
+        vertical-align: middle !important;
+        white-space: nowrap !important;
+    }
+    
+    .table th {
+        background-color: var(--header-bg) !important;
+        color: white !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10 !important;
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+    }
+    
+    /* === BOTÕES MOBILE OTIMIZADOS === */
+    .btn {
+        min-height: 36px !important;
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        border-radius: 20px !important;
+    }
+    
+    .btn-sm {
+        min-height: 30px !important;
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+    
+    /* === NAVEGAÇÃO MOBILE === */
+    .nav-pills .nav-link {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        margin: 1px !important;
+        border-radius: 15px !important;
+    }
+    
+    /* === MODAL MOBILE OTIMIZADO === */
+    .modal-dialog {
+        margin: 8px !important;
+        max-width: calc(100vw - 16px) !important;
+    }
+    
+    .modal-content {
+        border-radius: 12px !important;
+    }
+    
+    .modal-header,
+    .modal-footer {
+        padding: 10px 12px !important;
+    }
+    
+    .modal-body {
+        padding: 12px !important;
+        max-height: calc(100vh - 150px) !important;
+        overflow-y: auto !important;
+    }
+    
+    .modal-title {
+        font-size: 16px !important;
+    }
+    
+    /* === FORMULÁRIOS MOBILE === */
+    .form-control,
+    .form-select {
+        font-size: 13px !important;
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
+        min-height: 38px !important;
+    }
+    
+    .input-group-text {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+    }
+    
+    /* === TOAST MOBILE === */
+    .toast {
+        max-width: calc(100vw - 16px) !important;
+        margin: 0 8px !important;
+        font-size: 13px !important;
+    }
+    
+    /* === LOADING MOBILE === */
+    .spinner-container {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 9999 !important;
+    }
+    
+    /* === FORMATO DE DATA MOBILE === */
+    input[type="date"] {
+        font-size: 14px !important;
+        color: #1f2937 !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(0,0,0,0.2) !important;
+        border-radius: 6px !important;
+        padding: 6px 8px !important;
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: none !important;
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    /* === ZOOM PREVENTION === */
+    input, select, textarea {
+        font-size: 16px !important;
+        transform-origin: top left !important;
+    }
+    
+    /* === ANTI-ZOOM ESPECÍFICO === */
+    @media (max-width: 575.98px) {
+        input[type="text"],
+        input[type="email"], 
+        input[type="password"],
+        input[type="search"],
+        input[type="date"],
+        textarea,
+        select {
+            font-size: 16px !important;
+        }
+        
+        /* Mas para elementos específicos do layout mantemos o tamanho menor */
+        .data-controle-container input[type="date"] {
+            font-size: 12px !important;
+        }
+        
+        /* FORÇA COR ESCURA NOS INPUTS DE DATA - RAT FORM */
+        .rat-form input[type="date"],
+        .activity-item input[type="date"],
+        #dataInicio,
+        #dataTermino {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            background-color: #ffffff !important;
+        }
+        
+        .rat-form input[type="date"]::-webkit-datetime-edit,
+        .activity-item input[type="date"]::-webkit-datetime-edit,
+        #dataInicio::-webkit-datetime-edit,
+        #dataTermino::-webkit-datetime-edit {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+        
+        .rat-form input[type="date"]::-webkit-datetime-edit-month-field,
+        .rat-form input[type="date"]::-webkit-datetime-edit-day-field,
+        .rat-form input[type="date"]::-webkit-datetime-edit-year-field,
+        .activity-item input[type="date"]::-webkit-datetime-edit-month-field,
+        .activity-item input[type="date"]::-webkit-datetime-edit-day-field,
+        .activity-item input[type="date"]::-webkit-datetime-edit-year-field,
+        #dataInicio::-webkit-datetime-edit-month-field,
+        #dataInicio::-webkit-datetime-edit-day-field,
+        #dataInicio::-webkit-datetime-edit-year-field,
+        #dataTermino::-webkit-datetime-edit-month-field,
+        #dataTermino::-webkit-datetime-edit-day-field,
+        #dataTermino::-webkit-datetime-edit-year-field {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+        
+        .form-select option {
+            font-size: 14px !important;
+        }
+    }
+}
+
+/* === DATE OVERLAY (SHORT FORMAT) - MOBILE SUPPORT === */
+.date-input-wrapper {
+    position: relative;
+}
+.date-input-wrapper .formatted-date {
+    z-index: 2; /* above the native input text */
+    pointer-events: none; /* allow clicks to reach the native date input */
+    color: #111827 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 6px 8px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+}
+
+/* On very small screens ensure the overlay font-size matches inputs */
+@media (max-width: 575.98px) {
+    .date-input-wrapper .formatted-date {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: #000000 !important;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .filter-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .filter-group {
+        width: 48% !important;
+    }
+    
+    .status-card h3 {
+        font-size: 28px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .filter-group {
+        width: 32% !important;
+    }
+    
+    .table th,
+    .table td {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+}
+
+/* ===== MELHORIAS DE PERFORMANCE ===== */
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Otimização de hardware */
+.clickable-card,
+.btn,
+.nav-link {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Transições otimizadas */
+.transition-fast {
+    transition: all 0.15s ease-out;
+}
+
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== UTILITÁRIOS MOBILE ===== */
+
+/* Ocultar em mobile */
+.d-mobile-none {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    .d-mobile-none {
+        display: block !important;
+    }
+}
+
+/* Mostrar apenas em mobile */
+.d-mobile-only {
+    display: block !important;
+}
+
+@media (min-width: 768px) {
+    .d-mobile-only {
+        display: none !important;
+    }
+}
+
+/* === MOBILE ESPECÍFICO: OCULTAR EMAIL DO USUÁRIO === */
+@media (max-width: 575.98px) {
+    /* Ocultar email do usuário em mobile */
+    .user-email-desktop {
+        display: none !important;
+    }
+    
+    /* Ocultar texto do usuário, deixar só o ícone */
+    .navbar-nav .nav-link span:not(.visually-hidden) {
+        display: none !important;
+    }
+    
+    /* Reduzir dropdown do usuário */
+    .navbar-nav .nav-item.dropdown {
+        margin: 0 !important;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 4px 8px !important;
+        font-size: 16px !important;
+    }
+    
+    /* === HEADER MOBILE COMPACTO === */
+    .main-header .row.align-items-center.mb-3 {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .main-header .col-md-4 {
+        padding: 2px !important;
+    }
+    
+    /* === CONTROLE DE DATA COMPACTO === */
+    .d-flex.flex-column.align-items-end {
+        align-items: center !important;
+        gap: 4px !important;
+    }
+    
+    .d-flex.align-items-center.gap-2:has(.small.text-white) {
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+    
+    /* === LAYOUT MOBILE RESPONSIVO === */
+    .container-fluid.pt-5.mt-3 {
+        padding-top: 1rem !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    /* === NAVBAR MOBILE === */
+    .navbar-brand {
+        font-size: 14px !important;
+        padding: 0 !important;
+    }
+    
+    .navbar-brand i {
+        font-size: 16px !important;
+    }
+    
+    .navbar-toggler {
+        padding: 2px 6px !important;
+        font-size: 12px !important;
+    }
+}
+
+/* ===== MELHORIAS DE ACESSIBILIDADE ===== */
+
+/* Foco visível */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+}
+
+/* Texto legível */
+@media (max-width: 575.98px) {
+    body {
+        font-size: var(--mobile-font-size);
+        line-height: 1.5;
+    }
+    
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 18px; }
+    h4 { font-size: 16px; }
+    h5 { font-size: 14px; }
+    h6 { font-size: 12px; }
+}
+
+/* ===== TOUCH GESTURES ===== */
+
+/* Área de toque maior */
+.touch-target {
+    min-height: var(--touch-target-size);
+    min-width: var(--touch-target-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Anti-zoom em inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+    font-size: 16px !important;
+}
+
+@media (max-width: 575.98px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    textarea,
+    select {
+        font-size: var(--mobile-font-size) !important;
+    }
+}
+
+/* ===== ANIMAÇÕES SUAVES ===== */
+
+/* Fade in para elementos carregados */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulse para loading */
+.pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ===== DARK MODE SUPPORT - CORREÇÃO MOBILE ===== */
+
+/* Base dark theme for mobile */
+@media (max-width: 768px) {
+    /* Dark theme (padrão) */
+    html, body {
+        background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+        color: #e9ecef !important;
+    }
+    
+    html.dark-theme, body.dark-theme,
+    html[data-theme="dark"], body[data-theme="dark"] {
+        background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+        color: #e9ecef !important;
+    }
+    
+    /* Light theme mobile */
+    html.light-theme, body.light-theme,
+    html[data-theme="light"], body[data-theme="light"] {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%) !important;
+        color: #2c3e50 !important;
+    }
+    
+    /* Force theme application on mobile with higher specificity */
+    html[data-theme="light"] body,
+    body[data-theme="light"],
+    html.light-theme body,
+    body.light-theme {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%) !important;
+        color: #2c3e50 !important;
+    }
+    
+    html[data-theme="dark"] body,
+    body[data-theme="dark"],
+    html.dark-theme body,
+    body.dark-theme {
+        background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%) !important;
+        color: #e9ecef !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --body-bg: #0f172a;
+        --card-bg: #1e293b;
+        --text-color: #e2e8f0;
+    }
+    
+    body {
+        background-color: var(--body-bg);
+        color: var(--text-color);
+    }
+    
+    .status-card {
+        background-color: var(--card-bg);
+        border: 1px solid #334155;
+    }
+}
+
+/* ===== SUPORTE PARA ZOOM E DIFERENTES DENSIDADES ===== */
+
+/* Suporte para zoom nativo do navegador */
+@media (max-width: 575.98px) {
+    /* Base responsiva que se adapta ao zoom */
+    html {
+        font-size: clamp(12px, 4vw, 16px);
+        text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+    }
+    
+    body {
+        min-width: 320px;
+        overflow-x: hidden;
+        position: relative;
+    }
+    
+    /* Container responsivo */
+    .container-fluid {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+    
+    /* === ELEMENTOS QUE SE ADAPTAM AO ZOOM === */
+    .status-card,
+    .btn,
+    .form-control,
+    .form-select {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* === LAYOUT FLUIDO === */
+    .row {
+        margin-left: -2px;
+        margin-right: -2px;
+    }
+    
+    .row > * {
+        padding-left: 2px;
+        padding-right: 2px;
+        min-width: 0;
+    }
+    
+    /* === TEXTO RESPONSIVO === */
+    .text-responsive {
+        font-size: clamp(10px, 3vw, 14px);
+        line-height: 1.4;
+    }
+    
+    /* === DENSIDADE DE TELA ALTA === */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .status-card {
+            border-width: 0.5px;
+        }
+        
+        .btn {
+            border-width: 0.5px;
+        }
+    }
+}
+
+/* === SAFE AREA PARA NOTCH/ISLAND === */
+@supports (padding: max(0px)) {
+    .main-header {
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+        padding-top: max(8px, env(safe-area-inset-top));
+    }
+    
+    .container-fluid {
+        padding-left: max(6px, env(safe-area-inset-left));
+        padding-right: max(6px, env(safe-area-inset-right));
+        padding-bottom: max(6px, env(safe-area-inset-bottom));
+    }
+}
+
+/* === ORIENTAÇÃO LANDSCAPE === */
+@media (max-width: 575.98px) and (orientation: landscape) {
+    .main-header {
+        padding: 4px 0;
+    }
+    
+    .logo-image {
+        max-height: 40px !important;
+    }
+    
+    .status-card {
+        padding: 6px 8px !important;
+        min-height: 50px !important;
+    }
+    
+    .status-card h3 {
+        font-size: 16px !important;
+    }
+    
+    .status-card p {
+        font-size: 9px !important;
+    }
+}
+
+/* === ACESSIBILIDADE E PREFERÊNCIAS DO USUÁRIO === */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* === FORMATAÇÃO DE DATA MAIS COMPACTA === */
+@media (max-width: 575.98px) {
+    /* Força formato DD/MM/AA para campos de data */
+    input[type="date"] {
+        position: relative;
+        width: 90px !important;
+        text-align: center;
+    }
+    
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-clear-button {
+        display: none;
+    }
+    
+    input[type="date"]::-webkit-datetime-edit-text {
+        color: #1f2937;
+        padding: 0 1px;
+    }
+    
+    input[type="date"]::-webkit-datetime-edit-month-field,
+    input[type="date"]::-webkit-datetime-edit-day-field,
+    input[type="date"]::-webkit-datetime-edit-year-field {
+        color: #1f2937;
+        font-weight: 500;
+    }
+    
+    /* Esconde separadores longos */
+    input[type="date"]::-webkit-datetime-edit {
+        font-size: 13px;
+        color: #1f2937;
+    }
+}
+
+/* ===== CLASSES UTILITÁRIAS MOBILE ===== */
+@media (max-width: 575.98px) {
+    /* Text responsivo */
+    .text-mobile-xs { font-size: 10px !important; }
+    .text-mobile-sm { font-size: 12px !important; }
+    .text-mobile-md { font-size: 14px !important; }
+    
+    /* Spacing mobile */
+    .p-mobile-1 { padding: 4px !important; }
+    .p-mobile-2 { padding: 8px !important; }
+    .m-mobile-1 { margin: 4px !important; }
+    .m-mobile-2 { margin: 8px !important; }
+    
+    /* Containers flexíveis */
+    .flex-mobile-column { 
+        flex-direction: column !important; 
+        align-items: stretch !important;
+    }
+    
+    .gap-mobile-1 { gap: 4px !important; }
+    .gap-mobile-2 { gap: 8px !important; }
+    
+    /* Cards responsivos */
+    .card-mobile-compact {
+        border-radius: 8px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* Botões mobile */
+    .btn-mobile-sm {
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+        min-height: 32px !important;
+    }
+    
+    .btn-mobile-icon-only {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Status cards grid otimizado */
+    .status-cards-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+        margin: 8px 0 !important;
+    }
+    
+    /* Scroll suave em tabelas */
+    .table-responsive::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 2px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+}
+
+/* ===== PWA OPTIMIZATIONS ===== */
+
+/* Remover seleção de texto em elementos de UI */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Otimizar scroll */
+.scroll-optimized {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== FALLBACKS E COMPATIBILIDADE ===== */
+@supports not (display: grid) {
+    @media (max-width: 575.98px) {
+        .status-cards-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+        }
+        
+        .status-cards-grid > * {
+            flex: 1 1 calc(50% - 6px) !important;
+        }
+    }
+}
+
+/* Fallback para browsers antigos */
+@supports not (gap: 6px) {
+    @media (max-width: 575.98px) {
+        .status-cards-grid > * {
+            margin: 3px !important;
+        }
+    }
+}

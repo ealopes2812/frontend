@@ -1,0 +1,373 @@
+/* ===================================================================
+   DARK/LIGHT THEME SYSTEM - Modern Toggle
+   WifiMaxx Monitor - Theme Switcher
+   ================================================================== */
+
+:root {
+    /* Dark Theme Variables (Default) */
+    --theme-bg-primary: #1a237e;
+    --theme-bg-secondary: #f3f6fd;
+    --theme-glass-bg: rgba(255, 255, 255, 0.15);
+    --theme-glass-border: rgba(255, 255, 255, 0.2);
+    --theme-text-primary: #ffffff;
+    --theme-text-secondary: rgba(255, 255, 255, 0.8);
+    --theme-blur: blur(15px);
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+    --theme-bg-primary: #ffffff;
+    --theme-bg-secondary: #f8f9fa;
+    --theme-glass-bg: rgba(255, 255, 255, 0.8);
+    --theme-glass-border: rgba(0, 0, 0, 0.1);
+    --theme-text-primary: #212529;
+    --theme-text-secondary: #6c757d;
+    --theme-blur: blur(10px);
+}
+
+/* ===================================================================
+   THEME TOGGLE BUTTON - INTEGRADO NO NOVO HEADER FUTURÍSTICO
+   ================================================================== */
+
+.theme-toggle {
+    position: absolute;
+    top: 50%;
+    right: 25px; /* Posicionamento mais elegante */
+    transform: translateY(-50%);
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 50px !important;
+    padding: 12px 20px !important;
+    cursor: pointer !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(59, 130, 246, 0.1) !important;
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+    color: #e2e8f0 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+/* Efeito de linha de luz no topo */
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0.8;
+}
+
+/* Efeito shimmer no hover */
+.theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.theme-toggle:hover::after {
+    left: 100%;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-50%) translateY(-2px) !important;
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.2),
+        0 0 30px rgba(59, 130, 246, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Minimal two-dot toggle */
+.theme-toggle {
+    position: relative;
+    z-index: 2100;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    width: 40px;
+    height: 24px;
+    padding: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}
+.theme-toggle .dot {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+.theme-toggle .dot-dark { background: #000; border: 1px solid rgba(255,255,255,0.6); }
+.theme-toggle .dot-light { background: #fff; border: 1px solid rgba(0,0,0,0.2); }
+
+[data-theme="light"] .theme-toggle { border-color: rgba(0,0,0,0.25); }
+
+/* Light theme button styling */
+/* no extra light theme styling needed beyond border color */
+
+/* ===================================================================
+   RESPONSIVIDADE
+   ================================================================== */
+
+@media (max-width: 1200px) {
+    .theme-toggle {
+        right: 20px !important;
+        padding: 10px 16px !important;
+        font-size: 12px !important;
+    }
+    
+    .theme-toggle .theme-text {
+        display: none !important; /* Ocultar texto em telas menores */
+    }
+    
+    .theme-toggle {
+        gap: 0 !important;
+        padding: 12px !important;
+        border-radius: 50% !important;
+        width: 44px !important;
+        height: 44px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px !important;
+        right: 15px !important;
+        transform: none !important;
+        width: 40px !important;
+        height: 40px !important;
+        padding: 10px !important;
+    }
+    
+    .theme-toggle i {
+        font-size: 14px !important;
+    }
+    
+    .theme-toggle .theme-icon {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .theme-toggle {
+        top: 10px !important;
+        right: 10px !important;
+        width: 36px !important;
+        height: 36px !important;
+        padding: 8px !important;
+    }
+}
+
+/* ===================================================================
+   ACESSIBILIDADE E INTERATIVIDADE
+   ================================================================== */
+
+.theme-toggle:focus {
+    outline: 2px solid rgba(59, 130, 246, 0.6) !important;
+    outline-offset: 2px !important;
+}
+
+.theme-toggle:active {
+    transform: translateY(-50%) translateY(-1px) scale(0.98) !important;
+}
+
+[data-theme="light"] .theme-toggle:focus {
+    outline-color: rgba(59, 130, 246, 0.8) !important;
+}
+
+/* ===================================================================
+   ANIMAÇÕES ESPECIAIS
+   ================================================================== */
+
+@keyframes theme-switch-glow {
+    0% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 20px rgba(59, 130, 246, 0.1); }
+    50% { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2), 0 0 40px rgba(59, 130, 246, 0.4); }
+    100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 20px rgba(59, 130, 246, 0.1); }
+}
+
+.theme-toggle.switching {
+    animation: theme-switch-glow 0.6s ease-in-out;
+}
+
+/* Desabilitar transições durante mudança de tema para evitar flicker */
+.theme-transitioning .theme-toggle {
+    transition: none !important;
+}
+
+/* ===================================================================
+   THEME ADAPTATIONS FOR COMPONENTS
+   ================================================================== */
+
+/* Header adaptation */
+[data-theme="light"] header.main-header {
+    background: var(--theme-bg-primary) !important;
+    color: var(--theme-text-primary);
+}
+
+[data-theme="light"] header.main-header label,
+[data-theme="light"] header.main-header .text-muted {
+    color: var(--theme-text-primary) !important;
+}
+
+/* Body adaptation */
+[data-theme="light"] body {
+    background-color: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+}
+
+/* Glass components adaptation */
+[data-theme="light"] .glass-card,
+[data-theme="light"] .status-card-glass,
+[data-theme="light"] .filter-panel-glass,
+[data-theme="light"] .table-container-glass,
+[data-theme="light"] .modern-filters-container {
+    background: var(--theme-glass-bg);
+    border-color: var(--theme-glass-border);
+    backdrop-filter: var(--theme-blur);
+    -webkit-backdrop-filter: var(--theme-blur);
+    color: var(--theme-text-primary);
+}
+
+/* Text colors in light theme */
+[data-theme="light"] .status-card-glass .status-title,
+[data-theme="light"] .status-card-glass .status-count,
+[data-theme="light"] .chip-label,
+[data-theme="light"] .chip-select {
+    color: var(--theme-text-primary) !important;
+}
+
+[data-theme="light"] .status-card-glass .status-icon i,
+[data-theme="light"] .chip-icon i {
+    color: var(--theme-text-primary);
+}
+
+/* Table adaptation */
+[data-theme="light"] .table-container-glass .table th,
+[data-theme="light"] .table-container-glass .table td {
+    color: var(--theme-text-primary);
+}
+
+[data-theme="light"] .table-container-glass .table th {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .table-container-glass .table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Search input adaptation */
+[data-theme="light"] .chip-input {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: var(--theme-text-primary) !important;
+}
+
+[data-theme="light"] .chip-input::placeholder {
+    color: var(--theme-text-secondary);
+}
+
+[data-theme="light"] .chip-input:focus {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Filter chips adaptation */
+[data-theme="light"] .filter-chip {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .filter-chip:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .chip-icon {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* ===================================================================
+   MOBILE ADAPTATIONS
+   ================================================================== */
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+    }
+    
+    .theme-toggle i {
+        font-size: 20px;
+    }
+    
+    .theme-toggle .theme-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* ===================================================================
+   SMOOTH TRANSITIONS FOR THEME CHANGE
+   ================================================================== */
+
+* {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease;
+}
+
+/* Disable transitions during theme change to avoid flicker */
+.theme-transitioning * {
+    transition: none !important;
+}
+
+/* ===================================================================
+   ACCESSIBILITY
+   ================================================================== */
+
+.theme-toggle:focus {
+    outline: 2px solid var(--theme-text-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-toggle,
+    .theme-toggle i,
+    .icon-sun,
+    .icon-moon {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .theme-toggle {
+        border: 2px solid var(--theme-text-primary);
+    }
+}

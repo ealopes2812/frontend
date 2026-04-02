@@ -1,0 +1,483 @@
+/* ===================================================================
+   GLASSMORPHISM DESIGN SYSTEM 2025
+   WifiMaxx Monitor - Modern Glass UI Components
+   ================================================================== */
+
+:root {
+    /* Glassmorphism Colors */
+    --glass-bg-primary: rgba(255, 255, 255, 0.15);
+    --glass-bg-secondary: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-border-strong: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --glass-blur: blur(15px);
+    --glass-blur-strong: blur(20px);
+    
+    /* Glass Card Variants - Cores Originais */
+    --glass-success: rgba(40, 167, 69, 0.2);        /* Verde Online */
+    --glass-warning: rgba(255, 193, 7, 0.2);        /* Amarelo Atenção */
+    --glass-danger: rgba(220, 53, 69, 0.2);         /* Vermelho Alerta */
+    --glass-info: rgba(52, 58, 64, 0.2);            /* Cinza Inativo */
+    --glass-maintenance: rgba(255, 152, 0, 0.2);    /* Laranja Manutenção */
+    
+    /* Animation Variables */
+    --glass-transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --glass-hover-scale: 1.02;
+}
+
+/* ===================================================================
+   BASE GLASS CARD COMPONENT
+   ================================================================== */
+
+.glass-card {
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    transition: var(--glass-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border-strong), transparent);
+    opacity: 0.8;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px) scale(var(--glass-hover-scale));
+    box-shadow: var(--glass-shadow-hover);
+    border-color: var(--glass-border-strong);
+}
+
+/* ===================================================================
+   GLASS CARD VARIANTS
+   ================================================================== */
+
+.glass-card-success {
+    background: var(--glass-success);
+    border-color: rgba(40, 167, 69, 0.4);
+}
+
+.glass-card-warning {
+    background: var(--glass-warning);
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+.glass-card-danger {
+    background: var(--glass-danger);
+    border-color: rgba(220, 53, 69, 0.4);
+}
+
+.glass-card-info {
+    background: var(--glass-info);
+    border-color: rgba(52, 58, 64, 0.4);
+}
+
+.glass-card-maintenance {
+    background: var(--glass-maintenance);
+    border-color: rgba(255, 152, 0, 0.4);
+}
+
+/* ===================================================================
+   STATUS CARDS GLASSMORPHISM
+   ================================================================== */
+
+.status-card-glass {
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: var(--glass-transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    color: white !important;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.status-card-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--glass-border-strong), transparent);
+    opacity: 0.9;
+}
+
+.status-card-glass:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+    border-color: var(--glass-border-strong);
+}
+
+.status-card-glass.active-filter {
+    background: var(--glass-bg-secondary);
+    border: 2px solid var(--glass-border-strong);
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.status-card-glass .status-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+    transition: var(--glass-transition);
+}
+
+.status-card-glass:hover .status-icon {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.status-card-glass .status-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+}
+
+.status-card-glass .status-count {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================================================================
+   FILTER PANEL GLASSMORPHISM
+   ================================================================== */
+
+.filter-panel-glass {
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--glass-shadow);
+    transition: var(--glass-transition);
+}
+
+.filter-panel-glass:hover {
+    border-color: var(--glass-border-strong);
+    box-shadow: var(--glass-shadow-hover);
+}
+
+/* ===================================================================
+   TABLE CONTAINER GLASSMORPHISM
+   ================================================================== */
+
+.table-container-glass {
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--glass-shadow);
+    transition: var(--glass-transition);
+}
+
+.table-container-glass:hover {
+    border-color: var(--glass-border-strong);
+    box-shadow: var(--glass-shadow-hover);
+}
+
+.table-container-glass .table {
+    background: transparent;
+    margin: 0;
+}
+
+.table-container-glass .table th {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--glass-border);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 1rem 0.75rem;
+}
+
+.table-container-glass .table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    background: transparent;
+}
+
+.table-container-glass .table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* ===================================================================
+   SEARCH INPUT GLASSMORPHISM
+   ================================================================== */
+
+.search-glass {
+    background: var(--glass-bg-secondary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    transition: var(--glass-transition);
+}
+
+.search-glass::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-glass:focus {
+    outline: none;
+    border-color: var(--glass-border-strong);
+    background: var(--glass-bg-primary);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* ===================================================================
+   MOBILE OPTIMIZATIONS
+   ================================================================== */
+
+@media (max-width: 768px) {
+    .status-card-glass {
+        padding: 1.5rem 1rem;
+        min-height: 120px;
+        border-radius: 20px;
+    }
+    
+    .status-card-glass .status-icon {
+        font-size: 2rem;
+    }
+    
+    .status-card-glass .status-count {
+        font-size: 1.75rem;
+    }
+    
+    .glass-card {
+        border-radius: 16px;
+    }
+    
+    .filter-panel-glass,
+    .table-container-glass {
+        border-radius: 16px;
+        padding: 1rem;
+    }
+}
+
+/* ===================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .glass-card,
+    .status-card-glass,
+    .filter-panel-glass,
+    .table-container-glass {
+        transition: none;
+    }
+    
+    .glass-card:hover,
+    .status-card-glass:hover {
+        transform: none;
+    }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(15px)) {
+    .glass-card,
+    .status-card-glass,
+    .filter-panel-glass,
+    .table-container-glass {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* ===================================================================
+   LOADING STATES
+   ================================================================== */
+
+.glass-card.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: glass-shimmer 1.5s infinite;
+}
+
+@keyframes glass-shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ===================================================================
+   STATUS CARD COLOR VARIANTS - CORES VIVAS E FORÇADAS
+   ================================================================== */
+
+/* ONLINE - VERDE VIBRANTE */
+.glass-card-success,
+.status-card-glass.glass-card-success {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.4), rgba(40, 167, 69, 0.2)) !important;
+    border: 2px solid rgba(40, 167, 69, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(40, 167, 69, 0.3) !important;
+}
+
+.glass-card-success .status-icon i,
+.status-card-glass.glass-card-success .status-icon i {
+    color: #28a745 !important;
+    text-shadow: 0 0 20px rgba(40, 167, 69, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* ATENÇÃO - AMARELO VIBRANTE */
+.glass-card-warning,
+.status-card-glass.glass-card-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.4), rgba(255, 193, 7, 0.2)) !important;
+    border: 2px solid rgba(255, 193, 7, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(255, 193, 7, 0.3) !important;
+}
+
+.glass-card-warning .status-icon i,
+.status-card-glass.glass-card-warning .status-icon i {
+    color: #ffc107 !important;
+    text-shadow: 0 0 20px rgba(255, 193, 7, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* ALERTA - VERMELHO VIBRANTE */
+.glass-card-danger,
+.status-card-glass.glass-card-danger {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.4), rgba(220, 53, 69, 0.2)) !important;
+    border: 2px solid rgba(220, 53, 69, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(220, 53, 69, 0.3) !important;
+}
+
+.glass-card-danger .status-icon i,
+.status-card-glass.glass-card-danger .status-icon i {
+    color: #dc3545 !important;
+    text-shadow: 0 0 20px rgba(220, 53, 69, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* INATIVO - CINZA */
+.glass-card-info,
+.status-card-glass.glass-card-info {
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.4), rgba(108, 117, 125, 0.2)) !important;
+    border: 2px solid rgba(108, 117, 125, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(108, 117, 125, 0.3) !important;
+}
+
+.glass-card-info .status-icon i,
+.status-card-glass.glass-card-info .status-icon i {
+    color: #6c757d !important;
+    text-shadow: 0 0 20px rgba(108, 117, 125, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* MANUTENÇÃO - LARANJA VIBRANTE */
+.glass-card-maintenance,
+.status-card-glass.glass-card-maintenance {
+    background: linear-gradient(135deg, rgba(255, 126, 20, 0.4), rgba(255, 126, 20, 0.2)) !important;
+    border: 2px solid rgba(255, 126, 20, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(255, 126, 20, 0.3) !important;
+}
+
+.glass-card-maintenance .status-icon i,
+.status-card-glass.glass-card-maintenance .status-icon i {
+    color: #ff7e14 !important;
+    text-shadow: 0 0 20px rgba(255, 126, 20, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+/* Forçar cores nos títulos e números também */
+.glass-card-success .status-title,
+.glass-card-success .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-card-warning .status-title,
+.glass-card-warning .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-card-danger .status-title,
+.glass-card-danger .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-card-info .status-title,
+.glass-card-info .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-card-maintenance .status-title,
+.glass-card-maintenance .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* DIVERGÊNCIAS - ROXO VIBRANTE */
+.glass-card-divergence,
+.status-card-glass.glass-card-divergence {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.4), rgba(138, 43, 226, 0.2)) !important;
+    border: 2px solid rgba(138, 43, 226, 0.8) !important;
+    box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3) !important;
+}
+
+.glass-card-divergence .status-icon i,
+.status-card-glass.glass-card-divergence .status-icon i {
+    color: #8a2be2 !important;
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.8) !important;
+    filter: brightness(1.2) !important;
+}
+
+.glass-card-divergence .status-title,
+.glass-card-divergence .status-count {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ===================================================================
+   DARK MODE SUPPORT (Future Implementation)
+   ================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg-primary: rgba(0, 0, 0, 0.3);
+        --glass-bg-secondary: rgba(0, 0, 0, 0.2);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-border-strong: rgba(255, 255, 255, 0.2);
+    }
+}

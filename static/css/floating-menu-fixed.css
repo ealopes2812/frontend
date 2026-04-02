@@ -1,0 +1,53 @@
+/* ===================================================================
+   CORREÇÃO DO MENU FLUTUANTE
+   ================================================================== */
+
+/* Posição fixa no canto superior direito */
+.floating-menu,
+#floatingMenu,
+.floating-action-button,
+.fab-container,
+div[class*="floating"],
+div[id*="floating"],
+.floating-action-menu {
+    position: fixed !important;
+    top: 10px !important;
+    right: 12px !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: 3000 !important; /* super top */
+    transform: none !important;
+}
+
+/* Garantir visibilidade */
+.floating-menu button,
+#floatingMenu button,
+.floating-action-button button,
+.fab-container button,
+div[class*="floating"] button,
+div[id*="floating"] button {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Estilos específicos para o menu expandido */
+.floating-menu .menu-options,
+#floatingMenu .menu-options,
+.floating-action-button .menu-options,
+div[class*="floating"] .menu-options,
+div[id*="floating"] .menu-options {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Prevenir recortes por contêineres pais */
+header.main-header,
+header.main-header .container-fluid,
+.main-content-container {
+    overflow: visible !important;
+}
