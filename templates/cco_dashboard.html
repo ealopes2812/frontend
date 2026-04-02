@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#161b22">
+    <title>CCO Admin — WifiMaxx Monitor</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/logo.png" sizes="32x32">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Font Awesome (required by chat.js) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Chart.js Datalabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    
+    <!-- CCO Dashboard CSS -->
+    <link rel="stylesheet" href="/static/css/cco-dashboard.css?v={{ cache_version }}">
+</head>
+<body>
+
+<div class="cco-layout">
+
+    <!-- ======== TOP NAVIGATION ======== -->
+    <nav class="cco-topnav" id="ccoTopnav">
+        <div class="cco-topnav-brand">
+            <span class="brand-accent">CCO</span> Operations Hub
+        </div>
+        <div class="cco-topnav-links">
+            <a href="/dashboard" class="cco-topnav-item">
+                <i class="bi bi-hdd-rack"></i> Monitoramento
+            </a>
+            <a href="/chamados" class="cco-topnav-item">
+                <i class="bi bi-ticket-detailed"></i> Chamados
+            </a>
+            <a href="/asbuilt" class="cco-topnav-item">
+                <i class="bi bi-file-earmark-check"></i> Asbuilt
+            </a>
+        </div>
+        <div class="cco-topnav-right">
+            <div class="cco-refresh-badge">
+                <span class="pulse"></span>
+                <span id="lastUpdate">Atualizando...</span>
+            </div>
+            <a href="/logout" class="cco-topnav-logout" title="Sair">
+                <i class="bi bi-box-arrow-right"></i>
+            </a>
+        </div>
+        <!-- Mobile hamburger -->
+        <button class="cco-topnav-toggle" onclick="document.getElementById('ccoTopnav').classList.toggle('open')">
+            <i class="bi bi-list"></i>
+        </button>
+    </nav>
+
+    <!-- ======== MAIN CONTENT ======== -->
+    <main class="cco-main" id="ccoMain">
+        
+        <!-- Header -->
+        <div class="cco-header">
+            <div>
+                <h1>Visão Geral Operacional</h1>
+                <p class="subtitle">Centro de Controle Operacional — Tempo real</p>
+            </div>
+            <div class="cco-user-info">
+                <span class="user-name">
+                    Olá, <strong id="userName">{{ user.nome or user.display_name or (user.username.split('@')[0] if user.username else 'Usuário') }}</strong>
+                </span>
+                <div class="cco-user-avatar" id="userAvatar">
+                    {% if user.nome or user.display_name %}
+                        {{ (user.nome or user.display_name)[:2]|upper }}
+                    {% elif user.username %}
+                        {{ user.username[:2]|upper }}
+                    {% else %}
+                        AD
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Row -->
+        <div class="cco-kpi-grid">
+            <div class="cco-kpi-card kpi-primary">
+                <div class="kpi-content">
+                    <div>
+                        <p class="kpi-label">Total Chamados</p>
+                        <p class="kpi-value" id="kpiTotalChamados">
+                            <span class="cco-skeleton" style="width:48px;height:32px;display:inline-block"></span>
+                        </p>
+                        <p class="kpi-subtitle" id="kpiTotalChamadosSub">carregando...</p>
+                    </div>
+                    <div class="kpi-icon"><i class="bi bi-ticket-detailed"></i></div>
+                </div>
+            </div>
+            <div class="cco-kpi-card kpi-success">
+                <div class="kpi-content">
+                    <div>
+                        <p class="kpi-label">Máquinas Online</p>
+                        <p class="kpi-value" id="kpiOnline">
+                            <span class="cco-skeleton" style="width:48px;height:32px;display:inline-block"></span>
+                        </p>
+                        <p class="kpi-subtitle" id="kpiOnlineSub">carregando...</p>
+                    </div>
+                    <div class="kpi-icon"><i class="bi bi-hdd-rack"></i></div>
+                </div>
+            </div>
+            <div class="cco-kpi-card kpi-warning">
+                <div class="kpi-content">
+                    <div>
+                        <p class="kpi-label">Alertas Ativos</p>
+                        <p class="kpi-value" id="kpiAlertas">
+                            <span class="cco-skeleton" style="width:48px;height:32px;display:inline-block"></span>
+                        </p>
+                        <p class="kpi-subtitle" id="kpiAlertasSub">carregando...</p>
+                    </div>
+                    <div class="kpi-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                </div>
+            </div>
+            <div class="cco-kpi-card kpi-danger">
+                <div class="kpi-content">
+                    <div>
+                        <p class="kpi-label">Máquinas Inativas</p>
+                        <p class="kpi-value" id="kpiOffline">
+                            <span class="cco-skeleton" style="width:48px;height:32px;display:inline-block"></span>
+                        </p>
+                        <p class="kpi-subtitle" id="kpiOfflineSub">carregando...</p>
+                    </div>
+                    <div class="kpi-icon"><i class="bi bi-hdd-rack-fill"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Row -->
+        <div class="cco-bottom-row">
+            <!-- Calendar -->
+            <div class="cco-card" style="display:flex;flex-direction:column;">
+                <h3 class="cco-card-title" id="calendarTitle">Agenda — Fev 2026</h3>
+                <div class="cco-calendar-grid" id="calendarGrid">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="cco-calendar-events" id="calendarEvents">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Filter -->
+        <div class="cco-card" style="margin-bottom:20px;">
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                <h3 class="cco-card-title" style="margin:0;border:none;padding:0;white-space:nowrap;">Filtro por Departamento</h3>
+                <div style="flex:1;min-width:250px;">
+                    <select id="deptFilter" multiple style="width:100%;min-height:38px;background:var(--cco-card-bg, #1c2333);color:var(--cco-text, #e2e8f0);border:1px solid var(--cco-border, #2d3548);border-radius:8px;padding:6px 10px;font-size:0.9rem;">
+                    </select>
+                </div>
+                <button onclick="clearDeptFilter()" class="cco-btn-primary" style="padding:0.4rem 0.8rem;font-size:0.85rem;white-space:nowrap;">
+                    <i class="bi bi-x-circle"></i> Limpar Filtro
+                </button>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="cco-charts-row">
+            <div class="cco-card">
+                <h3 class="cco-card-title">Chamados por Status</h3>
+                <div class="cco-chart-container">
+                    <canvas id="chartPie"></canvas>
+                </div>
+            </div>
+            <div class="cco-card">
+                <h3 class="cco-card-title">Chamados por Usuário CCO</h3>
+                <div class="cco-chart-container">
+                    <canvas id="chartChamadosByUser"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Novos Gráficos: Chamados por Departamento e Status -->
+        <div class="cco-charts-row">
+            <div class="cco-card">
+                <h3 class="cco-card-title">Chamados por Departamento (Recebidos)</h3>
+                <div class="cco-chart-container">
+                    <canvas id="chartChamadosByDept"></canvas>
+                </div>
+            </div>
+            <div class="cco-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem;">
+                    <h3 class="cco-card-title" style="margin:0;border:none;padding:0;">Status por Departamento</h3>
+                    <select id="deptPieSelector" onchange="updateStatusPieFromSelector()" style="background:var(--cco-card-bg, #1c2333);color:var(--cco-text, #e2e8f0);border:1px solid var(--cco-border, #2d3548);border-radius:6px;padding:4px 8px;font-size:0.85rem;">
+                    </select>
+                </div>
+                <div class="cco-chart-container">
+                    <canvas id="chartStatusByDeptPie"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Line Chart Row (full width) -->
+        <div style="display:grid;grid-template-columns:1fr;gap:20px;">
+            <div class="cco-card" style="width:100%;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem;">
+                    <h3 class="cco-card-title" style="margin:0;border:none;padding:0;">Histórico de Máquinas — Últimos 7 dias</h3>
+                    <div style="display:flex;gap:0.5rem;">
+                        <button onclick="exportDashboardPDF()" class="cco-btn-primary" style="padding:0.4rem 0.8rem;font-size:0.8rem;" title="Exportar dashboard como PDF">
+                            <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                        </button>
+                        <button onclick="exportHistoryXLS()" class="cco-btn-primary" style="padding:0.4rem 0.8rem;font-size:0.8rem;" title="Exportar histórico como Excel">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Exportar XLS
+                        </button>
+                    </div>
+                </div>
+                <div class="cco-chart-container" style="height:300px;">
+                    <canvas id="chartLine"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Chat Widget: real chat.js integration (replaces dummy widget) -->
+</div>
+
+<!-- Modal Criar/Editar Lembrete -->
+<div id="reminderModal" class="cco-modal" style="display:none;">
+    <div class="cco-modal-content">
+        <div class="cco-modal-header">
+            <h3 id="reminderModalTitle">Lembretes</h3>
+            <button onclick="closeReminderModal()" class="cco-modal-close">&times;</button>
+        </div>
+        <div class="cco-modal-body">
+            <!-- Lista de lembretes existentes -->
+            <div id="reminderExistingList" style="margin-bottom:1rem;"></div>
+            <!-- Botão para mostrar formulário de criação -->
+            <div id="reminderNewBtnWrap" style="margin-bottom:1rem;">
+                <button type="button" onclick="showReminderForm()" class="cco-btn-primary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                    <i class="bi bi-plus-circle"></i> Novo Lembrete
+                </button>
+            </div>
+            <!-- Formulário (inicialmente oculto) -->
+            <div id="reminderFormWrap" style="display:none;">
+                <hr style="border-color:var(--cco-border);margin-bottom:1rem;">
+                <form id="reminderForm" onsubmit="saveReminder(event)">
+                    <input type="hidden" id="reminderId" value="">
+                    <input type="hidden" id="reminderDate" value="">
+                    <div style="margin-bottom:1rem;">
+                        <label>Título *</label>
+                        <input type="text" id="reminderTitle" required>
+                    </div>
+                    <div style="margin-bottom:1rem;">
+                        <label>Descrição</label>
+                        <textarea id="reminderDescription" rows="3" style="resize:vertical;"></textarea>
+                    </div>
+                    <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                        <button type="button" onclick="hideReminderForm()" class="cco-btn-secondary">Cancelar</button>
+                        <button type="submit" class="cco-btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+.cco-modal { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:10000;display:flex;align-items:center;justify-content:center; }
+.cco-modal-content { background:var(--cco-card, #1c2333);color:var(--cco-text, #e2e8f0);border-radius:12px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.75);border:1px solid var(--cco-border, #2d3548); }
+.cco-modal-header { display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid var(--cco-border, #2d3548); }
+.cco-modal-body { padding:1.5rem; }
+.cco-modal-close { background:none;border:none;font-size:1.5rem;color:var(--cco-text-muted, #7c8ba1);cursor:pointer; }
+.cco-btn-primary { background:var(--cco-primary, #3b82f6);color:white;border:none;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;font-weight:500; }
+.cco-btn-secondary { background:var(--cco-card-hover, #222b3d);color:var(--cco-text, #e2e8f0);border:1px solid var(--cco-border, #2d3548);padding:0.5rem 1rem;border-radius:6px;cursor:pointer; }
+.cco-btn-primary:hover { opacity:0.9; }
+.cco-modal-body input[type="text"],
+.cco-modal-body input[type="date"],
+.cco-modal-body textarea,
+.cco-modal-body select { width:100%;padding:0.5rem;border-radius:6px;border:1px solid var(--cco-border, #2d3548);background:var(--cco-bg, #161b22);color:var(--cco-text, #e2e8f0);font-family:inherit;font-size:0.875rem; }
+.cco-modal-body input:focus,
+.cco-modal-body textarea:focus,
+.cco-modal-body select:focus { outline:none;border-color:var(--cco-primary, #3b82f6);box-shadow:0 0 0 2px rgba(59,130,246,0.2); }
+.cco-modal-body label { display:block;margin-bottom:0.5rem;font-weight:500;color:var(--cco-text, #e2e8f0);font-size:0.875rem; }
+.cco-calendar-day { cursor:pointer;position:relative;min-height:32px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;user-select:none; }
+.cco-calendar-day:hover { background:rgba(59,130,246,0.1); }
+.cco-calendar-day:active:not(.day-empty) { background:rgba(59,130,246,0.2);transform:scale(0.95); }
+.day-selected { background:var(--cco-primary, #3b82f6) !important;color:white !important;border-radius:50%;font-weight:700; }
+.day-selected .reminder-badge { background:white;color:var(--cco-primary, #3b82f6); }
+.day-has-reminders { background:rgba(59,130,246,0.15);font-weight:700;color:var(--cco-text); }
+.reminder-badge { position:absolute;top:1px;right:1px;background:var(--cco-primary);color:white;border-radius:50%;width:16px;height:16px;font-size:0.6rem;display:flex;align-items:center;justify-content:center;pointer-events:none; }
+.cco-reminder-item { transition:background 0.15s; }
+.cco-reminder-item:hover { background:var(--cco-card-hover, #222b3d) !important; }
+</style>
+
+<!-- CCO Dashboard JS -->
+<script src="/static/js/cco_dashboard.js?v={{ cache_version }}"></script>
+
+<!-- Chat JS: global variables required by chat.js -->
+<script>
+    var USER_EMAIL = "{{ user.email or user.username or '' }}";
+    var USER_NAME = "{{ user.nome or user.display_name or '' }}";
+    var USER_DEPARTMENT = "{{ user.departamento or '' }}";
+    var IS_ADMIN = {{ 'true' if user.is_admin else 'false' }};
+</script>
+<script src="/static/js/chat.js?v={{ cache_version }}"></script>
+
+</body>
+</html>

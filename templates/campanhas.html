@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Gestão de Campanhas - WifiMaxx Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, rgba(26, 35, 126, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .navbar-brand img {
+            max-height: 55px;
+            width: auto;
+        }
+
+        .nav-link {
+            color: #bdc3c7 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #4CAF50 !important;
+        }
+
+        /* Container principal */
+        .container-fluid {
+            padding: 2rem;
+        }
+
+        h2 {
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.3), rgba(102, 187, 106, 0.2));
+            border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Tabs personalizadas */
+        .nav-tabs {
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(22, 33, 62, 0.6));
+            border: 1px solid rgba(76, 175, 80, 0.2) !important;
+            color: #bdc3c7 !important;
+            margin-right: 0.5rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2));
+            color: #4CAF50 !important;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(102, 187, 106, 0.3)) !important;
+            color: #4CAF50 !important;
+            border-bottom: 3px solid #4CAF50 !important;
+        }
+
+        /* Formulários */
+        .form-label {
+            color: #bdc3c7;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(26, 26, 46, 0.95);
+            border-color: #4CAF50;
+            color: #ecf0f1;
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #7f8c8d;
+        }
+
+        /* Tabela */
+        .table {
+            color: #1a1a1a;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .table thead {
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.4), rgba(102, 187, 106, 0.3));
+        }
+
+        .table thead th {
+            border-bottom: 2px solid rgba(76, 175, 80, 0.5);
+            color: #1a5c1f;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .table tbody td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+            color: #1a1a1a;
+        }
+        
+        /* Texto info (garagens) - mudar de azul para preto */
+        .table .text-info {
+            color: #1a1a1a !important;
+        }
+        
+        /* Texto muted - mudar para cinza escuro */
+        .table .text-muted {
+            color: #555 !important;
+        }
+
+        /* Tabela de detalhes expandida */
+        .table-detalhes {
+            background: rgba(245, 245, 245, 0.95) !important;
+        }
+        
+        .table-detalhes thead th {
+            color: #1a5c1f !important;
+            background: rgba(76, 175, 80, 0.3) !important;
+            border-color: rgba(76, 175, 80, 0.4) !important;
+        }
+        
+        .table-detalhes tbody td {
+            color: #1a1a1a !important;
+            border-color: rgba(76, 175, 80, 0.2) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .table-detalhes tbody tr:hover td {
+            background: rgba(76, 175, 80, 0.15) !important;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.5em 0.75em;
+            font-weight: 500;
+        }
+
+        /* Botões */
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #66BB6A, #81C784);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .stats-card .label {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .stats-card.primary .number { color: #3498db; }
+        .stats-card.success .number { color: #2ecc71; }
+        .stats-card.warning .number { color: #f39c12; }
+        .stats-card.danger .number { color: #e74c3c; }
+
+        /* Prestadores list */
+        .prestadores-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .prestadores-list .form-check {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .prestadores-list .form-check:last-child {
+            border-bottom: none;
+        }
+
+        .prestadores-list .form-check-label {
+            color: #ecf0f1 !important;
+            font-weight: 500;
+        }
+
+        .prestadores-list .form-check-label i {
+            color: #4CAF50;
+        }
+
+        /* Toast container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 1rem;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="nav-link" href="/dashboard">
+                <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+            </a>
+            <a class="navbar-brand" href="/dashboard">
+                <img src="{{ url_for('static', path='logo.png') }}" alt="WifiMaxx" class="logo-image">
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">
+                    <i class="bi bi-person-circle me-1"></i>{{ user.email }}
+                </span>
+                <a href="/logout" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right me-1"></i>Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="max-width: 1600px;">
+        <h2><i class="bi bi-megaphone-fill me-2"></i>Gestão de Campanhas</h2>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4" id="statsContainer">
+            <div class="col-md-3 mb-3">
+                <div class="stats-card primary">
+                    <div class="number" id="statTotalCampanhas">0</div>
+                    <div class="label"><i class="bi bi-collection me-1"></i>Campanhas</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="number" id="statTotalPrefixos">0</div>
+                    <div class="label"><i class="bi bi-tag me-1"></i>Total Prefixos</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card success">
+                    <div class="number" id="statAdesivados">0</div>
+                    <div class="label"><i class="bi bi-check-circle me-1"></i>Adesivados</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card warning">
+                    <div class="number" id="statPendentes">0</div>
+                    <div class="label"><i class="bi bi-clock me-1"></i>Pendentes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="campanhasTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="gestao-tab" data-bs-toggle="tab" data-bs-target="#gestao" type="button" role="tab">
+                    <i class="bi bi-gear me-1"></i>Gestão de Campanhas
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cadastro-tab" data-bs-toggle="tab" data-bs-target="#cadastro" type="button" role="tab">
+                    <i class="bi bi-plus-circle me-1"></i>Cadastrar Prefixos
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="campanhasTabContent">
+            <!-- Tab Gestão de Campanhas -->
+            <div class="tab-pane fade show active" id="gestao" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-list-ul me-2"></i>Campanhas Cadastradas</span>
+                        <div>
+                            <button class="btn btn-sm btn-success me-2" onclick="exportarTodasCampanhasXLSX()">
+                                <i class="bi bi-file-earmark-excel me-1"></i>Exportar XLSX
+                            </button>
+                            <button class="btn btn-sm btn-outline-light" onclick="carregarCampanhasGestao()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Lista de Campanhas -->
+                        <div id="listaCampanhasContainer">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tabelaCampanhasGestao">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;"></th>
+                                            <th>Campanha</th>
+                                            <th>Projeto</th>
+                                            <th>Garagens</th>
+                                            <th>Total Prefixos</th>
+                                            <th>Adesivados</th>
+                                            <th>Pendentes</th>
+                                            <th>Progresso</th>
+                                            <th>Criado Por</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodyCampanhasGestao">
+                                        <tr><td colspan="10" class="text-center text-muted">Carregando...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Edição de Campanha (oculto inicialmente) -->
+                        <div id="edicaoCampanhaContainer" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-pencil-square me-2"></i>Editando: <span id="campanhaEditandoNome" class="text-success"></span>
+                                </h5>
+                                <div>
+                                    <button class="btn btn-success me-2" onclick="exportarCampanhaXLSX()">
+                                        <i class="bi bi-file-earmark-excel me-1"></i>Exportar XLSX
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="voltarListaCampanhas()">
+                                        <i class="bi bi-arrow-left me-1"></i>Voltar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tabelaPrefixosCampanha">
+                                    <thead>
+                                        <tr>
+                                            <th>Prefixo</th>
+                                            <th>Garagem</th>
+                                            <th>Status</th>
+                                            <th>Observação</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodyPrefixosCampanha">
+                                        <tr><td colspan="5" class="text-center text-muted">Carregando...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Cadastrar Prefixos -->
+            <div class="tab-pane fade" id="cadastro" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-plus-circle me-2"></i>Cadastrar Novos Prefixos
+                    </div>
+                    <div class="card-body">
+                        <form id="formCadastrarPrefixos">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="pcProjeto" class="form-label">
+                                        <i class="bi bi-folder me-1"></i>Projeto *
+                                    </label>
+                                    <select id="pcProjeto" class="form-select" required>
+                                        <option value="">Carregando projetos...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="pcCampanha" class="form-label">
+                                        <i class="bi bi-megaphone me-1"></i>Campanha *
+                                    </label>
+                                    <select id="pcCampanha" class="form-select" required>
+                                        <option value="">Carregando campanhas...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="pcGaragem" class="form-label">
+                                    <i class="bi bi-building me-1"></i>Garagem *
+                                </label>
+                                <select id="pcGaragem" class="form-select" required>
+                                    <option value="">Carregando garagens...</option>
+                                </select>
+                                <small class="text-muted">Selecione a garagem onde os prefixos serão adesivados</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="pcPrefixos" class="form-label">
+                                    <i class="bi bi-tags me-1"></i>Prefixos *
+                                </label>
+                                <textarea id="pcPrefixos" class="form-control" rows="5" 
+                                    placeholder="Digite os prefixos separados por vírgula ou quebra de linha&#10;Exemplo: 734, 735, 736&#10;ou&#10;734&#10;735&#10;736" required></textarea>
+                                <small class="text-muted">Aceita prefixos separados por vírgula ou quebra de linha. Todos os prefixos serão vinculados à garagem selecionada acima.</small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="bi bi-people me-1"></i>Atribuir a Prestadores (opcional)
+                                </label>
+                                <div id="pcPrestadoresList" class="prestadores-list">
+                                    <p class="text-muted mb-0">Carregando prestadores...</p>
+                                </div>
+                                <small class="text-muted">Selecione os prestadores que terão acesso a estes prefixos</small>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-success btn-lg" onclick="cadastrarPrefixosPC()">
+                                    <i class="bi bi-check-circle me-1"></i>Cadastrar Prefixos
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="limparFormularioCadastro()">
+                                    <i class="bi bi-eraser me-1"></i>Limpar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Prefixo Individual -->
+    <div class="modal fade" id="editarPrefixoModal" tabindex="-1" aria-labelledby="editarPrefixoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98)); color: #ecf0f1;">
+                <div class="modal-header" style="background: linear-gradient(90deg, rgba(243, 156, 18, 0.3), rgba(241, 196, 15, 0.2)); border-color: rgba(243, 156, 18, 0.3);">
+                    <h5 class="modal-title" id="editarPrefixoModalLabel" style="color: #f39c12;">
+                        <i class="bi bi-pencil me-2"></i>Editar Prefixo
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editPrefixoId">
+                    <div class="mb-3">
+                        <label for="editPrefixoCodigo" class="form-label">Código do Prefixo</label>
+                        <input type="text" class="form-control" id="editPrefixoCodigo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrefixoGaragem" class="form-label">Garagem</label>
+                        <select class="form-select" id="editPrefixoGaragem">
+                            <option value="">Carregando garagens...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrefixoCampanha" class="form-label">Campanha</label>
+                        <select class="form-select" id="editPrefixoCampanha">
+                            <option value="">Carregando campanhas...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-color: rgba(76, 175, 80, 0.2);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="removerPrefixo()">
+                        <i class="bi bi-trash me-1"></i>Remover
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarEdicaoPrefixo()">
+                        <i class="bi bi-check-circle me-1"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <!-- Variáveis de configuração passadas do backend -->
+    <script>
+        const USER_EMAIL = '{{ user_email | default("") }}';
+        const USER_ROLE = '{{ user_role | default("user") }}';
+    </script>
+    
+    <script>
+        // ============================================================================
+        // VARIÁVEIS GLOBAIS
+        // ============================================================================
+        let pcProjetosData = [];
+        let pcGaragensData = [];
+        let campanhaAtualEditando = null;
+        let projetoAtualEditando = null;
+        
+        // ============================================================================
+        // INICIALIZAÇÃO
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('📋 Página de Campanhas inicializada');
+            
+            // Carregar dados iniciais
+            await Promise.all([
+                carregarCampanhasGestao(),
+                carregarProjetosPC(),
+                carregarCampanhasPC(),
+                carregarGaragensPC(),
+                carregarPrestadoresPC()
+            ]);
+        });
+        
+        // ============================================================================
+        // FUNÇÕES DE TOAST
+        // ============================================================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            const bgClass = {
+                'success': 'bg-success',
+                'danger': 'bg-danger',
+                'warning': 'bg-warning text-dark',
+                'info': 'bg-info'
+            }[type] || 'bg-info';
+            
+            const icon = {
+                'success': 'bi-check-circle-fill',
+                'danger': 'bi-x-circle-fill',
+                'warning': 'bi-exclamation-triangle-fill',
+                'info': 'bi-info-circle-fill'
+            }[type] || 'bi-info-circle-fill';
+            
+            const toastHtml = `
+                <div id="${toastId}" class="toast ${bgClass} text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body d-flex align-items-center">
+                        <i class="bi ${icon} me-2"></i>
+                        <span>${message}</span>
+                        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', toastHtml);
+            const toastEl = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+            toast.show();
+            
+            toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+        }
+        
+        // ============================================================================
+        // CARREGAR DADOS DO FORMULÁRIO
+        // ============================================================================
+        async function carregarProjetosPC() {
+            try {
+                const response = await fetch('/api/asbuilt/projetos/list');
+                const data = await response.json();
+                
+                if (data.success && data.projetos) {
+                    pcProjetosData = data.projetos;
+                    const select = document.getElementById('pcProjeto');
+                    select.innerHTML = '<option value="">Selecione um projeto...</option>';
+                    
+                    data.projetos.forEach(proj => {
+                        const option = document.createElement('option');
+                        option.value = proj.projeto;
+                        option.textContent = proj.projeto;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar projetos:', error);
+            }
+        }
+        
+        async function carregarCampanhasPC() {
+            const campanhaSelect = document.getElementById('pcCampanha');
+            campanhaSelect.innerHTML = '<option value="">Carregando campanhas...</option>';
+            
+            try {
+                const response = await fetch('/api/asbuilt/campanhas/list');
+                const data = await response.json();
+                
+                if (data.success && data.campanhas && data.campanhas.length > 0) {
+                    campanhaSelect.innerHTML = '<option value="">Selecione a campanha...</option>';
+                    data.campanhas.forEach(campanha => {
+                        const option = document.createElement('option');
+                        option.value = campanha;
+                        option.textContent = campanha;
+                        campanhaSelect.appendChild(option);
+                    });
+                } else {
+                    campanhaSelect.innerHTML = '<option value="">Nenhuma campanha encontrada</option>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar campanhas:', error);
+                campanhaSelect.innerHTML = '<option value="">Erro ao carregar campanhas</option>';
+            }
+        }
+        
+        async function carregarGaragensPC() {
+            try {
+                const response = await fetch('/api/asbuilt/garagens/todas');
+                const data = await response.json();
+                
+                if (data.success && data.garagens) {
+                    pcGaragensData = data.garagens;
+                    const select = document.getElementById('pcGaragem');
+                    select.innerHTML = '<option value="">Selecione uma garagem...</option>';
+                    
+                    data.garagens.forEach(garagem => {
+                        const option = document.createElement('option');
+                        option.value = garagem;
+                        option.textContent = garagem;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar garagens:', error);
+            }
+        }
+        
+        async function carregarPrestadoresPC() {
+            try {
+                const response = await fetch('/api/asbuilt/prestadores/list');
+                const data = await response.json();
+                
+                const container = document.getElementById('pcPrestadoresList');
+                
+                if (data.success && data.prestadores && data.prestadores.length > 0) {
+                    container.innerHTML = data.prestadores.map((p, i) => `
+                        <div class="form-check">
+                            <input class="form-check-input pc-prestador-check" type="checkbox" 
+                                   value="${p.email}" id="pcPrestador${i}">
+                            <label class="form-check-label" for="pcPrestador${i}">
+                                <i class="bi bi-person-badge me-1"></i>${p.email}
+                            </label>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p class="text-muted mb-0"><i class="bi bi-info-circle me-1"></i>Nenhum prestador cadastrado no sistema</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar prestadores:', error);
+                document.getElementById('pcPrestadoresList').innerHTML = '<p class="text-danger mb-0"><i class="bi bi-exclamation-triangle me-1"></i>Erro ao carregar prestadores</p>';
+            }
+        }
+        
+        // ============================================================================
+        // CADASTRAR PREFIXOS
+        // ============================================================================
+        async function cadastrarPrefixosPC() {
+            const projeto = document.getElementById('pcProjeto').value;
+            const campanha = document.getElementById('pcCampanha').value;
+            const garagem = document.getElementById('pcGaragem').value;
+            const prefixos = document.getElementById('pcPrefixos').value;
+            
+            if (!projeto || !campanha || !garagem || !prefixos.trim()) {
+                showToast('Preencha todos os campos obrigatórios (Projeto, Campanha, Garagem e Prefixos)', 'warning');
+                return;
+            }
+            
+            const prestadoresCheckboxes = document.querySelectorAll('.pc-prestador-check:checked');
+            const usuariosEmails = Array.from(prestadoresCheckboxes).map(cb => cb.value).join(',');
+            
+            try {
+                const formData = new FormData();
+                formData.append('prefixos', prefixos);
+                formData.append('campanha', campanha);
+                formData.append('projeto', projeto);
+                formData.append('garagem', garagem);
+                formData.append('usuarios_emails', usuariosEmails);
+                formData.append('criado_por', USER_EMAIL);
+                
+                const response = await fetch('/api/asbuilt/prefixos/cadastrar', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast(`${result.cadastrados} prefixos cadastrados com sucesso!`, 'success');
+                    limparFormularioCadastro();
+                    await carregarCampanhasGestao();
+                } else {
+                    showToast(result.message || 'Erro ao cadastrar prefixos', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro ao cadastrar prefixos:', error);
+                showToast('Erro ao cadastrar prefixos: ' + error.message, 'danger');
+            }
+        }
+        
+        function limparFormularioCadastro() {
+            document.getElementById('pcProjeto').value = '';
+            document.getElementById('pcCampanha').value = '';
+            document.getElementById('pcGaragem').value = '';
+            document.getElementById('pcPrefixos').value = '';
+            document.querySelectorAll('.pc-prestador-check:checked').forEach(cb => cb.checked = false);
+        }
+        
+        // ============================================================================
+        // GESTÃO DE CAMPANHAS
+        // ============================================================================
+        
+        // Cache para armazenar dados das campanhas (usado na exportação)
+        let dadosCampanhasCache = [];
+        let detalhesCache = {};
+        
+        async function carregarCampanhasGestao() {
+            const tbody = document.getElementById('bodyCampanhasGestao');
+            tbody.innerHTML = '<tr><td colspan="10" class="text-center"><i class="bi bi-hourglass-split me-2"></i>Carregando...</td></tr>';
+            
+            try {
+                const response = await fetch('/api/asbuilt/campanhas/gestao');
+                const data = await response.json();
+                
+                if (data.success && data.campanhas && data.campanhas.length > 0) {
+                    // Armazenar em cache para exportação
+                    dadosCampanhasCache = data.campanhas;
+                    
+                    // Atualizar estatísticas
+                    let totalPrefixos = 0, totalAdesivados = 0, totalPendentes = 0;
+                    
+                    tbody.innerHTML = data.campanhas.map((c, index) => {
+                        // Converter para número para evitar concatenação de strings
+                        const total = parseInt(c.total_prefixos) || 0;
+                        const adesivados = parseInt(c.adesivados) || 0;
+                        const pendentes = parseInt(c.pendentes) || 0;
+                        totalPrefixos += total;
+                        totalAdesivados += adesivados;
+                        totalPendentes += pendentes;
+                        
+                        // Calcular progresso
+                        const progresso = total > 0 ? Math.round((adesivados / total) * 100) : 0;
+                        let progressClass = 'bg-danger';
+                        if (progresso >= 100) progressClass = 'bg-success';
+                        else if (progresso >= 50) progressClass = 'bg-warning';
+                        else if (progresso > 0) progressClass = 'bg-info';
+                        
+                        // Exibir garagens (pode ser lista separada por vírgula)
+                        const garagensDisplay = c.garagens || '-';
+                        const campanhaId = `campanha_${index}`;
+                        
+                        return `
+                            <tr>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-success" onclick="toggleDetalhesCampanha('${campanhaId}', '${encodeURIComponent(c.campanha)}', '${encodeURIComponent(c.projeto)}')" title="Expandir detalhes">
+                                        <i class="bi bi-plus" id="icon_${campanhaId}"></i>
+                                    </button>
+                                </td>
+                                <td><strong>${c.campanha}</strong></td>
+                                <td>${c.projeto}</td>
+                                <td><small class="text-info">${garagensDisplay}</small></td>
+                                <td><span class="badge bg-primary">${total}</span></td>
+                                <td><span class="badge bg-success">${adesivados}</span></td>
+                                <td><span class="badge bg-warning text-dark">${pendentes}</span></td>
+                                <td>
+                                    <div class="progress" style="height: 20px; min-width: 80px;">
+                                        <div class="progress-bar ${progressClass}" role="progressbar" 
+                                             style="width: ${progresso}%;" 
+                                             aria-valuenow="${progresso}" aria-valuemin="0" aria-valuemax="100">
+                                            ${progresso}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><small class="text-muted">${c.criado_por || '-'}</small></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarCampanha('${c.campanha}', '${c.projeto}')">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr id="detalhes_${campanhaId}" style="display: none;">
+                                <td colspan="10" style="background: rgba(76, 175, 80, 0.05); padding: 1rem;">
+                                    <div id="conteudo_${campanhaId}">
+                                        <div class="text-center text-muted">
+                                            <i class="bi bi-hourglass-split me-2"></i>Carregando detalhes...
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                    
+                    // Atualizar cards de estatísticas
+                    document.getElementById('statTotalCampanhas').textContent = data.campanhas.length;
+                    document.getElementById('statTotalPrefixos').textContent = totalPrefixos;
+                    document.getElementById('statAdesivados').textContent = totalAdesivados;
+                    document.getElementById('statPendentes').textContent = totalPendentes;
+                } else {
+                    dadosCampanhasCache = [];
+                    tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Nenhuma campanha encontrada</td></tr>';
+                    document.getElementById('statTotalCampanhas').textContent = '0';
+                    document.getElementById('statTotalPrefixos').textContent = '0';
+                    document.getElementById('statAdesivados').textContent = '0';
+                    document.getElementById('statPendentes').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar campanhas:', error);
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Erro ao carregar campanhas</td></tr>';
+            }
+        }
+        
+        async function editarCampanha(campanha, projeto) {
+            campanhaAtualEditando = campanha;
+            projetoAtualEditando = projeto;
+            
+            document.getElementById('listaCampanhasContainer').style.display = 'none';
+            document.getElementById('edicaoCampanhaContainer').style.display = 'block';
+            document.getElementById('campanhaEditandoNome').textContent = `${campanha} (${projeto})`;
+            
+            await carregarPrefixosCampanha(campanha, projeto);
+        }
+        
+        function voltarListaCampanhas() {
+            document.getElementById('listaCampanhasContainer').style.display = 'block';
+            document.getElementById('edicaoCampanhaContainer').style.display = 'none';
+            campanhaAtualEditando = null;
+            projetoAtualEditando = null;
+        }
+        
+        async function carregarPrefixosCampanha(campanha, projeto) {
+            const tbody = document.getElementById('bodyPrefixosCampanha');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center"><i class="bi bi-hourglass-split me-2"></i>Carregando...</td></tr>';
+            
+            try {
+                const response = await fetch(`/api/asbuilt/campanhas/${encodeURIComponent(campanha)}/prefixos?projeto=${encodeURIComponent(projeto)}`);
+                const data = await response.json();
+                
+                if (data.success && data.prefixos && data.prefixos.length > 0) {
+                    tbody.innerHTML = data.prefixos.map(p => {
+                        const statusBadge = p.status === 'utilizado' 
+                            ? '<span class="badge bg-success">Adesivado</span>'
+                            : '<span class="badge bg-warning text-dark">Pendente</span>';
+                        
+                        const obsText = p.observacao 
+                            ? `<span class="text-info" title="${p.observacao}"><i class="bi bi-chat-dots-fill me-1"></i>${p.observacao.substring(0, 30)}${p.observacao.length > 30 ? '...' : ''}</span>`
+                            : '<span class="text-muted">-</span>';
+                        
+                        return `
+                            <tr>
+                                <td><strong>${p.codigo_prefixo}</strong></td>
+                                <td>${p.garagem || '-'}</td>
+                                <td>${statusBadge}</td>
+                                <td>${obsText}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-warning" onclick="abrirModalEditarPrefixo(${p.id}, '${p.codigo_prefixo}', '${p.garagem || ''}', '${p.campanha}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum prefixo encontrado</td></tr>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar prefixos:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro ao carregar prefixos</td></tr>';
+            }
+        }
+        
+        // ============================================================================
+        // EDIÇÃO DE PREFIXO
+        // ============================================================================
+        async function abrirModalEditarPrefixo(id, codigo, garagem, campanha) {
+            document.getElementById('editPrefixoId').value = id;
+            document.getElementById('editPrefixoCodigo').value = codigo;
+            
+            await Promise.all([
+                carregarGaragensEdicao(garagem),
+                carregarCampanhasEdicao(campanha)
+            ]);
+            
+            const modal = new bootstrap.Modal(document.getElementById('editarPrefixoModal'));
+            modal.show();
+        }
+        
+        async function carregarGaragensEdicao(garagemAtual) {
+            try {
+                const response = await fetch('/api/asbuilt/garagens/todas');
+                const data = await response.json();
+                
+                const select = document.getElementById('editPrefixoGaragem');
+                select.innerHTML = '<option value="">Selecione uma garagem...</option>';
+                
+                if (data.success && data.garagens) {
+                    data.garagens.forEach(g => {
+                        const option = document.createElement('option');
+                        option.value = g;
+                        option.textContent = g;
+                        if (g === garagemAtual) option.selected = true;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar garagens:', error);
+            }
+        }
+        
+        async function carregarCampanhasEdicao(campanhaAtual) {
+            try {
+                const response = await fetch('/api/asbuilt/campanhas/list');
+                const data = await response.json();
+                
+                const select = document.getElementById('editPrefixoCampanha');
+                select.innerHTML = '<option value="">Selecione uma campanha...</option>';
+                
+                if (data.success && data.campanhas) {
+                    data.campanhas.forEach(c => {
+                        const option = document.createElement('option');
+                        option.value = c;
+                        option.textContent = c;
+                        if (c === campanhaAtual) option.selected = true;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar campanhas:', error);
+            }
+        }
+        
+        async function salvarEdicaoPrefixo() {
+            const id = document.getElementById('editPrefixoId').value;
+            const codigo = document.getElementById('editPrefixoCodigo').value;
+            const garagem = document.getElementById('editPrefixoGaragem').value;
+            const campanha = document.getElementById('editPrefixoCampanha').value;
+            
+            try {
+                const response = await fetch(`/api/asbuilt/prefixos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        codigo_prefixo: codigo,
+                        garagem: garagem,
+                        campanha: campanha
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('Prefixo atualizado com sucesso!', 'success');
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editarPrefixoModal'));
+                    if (modal) modal.hide();
+                    
+                    if (campanhaAtualEditando) {
+                        await carregarPrefixosCampanha(campanhaAtualEditando, projetoAtualEditando);
+                    }
+                } else {
+                    showToast(result.message || 'Erro ao atualizar prefixo', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar prefixo:', error);
+                showToast('Erro ao salvar prefixo: ' + error.message, 'danger');
+            }
+        }
+        
+        async function removerPrefixo() {
+            const id = document.getElementById('editPrefixoId').value;
+            const codigo = document.getElementById('editPrefixoCodigo').value;
+            
+            if (!confirm(`Tem certeza que deseja remover o prefixo ${codigo}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/asbuilt/prefixos/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('Prefixo removido com sucesso!', 'success');
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editarPrefixoModal'));
+                    if (modal) modal.hide();
+                    
+                    if (campanhaAtualEditando) {
+                        await carregarPrefixosCampanha(campanhaAtualEditando, projetoAtualEditando);
+                    }
+                } else {
+                    showToast(result.message || 'Erro ao remover prefixo', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro ao remover prefixo:', error);
+                showToast('Erro ao remover prefixo: ' + error.message, 'danger');
+            }
+        }
+        
+        // ============================================================================
+        // EXPANDIR/COLAPSAR DETALHES DA CAMPANHA
+        // ============================================================================
+        async function toggleDetalhesCampanha(campanhaId, campanhaEncoded, projetoEncoded) {
+            const detalhesRow = document.getElementById(`detalhes_${campanhaId}`);
+            const conteudo = document.getElementById(`conteudo_${campanhaId}`);
+            const icon = document.getElementById(`icon_${campanhaId}`);
+            
+            if (!detalhesRow) return;
+            
+            const isVisible = detalhesRow.style.display !== 'none';
+            
+            if (isVisible) {
+                // Ocultar
+                detalhesRow.style.display = 'none';
+                icon.classList.remove('bi-dash');
+                icon.classList.add('bi-plus');
+            } else {
+                // Mostrar e carregar dados
+                detalhesRow.style.display = 'table-row';
+                icon.classList.remove('bi-plus');
+                icon.classList.add('bi-dash');
+                
+                // Carregar detalhes
+                await carregarDetalhesCampanhaAdmin(campanhaId, decodeURIComponent(campanhaEncoded), decodeURIComponent(projetoEncoded));
+            }
+        }
+        
+        async function carregarDetalhesCampanhaAdmin(campanhaId, campanha, projeto) {
+            const conteudo = document.getElementById(`conteudo_${campanhaId}`);
+            
+            try {
+                const url = `/api/asbuilt/campanhas/${encodeURIComponent(campanha)}/prefixos?projeto=${encodeURIComponent(projeto)}`;
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                if (result.success && result.prefixos) {
+                    const prefixos = result.prefixos;
+                    
+                    // Armazenar no cache para exportação
+                    detalhesCache[`${campanha}_${projeto}`] = prefixos;
+                    
+                    if (prefixos.length === 0) {
+                        conteudo.innerHTML = `
+                            <div class="text-center text-muted">
+                                <i class="bi bi-info-circle me-2"></i>Nenhum prefixo encontrado nesta campanha
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Agrupar por garagem
+                    const porGaragem = {};
+                    prefixos.forEach(p => {
+                        const garagem = p.garagem || 'Sem Garagem';
+                        if (!porGaragem[garagem]) {
+                            porGaragem[garagem] = [];
+                        }
+                        porGaragem[garagem].push(p);
+                    });
+                    
+                    // Renderizar tabela de detalhes
+                    let html = `
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-detalhes mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Garagem</th>
+                                        <th>Prefixo</th>
+                                        <th>Status</th>
+                                        <th>Asbuilt ID</th>
+                                        <th>Prestador</th>
+                                        <th>Observação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+                    
+                    Object.keys(porGaragem).sort().forEach(garagem => {
+                        const prefixosGaragem = porGaragem[garagem];
+                        prefixosGaragem.forEach((p, idx) => {
+                            const statusClass = p.status === 'utilizado' ? 'bg-success' : 'bg-warning text-dark';
+                            const statusText = p.status === 'utilizado' ? 'Adesivado' : 'Pendente';
+                            
+                            html += `
+                                <tr>
+                                    ${idx === 0 ? `<td rowspan="${prefixosGaragem.length}" style="vertical-align: middle; font-weight: bold;">${garagem}</td>` : ''}
+                                    <td>${p.codigo_prefixo}</td>
+                                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                                    <td>${p.asbuilt_id || '-'}</td>
+                                    <td>${p.prestador_email || '-'}</td>
+                                    <td style="font-size: 0.85em;">${p.observacao || '-'}</td>
+                                </tr>
+                            `;
+                        });
+                    });
+                    
+                    html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    
+                    conteudo.innerHTML = html;
+                    
+                } else {
+                    conteudo.innerHTML = `
+                        <div class="text-center text-danger">
+                            <i class="bi bi-exclamation-circle me-2"></i>Erro ao carregar detalhes
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao carregar detalhes:', error);
+                conteudo.innerHTML = `
+                    <div class="text-center text-danger">
+                        <i class="bi bi-exclamation-circle me-2"></i>Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // ============================================================================
+        // EXPORTAR XLSX
+        // ============================================================================
+        
+        /**
+         * Carrega biblioteca SheetJS dinamicamente
+         */
+        function carregarSheetJS() {
+            return new Promise((resolve, reject) => {
+                if (typeof XLSX !== 'undefined') {
+                    resolve();
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = 'https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js';
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('Falha ao carregar SheetJS'));
+                document.head.appendChild(script);
+            });
+        }
+        
+        /**
+         * Exportar todas as campanhas para XLSX com resumo e detalhes
+         */
+        async function exportarTodasCampanhasXLSX() {
+            if (dadosCampanhasCache.length === 0) {
+                showToast('Nenhuma campanha para exportar. Carregue os dados primeiro.', 'warning');
+                return;
+            }
+            
+            try {
+                // Verificar se SheetJS está disponível
+                if (typeof XLSX === 'undefined') {
+                    await carregarSheetJS();
+                }
+                
+                // Mostrar loading
+                const btnExport = document.querySelector('[onclick="exportarTodasCampanhasXLSX()"]');
+                const btnOriginal = btnExport ? btnExport.innerHTML : '';
+                if (btnExport) {
+                    btnExport.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Exportando...';
+                    btnExport.disabled = true;
+                }
+                
+                showToast('Carregando detalhes de todas as campanhas...', 'info');
+                
+                // Carregar detalhes de todas as campanhas
+                const todosDetalhes = [];
+                
+                for (const c of dadosCampanhasCache) {
+                    try {
+                        const url = `/api/asbuilt/campanhas/${encodeURIComponent(c.campanha)}/prefixos?projeto=${encodeURIComponent(c.projeto)}`;
+                        const response = await fetch(url);
+                        const result = await response.json();
+                        
+                        if (result.success && result.prefixos) {
+                            result.prefixos.forEach(p => {
+                                todosDetalhes.push({
+                                    'Campanha': c.campanha,
+                                    'Projeto': c.projeto,
+                                    'Garagem': p.garagem || '-',
+                                    'Prefixo': p.codigo_prefixo,
+                                    'Status': p.status === 'utilizado' ? 'Adesivado' : 'Pendente',
+                                    'Asbuilt ID': p.asbuilt_id || '-',
+                                    'Prestador': p.prestador_email || '-',
+                                    'Observação': p.observacao || '-',
+                                    'Data Criação': p.data_criacao ? new Date(p.data_criacao).toLocaleDateString('pt-BR') : '-'
+                                });
+                            });
+                        }
+                    } catch (err) {
+                        console.warn(`Erro ao carregar detalhes de ${c.campanha}:`, err);
+                    }
+                }
+                
+                // Criar workbook
+                const wb = XLSX.utils.book_new();
+                
+                // Aba 1: Resumo por Campanha
+                const dadosResumo = dadosCampanhasCache.map(c => ({
+                    'Campanha': c.campanha,
+                    'Projeto': c.projeto,
+                    'Garagens': c.garagens || '-',
+                    'Total Prefixos': parseInt(c.total_prefixos) || 0,
+                    'Adesivados': parseInt(c.adesivados) || 0,
+                    'Pendentes': parseInt(c.pendentes) || 0,
+                    'Progresso (%)': c.total_prefixos > 0 ? 
+                        Math.round((parseInt(c.adesivados) / parseInt(c.total_prefixos)) * 100) : 0,
+                    'Criado Por': c.criado_por || '-',
+                    'Data Criação': c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '-'
+                }));
+                
+                const wsResumo = XLSX.utils.json_to_sheet(dadosResumo);
+                wsResumo['!cols'] = [
+                    { wch: 25 }, { wch: 20 }, { wch: 30 }, { wch: 14 },
+                    { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 25 }, { wch: 14 }
+                ];
+                XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo Campanhas');
+                
+                // Aba 2: Detalhes (todos os prefixos)
+                if (todosDetalhes.length > 0) {
+                    const wsDetalhes = XLSX.utils.json_to_sheet(todosDetalhes);
+                    wsDetalhes['!cols'] = [
+                        { wch: 25 }, { wch: 20 }, { wch: 20 }, { wch: 12 },
+                        { wch: 12 }, { wch: 15 }, { wch: 25 }, { wch: 40 }, { wch: 14 }
+                    ];
+                    XLSX.utils.book_append_sheet(wb, wsDetalhes, 'Detalhes Prefixos');
+                }
+                
+                // Gerar arquivo
+                const dataHora = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
+                XLSX.writeFile(wb, `gestao_campanhas_admin_${dataHora}.xlsx`);
+                
+                // Restaurar botão
+                if (btnExport) {
+                    btnExport.innerHTML = btnOriginal;
+                    btnExport.disabled = false;
+                }
+                
+                showToast(`Exportado com sucesso! ${dadosCampanhasCache.length} campanhas e ${todosDetalhes.length} prefixos.`, 'success');
+                
+            } catch (error) {
+                console.error('Erro ao exportar:', error);
+                showToast('Erro ao exportar: ' + error.message, 'danger');
+                
+                // Restaurar botão em caso de erro
+                const btnExport = document.querySelector('[onclick="exportarTodasCampanhasXLSX()"]');
+                if (btnExport) {
+                    btnExport.innerHTML = '<i class="bi bi-file-earmark-excel me-1"></i>Exportar XLSX';
+                    btnExport.disabled = false;
+                }
+            }
+        }
+        
+        async function exportarCampanhaXLSX() {
+            if (!campanhaAtualEditando) {
+                showToast('Nenhuma campanha selecionada', 'warning');
+                return;
+            }
+            
+            try {
+                const url = `/api/asbuilt/campanhas/${encodeURIComponent(campanhaAtualEditando)}/export-xlsx?projeto=${encodeURIComponent(projetoAtualEditando)}`;
+                window.open(url, '_blank');
+                showToast('Exportação iniciada!', 'success');
+            } catch (error) {
+                console.error('Erro ao exportar:', error);
+                showToast('Erro ao exportar: ' + error.message, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

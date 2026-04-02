@@ -1,0 +1,3153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="format-detection" content="telephone=no">
+    
+    <title>WifiMaxx - Chamados N4</title>
+    
+    <!-- Favicon / App Icons -->
+    <link rel="icon" type="image/png" href="/static/icons/logo-192.png">
+    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon-180.png">
+    
+    <!-- PWA - Manifest dinâmico baseado no ambiente -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #0b1220;
+            --accent-blue: #0d6efd;
+            --accent-green: #22c55e;
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --safe-area-top: env(safe-area-inset-top, 0px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            color: var(--text-primary);
+        }
+        
+        /* App Container */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding-top: var(--safe-area-top);
+            padding-bottom: var(--safe-area-bottom);
+        }
+        
+        /* Header */
+        .app-header {
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .app-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .app-header .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .app-header .sync-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            padding: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .app-header .sync-btn:hover,
+        .app-header .sync-btn.syncing {
+            color: var(--accent-blue);
+        }
+        
+        .app-header .sync-btn.syncing i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Main Content */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Cards */
+        .card-list {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .garagem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .garagem-card:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .garagem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(13, 110, 253, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .garagem-icon i {
+            font-size: 28px;
+            color: var(--accent-blue);
+        }
+        
+        .garagem-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .garagem-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+        
+        .garagem-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .prefixos-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        
+        .prefixo-tag {
+            background: rgba(13, 110, 253, 0.2);
+            color: var(--accent-blue);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .garagem-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .garagem-badge .count {
+            background: var(--accent-blue);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 20px;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .garagem-badge .count.warning { background: var(--accent-orange); }
+        .garagem-badge .count.danger { background: var(--accent-red); }
+        
+        .garagem-badge .label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        /* Chamado Item Card */
+        .chamado-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+        
+        .chamado-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        
+        .chamado-prefixo {
+            background: rgba(13, 110, 253, 0.2);
+            color: var(--accent-blue);
+            font-size: 15px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        .chamado-status {
+            font-size: 10px;
+            font-weight: 500;
+            padding: 3px 6px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .chamado-status.pendente {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--accent-orange);
+        }
+        
+        .chamado-status.concluido {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .chamado-status.enviado {
+            background: rgba(13, 110, 253, 0.2);
+            color: var(--accent-blue);
+        }
+        
+        .chamado-status.bloqueado {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+        
+        .chamado-status.encaminhou-n2 {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+        }
+        
+        .chamado-card.locked {
+            border-color: rgba(239, 68, 68, 0.4);
+            opacity: 0.85;
+        }
+        
+        /* Grid compacto de prefixos (modo lista) */
+        .prefixo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .prefixo-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .prefixo-chip.pendente {
+            background: rgba(13, 110, 253, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(13, 110, 253, 0.3);
+        }
+        .prefixo-chip.concluido {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .prefixo-chip.locked {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+        
+        .chamado-patrimonio {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .chamado-action {
+            margin-top: 8px;
+        }
+        
+        .btn-nova-operacao {
+            width: 100%;
+            padding: 8px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        
+        .btn-nova-operacao:hover {
+            background: #0b5ed7;
+        }
+        
+        /* Info Card */
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(13, 110, 253, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px;
+        }
+        
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .info-card-header i {
+            font-size: 28px;
+            color: var(--accent-blue);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+        
+        .info-row .label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .info-row .value {
+            font-weight: bold;
+        }
+        
+        .info-row .value.orange { color: var(--accent-orange); }
+        .info-row .value.green { color: var(--accent-green); }
+        .info-row .value.blue { color: var(--accent-blue); }
+        
+        /* Section Header */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin: 16px 0 12px 0;
+        }
+        
+        .section-bar {
+            width: 4px;
+            height: 24px;
+            border-radius: 2px;
+        }
+        
+        .section-bar.orange { background: var(--accent-orange); }
+        .section-bar.green { background: var(--accent-green); }
+        .section-bar.blue { background: var(--accent-blue); }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .section-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .section-badge.orange { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+        .section-badge.green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .section-badge.blue { background: rgba(13, 110, 253, 0.2); color: var(--accent-blue); }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            padding-bottom: var(--safe-area-bottom);
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+        
+        .nav-btn i {
+            font-size: 22px;
+        }
+        
+        .nav-btn.active {
+            color: var(--accent-blue);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 80px;
+            color: var(--accent-green);
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+        
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        /* Loading Spinner */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        /* ========== FILA ENVIANDO ========== */
+        .sending-card {
+            border-color: rgba(59, 130, 246, 0.35) !important;
+            background: rgba(59, 130, 246, 0.06) !important;
+        }
+        
+        .sending-card.sending-error {
+            border-color: rgba(239, 68, 68, 0.35) !important;
+            background: rgba(239, 68, 68, 0.06) !important;
+        }
+        
+        .spinner-inline {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+        
+        /* Screens */
+        .screen {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+        }
+        
+        .screen.active {
+            display: flex;
+        }
+        
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: var(--safe-area-top);
+            left: 0;
+            right: 0;
+            background: var(--accent-red);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .connection-status.offline {
+            transform: translateY(0);
+        }
+        
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            z-index: 1000;
+        }
+        
+        .app-toast {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .form-group label .required {
+            color: var(--accent-red);
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+        
+        .form-select option {
+            background: #1a1a2e;
+            color: white;
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-readonly {
+            background: rgba(255, 255, 255, 0.04);
+            opacity: 0.7;
+        }
+        
+        .form-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        
+        .btn-submit:hover {
+            background: #1ea84e;
+        }
+        
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-submit:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+        
+        /* Photo Upload */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .photo-item {
+            aspect-ratio: 4/3;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--card-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-item:hover {
+            border-color: var(--accent-blue);
+            background: rgba(13, 110, 253, 0.1);
+        }
+        
+        .photo-item.has-photo {
+            border: 2px solid var(--accent-green);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-item i {
+            font-size: 28px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        
+        .photo-item span {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 0 8px;
+        }
+        
+        .photo-item .required-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: var(--accent-orange);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .photo-item .remove-btn {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        /* Stepper Styles */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 0 8px;
+        }
+        
+        .step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: calc(50% + 20px);
+            right: calc(-50% + 20px);
+            height: 2px;
+            background: var(--card-border);
+        }
+        
+        .step.completed:not(:last-child)::after {
+            background: var(--accent-green);
+        }
+        
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+        
+        .step.active .step-circle {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            text-align: center;
+        }
+        
+        .step.active .step-label {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        .step.completed .step-label {
+            color: var(--accent-green);
+        }
+        
+        /* Step Content */
+        .step-content {
+            display: none;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        /* Step Navigation */
+        .step-nav {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .btn-step {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-step-back {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+        }
+        
+        .btn-step-next {
+            background: linear-gradient(135deg, #e91e63, #f97316);
+            border: none;
+            color: white;
+        }
+        
+        .btn-step-next:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Input with Icon */
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon .form-input {
+            padding-left: 44px;
+        }
+        
+        .input-with-icon .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .input-with-icon .input-action {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px;
+            cursor: pointer;
+        }
+        
+        .input-with-icon .input-action:hover {
+            color: var(--accent-blue);
+        }
+        
+        /* Info Card (readonly fields) */
+        .info-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .info-field i {
+            color: var(--accent-orange);
+            font-size: 18px;
+        }
+        
+        .info-field .label {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .info-field .value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Photos Progress */
+        .photos-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .photos-progress.complete {
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        .photos-progress.incomplete {
+            background: rgba(249, 115, 22, 0.1);
+        }
+        
+        .photos-progress i {
+            font-size: 24px;
+        }
+        
+        .photos-progress.complete i {
+            color: var(--accent-green);
+        }
+        
+        .photos-progress.incomplete i {
+            color: var(--accent-orange);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ========== ASSINATURA SCREEN ========== */
+        .signature-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .signature-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .signature-canvas-wrapper {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #signatureCanvas {
+            width: 100%;
+            height: 200px;
+            touch-action: none;
+            cursor: crosshair;
+        }
+        
+        .signature-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .signature-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-limpar-assinatura {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: none;
+        }
+        
+        .input-responsavel {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        
+        .input-responsavel::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .finalize-summary {
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .finalize-summary h4 {
+            margin: 0 0 12px 0;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .finalize-summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .finalize-summary-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Connection Status Bar -->
+    <div class="connection-status" id="connectionStatus">
+        <i class="bi bi-wifi-off"></i> Sem conexão - Modo offline
+    </div>
+    
+    <div class="app-container">
+        <!-- ========== HOME SCREEN - LISTA DE GARAGENS ========== -->
+        <div class="screen active" id="screenHome">
+            <header class="app-header">
+                <div>
+                    <h1 style="margin: 0; font-size: 18px; font-weight: bold;">Chamados N4 - In Loco</h1>
+                    <p style="margin: 0; font-size: 12px; color: var(--text-secondary);" id="headerUserName">Olá, Técnico</p>
+                </div>
+                <div class="user-info">
+                    <button class="sync-btn" id="syncBtn" onclick="handleSync()">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </button>
+                    <div class="user-avatar" id="userAvatar">--</div>
+                </div>
+            </header>
+            
+            <div class="app-content" id="homeContent">
+                <div class="loading-container" id="homeLoading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 16px; color: var(--text-secondary);">Carregando chamados...</p>
+                </div>
+                
+                <div class="card-list" id="garagensList" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <!-- ========== GARAGEM DETAIL SCREEN ========== -->
+        <div class="screen" id="screenGaragemDetail">
+            <!-- Será preenchido dinamicamente -->
+        </div>
+        
+        <!-- ========== OPERAÇÃO FORM SCREEN ========== -->
+        <div class="screen" id="screenOperacao">
+            <!-- Será preenchido dinamicamente -->
+        </div>
+        
+        <!-- ========== ASSINATURA SCREEN ========== -->
+        <div class="screen" id="screenAssinatura">
+            <!-- Será preenchido dinamicamente -->
+        </div>
+        
+        <!-- ========== PERFIL SCREEN ========== -->
+        <div class="screen" id="screenPerfil">
+            <header class="app-header">
+                <button class="sync-btn" onclick="navigateTo('home')">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <h1 style="margin: 0; font-size: 18px; flex: 1; text-align: center;">Meu Perfil</h1>
+                <div style="width: 36px;"></div>
+            </header>
+            <div class="app-content" style="padding: 16px;">
+                <div style="text-align: center; padding: 24px 0;">
+                    <div class="user-avatar" style="width: 80px; height: 80px; font-size: 32px; margin: 0 auto 16px;" id="perfilAvatar">--</div>
+                    <h2 style="margin: 0 0 4px 0;" id="perfilNome">Carregando...</h2>
+                    <p style="margin: 0; color: var(--text-secondary);" id="perfilEmail">...</p>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <div class="garagem-card" style="cursor: pointer;" onclick="handleLogout()">
+                        <div class="garagem-icon" style="background: rgba(239, 68, 68, 0.2);">
+                            <i class="bi bi-box-arrow-right" style="color: var(--accent-red);"></i>
+                        </div>
+                        <div class="garagem-info">
+                            <h3 style="color: var(--accent-red);">Sair</h3>
+                            <p>Encerrar sessão</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 48px; color: var(--text-secondary); font-size: 12px;">
+                    <p>WifiMaxx Monitor v2.0 PWA</p>
+                    <p>© 2026 WifiMaxx</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ========== APP STATE ==========
+        let appState = {
+            user: null,
+            tecnico: null, // NOVO: dados do técnico do banco (nome, escritório)
+            garagens: [],
+            currentGaragem: null,
+            currentRatId: null,
+            currentRatData: null,
+            currentScreen: 'home',
+            isOnline: navigator.onLine,
+            isSyncing: false,
+            sendingQueue: [], // Fila de envio em background (igual ao Flutter)
+            locks: {}, // NOVO: sistema de locks
+            listViewMode: false // Modo lista compacta (prefixos em grid)
+        };
+        
+        // Auto-sync timer
+        let syncTimer = null;
+        let lockRefreshTimer = null; // NOVO: timer para atualizar locks
+        const SYNC_INTERVAL = 15000;
+        const LOCK_REFRESH_INTERVAL = 5000; // Atualizar locks a cada 5s
+        
+        // Client ID único para este dispositivo (locks)
+        let clientId = localStorage.getItem('wm_client_id');
+        if (!clientId) {
+            clientId = 'pwa-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('wm_client_id', clientId);
+        }
+        
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 PWA App iniciando...');
+            
+            checkAuth();
+            await loadTecnicoInfo(); // NOVO: buscar nome e escritório do técnico
+            await loadGaragens();
+            setupEventListeners();
+            startAutoSync();
+            startLockRefresh(); // NOVO: atualizar locks periodicamente
+            registerSW();
+        });
+        
+        // ========== TÉCNICO INFO (NOME E ESCRITÓRIO) ==========
+        async function loadTecnicoInfo() {
+            const email = appState.user?.email;
+            if (!email) return;
+            
+            try {
+                const response = await fetch(`/api/mobile/tecnico/${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.tecnico) {
+                        appState.tecnico = data.tecnico;
+                        console.log('✅ Técnico carregado:', appState.tecnico.nome, '- Escritório:', appState.tecnico.escritorio);
+                        
+                        // Atualizar UI com nome correto
+                        updateUserUI();
+                        localStorage.setItem('pwa_tecnico', JSON.stringify(appState.tecnico));
+                    }
+                }
+            } catch (e) {
+                console.error('Erro ao carregar técnico:', e);
+                // Tentar usar cache
+                const cached = localStorage.getItem('pwa_tecnico');
+                if (cached) {
+                    appState.tecnico = JSON.parse(cached);
+                }
+            }
+        }
+        
+        // ========== LOCK SERVICE ==========
+        async function refreshLocks() {
+            try {
+                const response = await fetch('/api/locks');
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.locks = {};
+                    (data.locks || []).forEach(lock => {
+                        appState.locks[lock.key] = lock;
+                    });
+                }
+            } catch (e) {
+                console.error('Erro ao atualizar locks:', e);
+            }
+        }
+        
+        function startLockRefresh() {
+            if (lockRefreshTimer) clearInterval(lockRefreshTimer);
+            refreshLocks();
+            lockRefreshTimer = setInterval(refreshLocks, LOCK_REFRESH_INTERVAL);
+        }
+        
+        function getLockKey(prefixo, patrimonio) {
+            return `${(prefixo || '').trim()}-${(patrimonio || '').trim()}`;
+        }
+        
+        function isLockedByOther(prefixo, patrimonio) {
+            const key = getLockKey(prefixo, patrimonio);
+            const lock = appState.locks[key];
+            if (!lock) return false;
+            return lock.owner !== clientId;
+        }
+        
+        function getLockOwnerName(prefixo, patrimonio) {
+            const key = getLockKey(prefixo, patrimonio);
+            const lock = appState.locks[key];
+            return lock?.tecnico_nome || lock?.owner || 'outro usuário';
+        }
+        
+        async function acquireLock(prefixo, patrimonio) {
+            try {
+                // Obter nome do técnico para exibição
+                const tecnicoNome = appState.tecnico?.nome || appState.user?.display_name || appState.user?.username || 'Técnico';
+                
+                const response = await fetch('/api/locks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prefixo: prefixo,
+                        patrimonio: patrimonio,
+                        owner: clientId,
+                        rat_id: appState.currentRatId,
+                        tecnico_nome: tecnicoNome  // NOVO: Nome do técnico para exibição
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success && data.owned) {
+                    console.log('🔒 Lock adquirido:', prefixo, patrimonio);
+                    await refreshLocks();
+                    return true;
+                } else {
+                    console.log('❌ Lock não adquirido - pertence a:', data.owner);
+                    return false;
+                }
+            } catch (e) {
+                console.error('Erro ao adquirir lock:', e);
+                return false;
+            }
+        }
+        
+        async function releaseLock(prefixo, patrimonio) {
+            try {
+                const response = await fetch('/api/locks', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prefixo: prefixo,
+                        patrimonio: patrimonio,
+                        owner: clientId,
+                        rat_id: appState.currentRatId
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('🔓 Lock liberado:', prefixo, patrimonio);
+                    await refreshLocks();
+                }
+            } catch (e) {
+                console.error('Erro ao liberar lock:', e);
+            }
+        }
+        
+        function checkAuth() {
+            try {
+                const userData = {
+                    email: '{{ user.get("email", "") }}',
+                    username: '{{ user.get("username", "") }}',
+                    display_name: '{{ user.get("display_name", "") }}' || '{{ user.get("username", "") }}',
+                    is_admin: {{ 'true' if user.get("is_admin") else 'false' }}
+                };
+                
+                if (userData.email) {
+                    appState.user = userData;
+                    updateUserUI();
+                    localStorage.setItem('pwa_user', JSON.stringify(userData));
+                } else {
+                    const cached = localStorage.getItem('pwa_user');
+                    if (cached) {
+                        appState.user = JSON.parse(cached);
+                        updateUserUI();
+                    } else {
+                        window.location.href = '/login?next=/mobile';
+                    }
+                }
+            } catch (e) {
+                console.error('Erro ao verificar auth:', e);
+                const cached = localStorage.getItem('pwa_user');
+                if (cached) {
+                    appState.user = JSON.parse(cached);
+                    updateUserUI();
+                }
+            }
+        }
+        
+        function updateUserUI() {
+            if (!appState.user) return;
+            
+            // CORREÇÃO: Priorizar nome do técnico do banco sobre display_name do usuário
+            const tecnicoNome = appState.tecnico?.nome;
+            const name = tecnicoNome || appState.user.display_name || appState.user.username || appState.user.email.split('@')[0];
+            const initials = getInitials(name);
+            
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('perfilAvatar').textContent = initials;
+            document.getElementById('perfilNome').textContent = name;
+            document.getElementById('perfilEmail').textContent = appState.user.email || '';
+            document.getElementById('headerUserName').textContent = `Olá, ${name.split(' ')[0]}`;
+        }
+        
+        function getInitials(name) {
+            if (!name) return '--';
+            const parts = name.split(' ').filter(p => p.length > 0);
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+        
+        // ========== AUTO SYNC ==========
+        function startAutoSync() {
+            if (syncTimer) clearInterval(syncTimer);
+            syncTimer = setInterval(() => {
+                if (!appState.isSyncing && appState.isOnline) {
+                    if (appState.currentScreen === 'home') {
+                        loadGaragens(true);
+                    } else if (appState.currentScreen === 'garagemDetail' && appState.currentRatId) {
+                        loadRatDetail(appState.currentRatId, true);
+                    }
+                }
+            }, SYNC_INTERVAL);
+        }
+        
+        // ========== DATA LOADING ==========
+        async function loadGaragens(silent = false) {
+            if (!silent) {
+                document.getElementById('homeLoading').style.display = 'flex';
+                document.getElementById('garagensList').style.display = 'none';
+            }
+            
+            try {
+                const userEmail = appState.user?.email || '';
+                
+                // Buscar chamados N4 E RATs abertas em paralelo
+                const [chamadosRes, ratsRes] = await Promise.all([
+                    fetch(`/api/mobile/n4/chamados?user_email=${encodeURIComponent(userEmail)}`),
+                    fetch('/api/rat')  // Retorna RATs do usuário
+                ]);
+                
+                if (chamadosRes.ok) {
+                    const chamadosResult = await chamadosRes.json();
+                    let garagens = chamadosResult.garagens || [];
+                    
+                    // Buscar RATs N4 abertas (draft com origem N4_CHAMADO)
+                    if (ratsRes.ok) {
+                        const ratsResult = await ratsRes.json();
+                        const ratsAbertas = (ratsResult.data || []).filter(r => 
+                            r.state === 'draft' && 
+                            r.origem === 'N4_CHAMADO' && 
+                            !r.finalizada
+                        );
+                        
+                        // Verificar se alguma RAT aberta tem garagem+projeto não presente nos chamados
+                        for (const rat of ratsAbertas) {
+                            // Resolver garagem: tentar garagem_atual, depois items[0].garagem
+                            const garagemRat = rat.garagem_atual
+                                || (rat.items && rat.items.length > 0 ? rat.items[0].garagem : null);
+                            const projetoRat = rat.projeto || '';
+                            
+                            if (!garagemRat) {
+                                console.warn(`[loadGaragens] RAT ${rat.id} sem garagem_atual e sem items com garagem — ignorando`);
+                                continue;
+                            }
+                            
+                            // Calcular itens pendentes (não enviados) na RAT
+                            const itensNaoEnviados = (rat.items || []).filter(i => !i.enviado).length;
+                            
+                            // Chave composta garagem+projeto para não misturar projetos diferentes
+                            const existeGaragem = garagens.some(g => g.garagem === garagemRat && (g.projeto || '') === projetoRat);
+                            if (!existeGaragem) {
+                                // Adicionar garagem da RAT aberta (mesmo sem chamados pendentes)
+                                garagens.push({
+                                    garagem: garagemRat,
+                                    projeto: projetoRat,
+                                    chamados: [],  // Sem chamados novos
+                                    total: 0,
+                                    rat_id: rat.id,  // Já tem RAT aberta
+                                    rat_items: rat.items?.length || 0,
+                                    rat_items_nao_enviados: itensNaoEnviados,
+                                    has_open_rat: true  // Flag para indicar RAT aberta
+                                });
+                                console.log(`[loadGaragens] Adicionada garagem ${garagemRat} (${projetoRat}) da RAT ${rat.id} aberta (${itensNaoEnviados} itens não enviados)`);
+                            } else {
+                                // Garagem+projeto existe, marcar que tem RAT aberta
+                                const g = garagens.find(g => g.garagem === garagemRat && (g.projeto || '') === projetoRat);
+                                if (g) {
+                                    g.rat_id = rat.id;
+                                    g.has_open_rat = true;
+                                    g.rat_items_nao_enviados = itensNaoEnviados;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Filtrar: manter garagens com chamados OU com RAT aberta
+                    // CORREÇÃO: garagem com RAT aberta (independente de ter chamados novos) NUNCA some
+                    appState.garagens = garagens.filter(g => 
+                        (g.total || g.chamados?.length || 0) > 0 || g.has_open_rat
+                    );
+                    
+                    localStorage.setItem('pwa_garagens', JSON.stringify(appState.garagens));
+                    renderGaragens();
+                } else {
+                    throw new Error('Erro ao carregar chamados');
+                }
+            } catch (e) {
+                console.error('Erro ao carregar garagens:', e);
+                const cached = localStorage.getItem('pwa_garagens');
+                if (cached) {
+                    appState.garagens = JSON.parse(cached);
+                    renderGaragens();
+                    if (!silent) showToast('Usando dados em cache');
+                } else {
+                    if (!silent) showToast('Erro ao carregar dados', 'error');
+                }
+            }
+            
+            if (!silent) {
+                document.getElementById('homeLoading').style.display = 'none';
+                document.getElementById('garagensList').style.display = 'flex';
+            }
+        }
+        
+        function renderGaragens() {
+            const container = document.getElementById('garagensList');
+            
+            if (appState.garagens.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bi bi-check-circle"></i>
+                        <h3>Nenhum chamado N4 pendente</h3>
+                        <p>Todos os chamados In Loco foram atendidos!</p>
+                        <button class="btn-nova-operacao" style="width: auto; margin-top: 24px; padding: 12px 24px;" onclick="handleSync()">
+                            <i class="bi bi-arrow-repeat"></i> Atualizar
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = appState.garagens.map((g, idx) => {
+                const total = g.total || g.chamados?.length || 0;
+                const prefixos = (g.chamados || []).slice(0, 3).map(c => c.prefixo);
+                const hasOpenRat = g.has_open_rat;
+                
+                let badgeClass = '';
+                let badgeIcon = '';
+                let badgeLabel = '';
+                
+                if (hasOpenRat && total === 0) {
+                    // RAT aberta sem chamados novos - mostrar em verde
+                    badgeClass = 'green';
+                    badgeIcon = '<i class="bi bi-clipboard-check"></i>';
+                    const naoEnviados = g.rat_items_nao_enviados || g.rat_items || 0;
+                    badgeLabel = naoEnviados > 0 ? `${naoEnviados} concluído${naoEnviados > 1 ? 's' : ''}` : 'RAT em andamento';
+                } else {
+                    // Chamados pendentes
+                    if (total >= 5) badgeClass = 'danger';
+                    else if (total >= 3) badgeClass = 'warning';
+                    badgeLabel = total === 1 ? 'chamado' : 'chamados';
+                }
+                
+                return `
+                    <div class="garagem-card" onclick="openGaragem(${idx})">
+                        <div class="garagem-icon" ${hasOpenRat && total === 0 ? 'style="background: rgba(34, 197, 94, 0.2);"' : ''}>
+                            <i class="bi bi-building" ${hasOpenRat && total === 0 ? 'style="color: var(--accent-green);"' : ''}></i>
+                        </div>
+                        <div class="garagem-info">
+                            <h3>${g.garagem || 'Garagem'}</h3>
+                            <p>${g.projeto || ''}</p>
+                            ${hasOpenRat && total === 0 ? `
+                                <div style="margin-top: 8px; color: var(--accent-green); font-size: 12px;">
+                                    <i class="bi bi-clock-history"></i> Aguardando finalização
+                                </div>
+                            ` : `
+                                <div class="prefixos-preview">
+                                    ${prefixos.map(p => `<span class="prefixo-tag">${p}</span>`).join('')}
+                                    ${total > 3 ? `<span class="prefixo-tag">+${total - 3}</span>` : ''}
+                                </div>
+                            `}
+                        </div>
+                        <div class="garagem-badge">
+                            ${hasOpenRat && total === 0 ? `
+                                <div class="count" style="background: var(--accent-green);">${badgeIcon}</div>
+                                <span class="label" style="font-size: 9px; max-width: 50px; text-align: center;">${badgeLabel}</span>
+                            ` : `
+                                <div class="count ${badgeClass}">${total}</div>
+                                <span class="label">${badgeLabel}</span>
+                            `}
+                        </div>
+                        <i class="bi bi-chevron-right" style="color: var(--text-secondary);"></i>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // ========== ABRIR GARAGEM ==========
+        async function openGaragem(index) {
+            const garagem = appState.garagens[index];
+            if (!garagem) return;
+            
+            appState.currentGaragem = garagem;
+            showToast('Abrindo garagem...');
+            
+            try {
+                // ========================================
+                // CORREÇÃO: Se a garagem já tem RAT aberta E não há chamados novos no feed,
+                // carregar RAT direto. Se há chamados, SEMPRE chamar iniciar-garagem para reconciliar.
+                // (a lista de chamados da garagem vem do FEED, não da RAT — a RAT só é finalizada no envio)
+                // ========================================
+                const temChamados = (garagem.chamados && garagem.chamados.length > 0) || (garagem.total > 0);
+                if (garagem.rat_id && !temChamados) {
+                    // Garagem com RAT existente mas sem chamados novos no feed
+                    console.log(`[openGaragem] Garagem ${garagem.garagem} já tem RAT ${garagem.rat_id} sem chamados novos - abrindo direto`);
+                    appState.currentRatId = garagem.rat_id;
+                    await loadRatDetail(garagem.rat_id);
+                    showGaragemDetailScreen();
+                    return;
+                }
+                
+                const userName = appState.user?.display_name || appState.user?.username || appState.user?.email?.split('@')[0] || 'Técnico';
+                const userEmail = appState.user?.email || '';
+                
+                // Endpoint espera Query params, não JSON body
+                const params = new URLSearchParams({
+                    garagem: garagem.garagem || '',
+                    projeto: garagem.projeto || '',
+                    user_email: userEmail,
+                    user_name: userName
+                });
+                
+                const response = await fetch(`/api/mobile/n4/iniciar-garagem?${params.toString()}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (result.success && result.rat_id) {
+                        appState.currentRatId = result.rat_id;
+                        await loadRatDetail(result.rat_id);
+                        showGaragemDetailScreen();
+                    } else {
+                        showToast(result.message || 'Erro ao iniciar', 'error');
+                    }
+                } else {
+                    const errData = await response.json().catch(() => ({}));
+                    console.error('[openGaragem] Erro:', errData);
+                    throw new Error(errData.detail || 'Erro ao iniciar garagem');
+                }
+            } catch (e) {
+                console.error('Erro ao abrir garagem:', e);
+                showToast(e.message || 'Erro ao abrir garagem', 'error');
+            }
+        }
+        
+        async function loadRatDetail(ratId, silent = false) {
+            try {
+                const response = await fetch(`/api/rat/${ratId}`);
+                
+                if (response.ok) {
+                    appState.currentRatData = await response.json();
+                    if (appState.currentScreen === 'garagemDetail') {
+                        renderGaragemDetail();
+                    }
+                }
+            } catch (e) {
+                console.error('Erro ao carregar RAT:', e);
+                if (!silent) showToast('Erro ao carregar detalhes', 'error');
+            }
+        }
+        
+        function toggleListViewMode() {
+            appState.listViewMode = !appState.listViewMode;
+            renderGaragemDetail();
+        }
+        
+        function showGaragemDetailScreen() {
+            appState.currentScreen = 'garagemDetail';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenGaragemDetail').classList.add('active');
+            renderGaragemDetail();
+        }
+        
+        function renderGaragemDetail() {
+            const screen = document.getElementById('screenGaragemDetail');
+            const garagem = appState.currentGaragem;
+            const rat = appState.currentRatData;
+            const items = rat?.items || [];
+            
+            // 🔒 Salvar posição do scroll antes de re-render
+            const scrollContainer = screen.querySelector('.app-content');
+            const savedScrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
+            
+            // DEBUG: Mostrar status_prefixo de cada item
+            console.log('[DEBUG renderGaragemDetail] Items recebidos:');
+            items.forEach((item, idx) => {
+                console.log(`  [${idx}] prefixo=${item.prefixo}, status_prefixo='${item.status_prefixo}', enviado=${item.enviado}`);
+            });
+            
+            // CORREÇÃO: Incluir CONCLUIDO_LOCAL nos concluídos
+            const statusConcluido = ['CONCLUIDO', 'CONCLUÍDO', 'CONCLUIDO_LOCAL'];
+            // Prefixos sendo enviados em background — excluir das outras seções
+            const sendingPrefixes = new Set((appState.sendingQueue || []).map(i => i.prefixo));
+            const pendentes = items.filter(i => !sendingPrefixes.has(i.prefixo) && !i.enviado && !statusConcluido.includes((i.status_prefixo || '').toUpperCase()) && (i.status_prefixo || '').toUpperCase() !== 'ENCAMINHOU_N2');
+            // ENCAMINHOU_N2 agrupado junto com concluídos (mesmo comportamento do Flutter)
+            const concluidos = items.filter(i => !sendingPrefixes.has(i.prefixo) && !i.enviado && (statusConcluido.includes((i.status_prefixo || '').toUpperCase()) || (i.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2'));
+            const encaminhadosN2 = concluidos.filter(i => (i.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2');
+            const enviados = items.filter(i => i.enviado);
+            
+            // 🔢 Ordenar por prefixo numérico crescente
+            const sortByPrefixo = (a, b) => {
+                const numA = parseInt((a.prefixo || '').replace(/\D/g, ''), 10) || 0;
+                const numB = parseInt((b.prefixo || '').replace(/\D/g, ''), 10) || 0;
+                if (numA !== numB) return numA - numB;
+                return (a.prefixo || '').localeCompare(b.prefixo || '');
+            };
+            pendentes.sort(sortByPrefixo);
+            concluidos.sort(sortByPrefixo);
+            enviados.sort(sortByPrefixo);
+            
+            console.log(`[DEBUG renderGaragemDetail] Filtro: pendentes=${pendentes.length}, concluidos=${concluidos.length}, encaminhadosN2=${encaminhadosN2.length}, enviados=${enviados.length}, enviando=${sendingPrefixes.size}`);
+            
+            screen.innerHTML = `
+                <header class="app-header">
+                    <button class="sync-btn" onclick="voltarParaHome()">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <div style="flex: 1; text-align: center;">
+                        <h1 style="margin: 0; font-size: 16px;">${garagem?.garagem || 'Garagem'}</h1>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary);">${garagem?.projeto || ''}</p>
+                    </div>
+                    <button class="sync-btn" onclick="toggleListViewMode()" id="btnListView" title="Visualizar em Lista">
+                        <i class="bi ${appState.listViewMode ? 'bi-view-stacked' : 'bi-eye'}"></i>
+                    </button>
+                    <button class="sync-btn" onclick="loadRatDetail('${appState.currentRatId}')">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </button>
+                </header>
+                
+                <div class="app-content">
+                    <!-- Info card oculto para economizar espaço -->
+                    
+                    ${pendentes.length > 0 ? `
+                        <div class="section-header">
+                            <div class="section-bar orange"></div>
+                            <h2 class="section-title">Chamados Pendentes</h2>
+                            <span class="section-badge orange">${pendentes.length}</span>
+                        </div>
+                        ${appState.listViewMode ? `
+                        <div class="prefixo-grid" style="padding: 0 12px 8px;">
+                            ${pendentes.map(item => {
+                                const locked = isLockedByOther(item.prefixo, item.patrimonio);
+                                const chamadoId = item.chamado_id || '';
+                                const desc = (item.description || '').replace(/'/g, "\\'");
+                                return `<span class="prefixo-chip ${locked ? 'locked' : 'pendente'}" ${!locked ? `onclick="novaOperacao('${item.prefixo}', '${item.patrimonio || ''}', '${chamadoId}', '${desc}')" style="cursor:pointer;"` : ''}>${locked ? '<i class="bi bi-lock-fill" style="font-size:10px;margin-right:2px;"></i>' : ''}${item.prefixo || '-'}</span>`;
+                            }).join('')}
+                        </div>
+                        ` : `
+                        <div class="card-list" style="padding-top: 0;">
+                            ${pendentes.map(item => renderChamadoCard(item, 'PENDENTE')).join('')}
+                        </div>`}
+                    ` : ''}
+                    
+                    ${appState.sendingQueue.length > 0 ? `
+                        <div class="section-header">
+                            <div class="section-bar" style="background: #3b82f6;"></div>
+                            <h2 class="section-title">Enviando</h2>
+                            <span class="section-badge" style="background: rgba(59,130,246,0.15); color: #3b82f6;">${appState.sendingQueue.length}</span>
+                        </div>
+                        <div class="card-list" style="padding-top: 0;">
+                            ${appState.sendingQueue.map(si => renderSendingCard(si)).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    ${concluidos.length > 0 ? `
+                        <div class="section-header">
+                            <div class="section-bar green"></div>
+                            <h2 class="section-title">Chamados Concluídos</h2>
+                            <span class="section-badge green">${concluidos.length}</span>
+                        </div>
+                        ${encaminhadosN2.length > 0 ? `
+                        <div style="margin: 0 12px 8px; font-size: 11px; color: #c084fc; background: rgba(168,85,247,0.1); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(168,85,247,0.2);">
+                            <i class="bi bi-info-circle"></i> Alguns prefixos foram encaminhados ao BI para atualização de base — incluídos na RAT normalmente.
+                        </div>
+                        ` : ''}
+                        ${appState.listViewMode ? `
+                        <div class="prefixo-grid" style="padding: 0 12px 8px;">
+                            ${concluidos.map(item => {
+                                const isN2 = (item.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2';
+                                return `<span class="prefixo-chip concluido">${isN2 ? '<i class="bi bi-arrow-up-circle" style="font-size:10px;margin-right:2px;color:#c084fc;"></i>' : ''}${item.prefixo || '-'}</span>`;
+                            }).join('')}
+                        </div>
+                        ` : `
+                        <div class="card-list" style="padding-top: 0;">
+                            ${concluidos.map(item => renderChamadoCard(item, (item.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2' ? 'ENCAMINHOU_N2' : 'CONCLUIDO')).join('')}
+                        </div>
+                        `}
+                        
+                        <div style="padding: 12px; margin-top: 8px;">
+                            <button class="btn-nova-operacao" style="background: var(--accent-green);" onclick="iniciarFinalizarRAT()">
+                                <i class="bi bi-send"></i> Enviar RAT Consolidada
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // 🔒 Restaurar posição do scroll após re-render
+            if (savedScrollTop > 0) {
+                const newScrollContainer = screen.querySelector('.app-content');
+                if (newScrollContainer) {
+                    newScrollContainer.scrollTop = savedScrollTop;
+                }
+            }
+        }
+        
+        function renderChamadoCard(item, status) {
+            const isPendente = status === 'PENDENTE';
+            const isConcluido = status === 'CONCLUIDO';
+            const isEnviado = status === 'ENVIADO';
+            const isEncaminhouN2 = status === 'ENCAMINHOU_N2';
+            
+            // NOVO: Verificar se está bloqueado por outro usuário
+            const locked = isLockedByOther(item.prefixo, item.patrimonio);
+            const lockOwner = locked ? getLockOwnerName(item.prefixo, item.patrimonio) : '';
+            
+            let statusClass = 'pendente';
+            let statusIcon = 'bi-hourglass-split';
+            let statusText = 'Pendente';
+            
+            if (locked) {
+                statusClass = 'bloqueado';
+                statusIcon = 'bi-lock-fill';
+                statusText = `Em atendimento`;
+            } else if (isEncaminhouN2) {
+                statusClass = 'encaminhou-n2';
+                statusIcon = 'bi-arrow-up-circle';
+                statusText = 'Encam. ao BI';
+            } else if (isConcluido) {
+                statusClass = 'concluido';
+                statusIcon = 'bi-check-circle';
+                statusText = 'Concluído';
+            } else if (isEnviado) {
+                statusClass = 'enviado';
+                statusIcon = 'bi-send';
+                statusText = 'Enviado';
+            }
+            
+            // NOVO: Obter chamado_id do item (NÃO usar item.id como fallback)
+            const chamadoId = item.chamado_id || '';
+            
+            // DEBUG: Log para diagnóstico
+            console.log(`[DEBUG] Item ${item.prefixo}: chamado_id=${chamadoId}, item.chamado_id=${item.chamado_id}, item.id=${item.id}`);
+            
+            return `
+                <div class="chamado-card ${locked ? 'locked' : ''}" ${isPendente && !locked ? `onclick="novaOperacao('${item.prefixo}', '${item.patrimonio || ''}', '${chamadoId}', '${(item.description || '').replace(/'/g, "\\'")}')"
+ style="cursor: pointer;"` : ''}>
+                    <div class="chamado-header">
+                        <span class="chamado-prefixo">${item.prefixo || '-'}</span>
+                        <span class="chamado-status ${statusClass}">
+                            <i class="bi ${statusIcon}"></i> ${statusText}
+                        </span>
+                    </div>
+                    <div class="chamado-patrimonio">
+                        <i class="bi bi-upc-scan"></i> ${item.patrimonio || 'N/A'}
+                    </div>
+                    ${item.description ? `
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
+                            <i class="bi bi-info-circle"></i> ${item.description}
+                        </div>
+                    ` : ''}
+                    ${locked ? `
+                        <div style="font-size: 11px; color: var(--accent-orange); margin-top: 4px; background: rgba(249,115,22,0.1); padding: 4px 8px; border-radius: 4px;">
+                            <i class="bi bi-person-fill"></i> ${lockOwner}
+                        </div>
+                    ` : ''}
+                    ${item.tipo_atividade ? `
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
+                            <i class="bi bi-tools"></i> ${item.tipo_atividade}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        // ========== NOVA OPERAÇÃO ==========
+        // Estado do formulário de operação (igual ao Flutter)
+        let operacaoState = {
+            currentStep: 0, // 0 = Identificação, 1 = Atividade, 2 = Fotos
+            prefixo: '',
+            patrimonio: '',
+            patrimonioRetirado: '',
+            patrimonioSwapped: false,
+            responsavel: '',
+            escritorio: '', // NOVO: escritório do técnico
+            linha: '', // NOVO: linha do prefixo
+            tipoAtividade: 'Visita Técnica',
+            tipoAsbuilt: 'Instalação de Ônibus',
+            conclusao: '',
+            dataInicio: new Date().toISOString().split('T')[0],
+            dataTermino: new Date().toISOString().split('T')[0],
+            observacao: '',
+            photos: {},
+            isSaving: false,
+            chamadoId: '' // NOVO: ID do chamado vinculado
+        };
+        
+        // Conclusões por tipo de atividade (igual ao Flutter)
+        const conclusoesPorAtividade = {
+            'Instalação': ['Aumento de frota', 'Implementação'],
+            'Manutenção Elétrica': ['Chicote Reparado/Feito', 'Fusivel Substituido', 'Demais'],
+            'Adesivação': ['Prefixo adesivado'],
+            'Visita Técnica': [
+                'Prefixo entrou em Manutenção',
+                'Prefixo voltou para operação',
+                'Prefixo desativado e maquina devolvida',
+                'Prefixo desativado e maquina não devolvida',
+                'Prefixo não localizado na garagem',
+                'Prefixo operante, mas a maquina não foi encontrada',
+                'Retirada de maquina',
+                'Inventário',
+                'Maquina Sinistrada',
+                'Maquina Reinstalada',
+                'Maquina Revisada',
+                'Troca de projeto',
+                'Prefixo sem chicote ou com problema'
+            ],
+            'Substituição': ['Troca de máquina'],
+            'Remanejamento': ['Troca de prefixo', 'Troca de garagem']
+        };
+        
+        // Tipos de Asbuilt (igual ao Flutter)
+        const tiposAsbuilt = [
+            'Instalação de Ônibus',
+            'Instalação de Terminal',
+            'Plano de Comunicação',
+            'Retirada',
+            'Não necessário'
+        ];
+        
+        // Fotos por tipo de Asbuilt (igual ao Flutter - AsbuiltModel.fotosConfig)
+        const fotosConfig = {
+            'Instalação de Ônibus': [
+                { field: 'frente_onibus', label: 'Frente do ônibus com prefixo', required: true },
+                { field: 'chicote_porta_fusivel', label: 'Chicote elétrico com porta fusível', required: true },
+                { field: 'maquina_patrimonio', label: 'Máquina com patrimônio', required: true },
+                { field: 'local_instalacao', label: 'Local de instalação', required: true },
+                { field: 'maquina_instalada', label: 'Máquina instalada', required: true }
+            ],
+            'Instalação de Terminal': [
+                { field: 'maquina_patrimonio', label: 'Máquina com patrimônio', required: true },
+                { field: 'local_instalacao', label: 'Local de instalação', required: true },
+                { field: 'maquina_instalada', label: 'Máquina instalada', required: true }
+            ],
+            'Plano de Comunicação': [
+                { field: 'adesivacao_1', label: 'Adesivação - Amostra 1', required: true },
+                { field: 'adesivacao_2', label: 'Adesivação - Amostra 2', required: true },
+                { field: 'adesivacao_3', label: 'Adesivação - Amostra 3', required: true },
+                { field: 'adesivacao_4', label: 'Adesivação - Amostra 4', required: true },
+                { field: 'adesivacao_5', label: 'Adesivação - Amostra 5', required: true }
+            ],
+            'Retirada': [
+                { field: 'frente_onibus', label: 'Frente do ônibus com prefixo', required: true },
+                { field: 'maquina_patrimonio', label: 'Máquina com patrimônio', required: true }
+            ],
+            'Não necessário': []
+        };
+        
+        async function novaOperacao(prefixo, patrimonio, chamadoId = '', chamadoDescription = '') {
+            // NOVO: Verificar se está bloqueado por outro usuário
+            await refreshLocks();
+            if (isLockedByOther(prefixo, patrimonio)) {
+                const owner = getLockOwnerName(prefixo, patrimonio);
+                showToast(`⚠️ Em atendimento por ${owner}`, 'error');
+                alert(`Este prefixo está sendo atendido por ${owner}.\n\nAguarde a finalização ou entre em contato.`);
+                return;
+            }
+            
+            // NOVO: Tentar adquirir lock
+            const lockAcquired = await acquireLock(prefixo, patrimonio);
+            if (!lockAcquired) {
+                showToast('Não foi possível iniciar - prefixo em uso', 'error');
+                return;
+            }
+            
+            // CORREÇÃO: Usar nome do técnico do banco (não email/display_name)
+            const tecnicoNome = appState.tecnico?.nome || appState.user?.display_name || appState.user?.username || 'Técnico';
+            const escritorio = appState.tecnico?.escritorio || '';
+            
+            operacaoState = {
+                currentStep: 0,
+                prefixo: prefixo,
+                patrimonio: patrimonio,
+                patrimonioRetirado: '',
+                patrimonioSwapped: false,
+                responsavel: tecnicoNome, // CORREÇÃO: nome do técnico (não email)
+                escritorio: escritorio, // NOVO: escritório do técnico
+                linha: '', // Será buscado junto com patrimônio
+                tipoAtividade: 'Visita Técnica',
+                tipoAsbuilt: 'Instalação de Ônibus',
+                conclusao: '',
+                dataInicio: new Date().toISOString().split('T')[0],
+                dataTermino: new Date().toISOString().split('T')[0],
+                observacao: '',
+                photos: {},
+                isSaving: false,
+                chamadoId: chamadoId, // NOVO: ID do chamado
+                chamadoDescription: chamadoDescription || '' // Descrição do chamado
+            };
+            
+            // Buscar dados adicionais do prefixo (patrimônio, linha)
+            if (prefixo) {
+                buscarDadosPrefixo(prefixo);
+            }
+            
+            appState.currentScreen = 'operacao';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenOperacao').classList.add('active');
+            renderOperacaoForm();
+        }
+        
+        // NOVO: Buscar dados adicionais do prefixo
+        async function buscarDadosPrefixo(prefixo) {
+            try {
+                const response = await fetch(`/api/asbuilt/validate-patrimonio?prefixo=${encodeURIComponent(prefixo)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.patrimonio && !operacaoState.patrimonio) {
+                        operacaoState.patrimonio = data.patrimonio;
+                    }
+                    if (data.linha) {
+                        operacaoState.linha = data.linha;
+                    }
+                    renderOperacaoForm();
+                }
+            } catch (e) {
+                console.error('Erro ao buscar dados do prefixo:', e);
+            }
+        }
+        
+        function renderOperacaoForm() {
+            const screen = document.getElementById('screenOperacao');
+            const tiposAtividade = Object.keys(conclusoesPorAtividade);
+            const conclusoes = conclusoesPorAtividade[operacaoState.tipoAtividade] || [];
+            const fotos = fotosConfig[operacaoState.tipoAsbuilt] || [];
+            
+            const requiredPhotos = fotos.filter(f => f.required).length;
+            const capturedRequired = fotos.filter(f => f.required && operacaoState.photos[f.field]).length;
+            
+            screen.innerHTML = `
+                <header class="app-header">
+                    <button class="sync-btn" onclick="voltarParaGaragem()">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <div style="flex: 1; text-align: center;">
+                        <h1 style="margin: 0; font-size: 16px;">${operacaoState.currentStep === 1 ? 'Concluir' : 'Nova'} Operação</h1>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary);">Prefixo: ${operacaoState.prefixo}</p>
+                    </div>
+                    <div style="padding: 6px 12px; border-radius: 16px; font-size: 11px; ${appState.isOnline ? 'background: rgba(34,197,94,0.2); color: var(--accent-green);' : 'background: rgba(249,115,22,0.2); color: var(--accent-orange);'}">
+                        <i class="bi ${appState.isOnline ? 'bi-cloud-check' : 'bi-cloud-slash'}"></i>
+                        ${appState.isOnline ? 'Online' : 'Offline'}
+                    </div>
+                </header>
+                
+                <div class="app-content" style="padding: 16px;">
+                    <!-- Stepper -->
+                    <div class="stepper">
+                        <div class="step ${operacaoState.currentStep === 0 ? 'active' : ''} ${operacaoState.currentStep > 0 ? 'completed' : ''}">
+                            <div class="step-circle">${operacaoState.currentStep > 0 ? '<i class="bi bi-check"></i>' : '1'}</div>
+                            <span class="step-label">Equipamento</span>
+                        </div>
+                        <div class="step ${operacaoState.currentStep === 1 ? 'active' : ''} ${capturedRequired >= requiredPhotos && operacaoState.currentStep === 1 ? 'completed' : ''}">
+                            <div class="step-circle">${capturedRequired >= requiredPhotos ? '<i class="bi bi-check"></i>' : '2'}</div>
+                            <span class="step-label">Fotos</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 1: Equipamento e Atividade -->
+                    <div class="step-content ${operacaoState.currentStep === 0 ? 'active' : ''}">
+                        ${renderStep1()}
+                    </div>
+                    
+                    <!-- Step 2: Fotos (Asbuilt) -->
+                    <div class="step-content ${operacaoState.currentStep === 1 ? 'active' : ''}">
+                        ${renderStep3()}
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="step-nav">
+                        ${operacaoState.currentStep > 0 ? `
+                            <button class="btn-step btn-step-back" onclick="prevStep()">
+                                <i class="bi bi-arrow-left"></i> Voltar
+                            </button>
+                        ` : ''}
+                        ${operacaoState.currentStep < 1 ? `
+                            <button class="btn-step btn-step-next" onclick="nextStep()">
+                                Próximo <i class="bi bi-arrow-right"></i>
+                            </button>
+                        ` : `
+                            <button class="btn-step btn-step-next" onclick="salvarOperacao()">
+                                <i class="bi bi-check-circle"></i> CONCLUIR PREFIXO
+                            </button>
+                        `}
+                    </div>
+                    
+                    <div style="height: 24px;"></div>
+                </div>
+            `;
+        }
+        
+        // Step 1: Equipamento e Atividade (formulário simplificado)
+        // Campos ocultos (Identificação, Localização, Cronograma) continuam
+        // auto-preenchidos e enviados junto — apenas não aparecem no formulário.
+        function renderStep1() {
+            const tiposAtividade = Object.keys(conclusoesPorAtividade);
+            const conclusoes = conclusoesPorAtividade[operacaoState.tipoAtividade] || [];
+            
+            return `
+                <!-- Descrição do chamado -->
+                ${operacaoState.chamadoDescription ? `
+                <div class="form-section" style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25);">
+                    <div class="form-section-title" style="color: #60a5fa;">
+                        <i class="bi bi-chat-text"></i> Descrição do Chamado
+                    </div>
+                    <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.4;">${operacaoState.chamadoDescription}</p>
+                </div>
+                ` : ''}
+                
+                <!-- Seção: Equipamento -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-bus-front"></i> Equipamento
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Prefixo <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-bus-front input-icon"></i>
+                            <input type="text" class="form-input" id="inputPrefixo" value="${operacaoState.prefixo}" 
+                                   onchange="operacaoState.prefixo = this.value" placeholder="Ex: 21001">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Patrimônio ${operacaoState.conclusao === 'Prefixo sem chicote ou com problema' ? '(não necessário)' : '<span class="required">*</span>'}</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-upc-scan input-icon"></i>
+                            <input type="text" class="form-input ${operacaoState.conclusao === 'Prefixo sem chicote ou com problema' ? 'form-readonly' : ''}" 
+                                   id="inputPatrimonio" value="${operacaoState.patrimonio}" 
+                                   onchange="operacaoState.patrimonio = this.value" placeholder="Ex: PAT123456"
+                                   ${operacaoState.conclusao === 'Prefixo sem chicote ou com problema' ? 'disabled' : ''}>
+                            <button class="input-action" onclick="swapPatrimonio()" title="${operacaoState.patrimonioSwapped ? 'Restaurar' : 'Mover para Retirado'}">
+                                <i class="bi ${operacaoState.patrimonioSwapped ? 'bi-arrow-counterclockwise' : 'bi-arrow-left-right'}" 
+                                   style="color: ${operacaoState.patrimonioSwapped ? 'var(--accent-green)' : 'inherit'}"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Patrimônio Retirado</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-arrow-left-right input-icon"></i>
+                            <input type="text" class="form-input" id="inputPatrimonioRetirado" value="${operacaoState.patrimonioRetirado}" 
+                                   onchange="operacaoState.patrimonioRetirado = this.value" placeholder="Digite se aplicável">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Seção: Atividade -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-tools"></i> Atividade
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Atividade <span class="required">*</span></label>
+                        <select class="form-select" id="tipoAtividade" onchange="onTipoAtividadeChange(this.value)">
+                            ${tiposAtividade.map(t => `
+                                <option value="${t}" ${t === operacaoState.tipoAtividade ? 'selected' : ''}>${t}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Conclusão <span class="required">*</span></label>
+                        <select class="form-select" id="conclusao" onchange="operacaoState.conclusao = this.value">
+                            <option value="">Selecione...</option>
+                            ${conclusoes.map(c => `
+                                <option value="${c}" ${c === operacaoState.conclusao ? 'selected' : ''}>${c}</option>
+                            `).join('')}
+                        </select>
+                        ${conclusoes.length === 0 ? '<small style="color: var(--text-secondary);">Nenhuma opção para este tipo</small>' : ''}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea class="form-textarea" id="observacao" placeholder="Digite observações adicionais sobre a operação..." 
+                                  onchange="operacaoState.observacao = this.value">${operacaoState.observacao}</textarea>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Step 2: Atividade e Cronograma
+        function renderStep2() {
+            const tiposAtividade = Object.keys(conclusoesPorAtividade);
+            const conclusoes = conclusoesPorAtividade[operacaoState.tipoAtividade] || [];
+            
+            return `
+                <!-- Seção: Atividade -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-tools"></i> Atividade
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Atividade <span class="required">*</span></label>
+                        <select class="form-select" id="tipoAtividade" onchange="onTipoAtividadeChange(this.value)">
+                            ${tiposAtividade.map(t => `
+                                <option value="${t}" ${t === operacaoState.tipoAtividade ? 'selected' : ''}>${t}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Conclusão <span class="required">*</span></label>
+                        <select class="form-select" id="conclusao" onchange="operacaoState.conclusao = this.value">
+                            <option value="">Selecione...</option>
+                            ${conclusoes.map(c => `
+                                <option value="${c}" ${c === operacaoState.conclusao ? 'selected' : ''}>${c}</option>
+                            `).join('')}
+                        </select>
+                        ${conclusoes.length === 0 ? '<small style="color: var(--text-secondary);">Nenhuma opção para este tipo</small>' : ''}
+                    </div>
+                </div>
+                
+                <!-- Seção: Cronograma -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-calendar"></i> Cronograma
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Data de Início</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-calendar-event input-icon"></i>
+                            <input type="date" class="form-input" value="${operacaoState.dataInicio}" 
+                                   onchange="operacaoState.dataInicio = this.value">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Data de Término</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-calendar-check input-icon"></i>
+                            <input type="date" class="form-input" value="${operacaoState.dataTermino}" 
+                                   onchange="operacaoState.dataTermino = this.value">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea class="form-textarea" id="observacao" placeholder="Digite observações adicionais sobre a operação..." 
+                                  onchange="operacaoState.observacao = this.value">${operacaoState.observacao}</textarea>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Step 3: Fotos (Asbuilt)
+        function renderStep3() {
+            const fotos = fotosConfig[operacaoState.tipoAsbuilt] || [];
+            const requiredCount = fotos.filter(f => f.required).length;
+            const capturedRequired = fotos.filter(f => f.required && operacaoState.photos[f.field]).length;
+            const allComplete = capturedRequired >= requiredCount;
+            
+            return `
+                <!-- Seção: Tipo de Asbuilt -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-list-check"></i> Tipo de Asbuilt
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Selecione o tipo de documentação fotográfica <span class="required">*</span></label>
+                        <select class="form-select" id="tipoAsbuilt" onchange="onTipoAsbuiltChange(this.value)">
+                            ${tiposAsbuilt.map(t => `
+                                <option value="${t}" ${t === operacaoState.tipoAsbuilt ? 'selected' : ''}>${t}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Seção: Fotos -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-camera"></i> Fotos Obrigatórias para ${operacaoState.tipoAsbuilt}
+                    </div>
+                    
+                    <!-- Indicador de progresso -->
+                    <div class="photos-progress ${allComplete ? 'complete' : 'incomplete'}">
+                        <i class="bi ${allComplete ? 'bi-check-circle-fill' : 'bi-camera-fill'}"></i>
+                        <div style="flex: 1;">
+                            <div style="font-weight: bold;">${Object.keys(operacaoState.photos).length}/${fotos.length} fotos capturadas</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">
+                                ${allComplete ? 'Todas as fotos obrigatórias capturadas ✓' : `Obrigatórias: ${capturedRequired}/${requiredCount}`}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${fotos.length === 0 && operacaoState.tipoAsbuilt === 'Não necessário' ? `
+                        <div style="text-align: center; padding: 24px; background: rgba(13,110,253,0.1); border-radius: 12px; border: 1px solid rgba(13,110,253,0.3);">
+                            <i class="bi bi-info-circle" style="font-size: 32px; color: var(--accent-blue);"></i>
+                            <p style="margin: 12px 0 0 0; color: var(--accent-blue); font-weight: bold;">Tipo "Não necessário" selecionado</p>
+                            <p style="margin: 8px 0 0 0; font-size: 12px; color: var(--text-secondary);">Nenhuma foto é necessária e o documento Asbuilt não será gerado.<br>Os dados serão salvos normalmente.</p>
+                        </div>
+                    ` : `
+                        <div class="photo-grid">
+                            ${fotos.map(f => `
+                                <div class="photo-item ${operacaoState.photos[f.field] ? 'has-photo' : ''}" 
+                                     onclick="capturePhoto('${f.field}')">
+                                    ${operacaoState.photos[f.field] ? `
+                                        <img src="${operacaoState.photos[f.field]}" alt="${f.label}">
+                                        <button class="remove-btn" onclick="event.stopPropagation(); removePhoto('${f.field}')">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    ` : `
+                                        <i class="bi bi-camera"></i>
+                                        <span>${f.label}</span>
+                                    `}
+                                    ${f.required ? '<span class="required-badge">Obrig.</span>' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+        
+        function nextStep() {
+            // Validar step atual antes de avançar
+            if (operacaoState.currentStep === 0) {
+                if (!operacaoState.prefixo) {
+                    showToast('Informe o prefixo', 'error');
+                    return;
+                }
+                if (!operacaoState.conclusao) {
+                    showToast('Selecione uma conclusão', 'error');
+                    return;
+                }
+            }
+            
+            if (operacaoState.currentStep < 1) {
+                operacaoState.currentStep++;
+                renderOperacaoForm();
+            }
+        }
+        
+        function prevStep() {
+            if (operacaoState.currentStep > 0) {
+                operacaoState.currentStep--;
+                renderOperacaoForm();
+            }
+        }
+        
+        function onTipoAtividadeChange(tipo) {
+            operacaoState.tipoAtividade = tipo;
+            operacaoState.conclusao = ''; // Reset conclusão ao mudar tipo
+            renderOperacaoForm();
+        }
+        
+        function onTipoAsbuiltChange(tipo) {
+            operacaoState.tipoAsbuilt = tipo;
+            // Não limpar fotos ao mudar tipo - mantém as que já foram tiradas
+            renderOperacaoForm();
+        }
+        
+        function swapPatrimonio() {
+            if (!operacaoState.patrimonioSwapped) {
+                if (operacaoState.patrimonio) {
+                    operacaoState.patrimonioRetirado = operacaoState.patrimonio;
+                    operacaoState.patrimonio = '';
+                    operacaoState.patrimonioSwapped = true;
+                    showToast('Patrimônio movido para Retirado');
+                } else {
+                    showToast('Digite um patrimônio primeiro', 'error');
+                }
+            } else {
+                if (operacaoState.patrimonioRetirado) {
+                    operacaoState.patrimonio = operacaoState.patrimonioRetirado;
+                    operacaoState.patrimonioRetirado = '';
+                    operacaoState.patrimonioSwapped = false;
+                    showToast('Patrimônio restaurado');
+                }
+            }
+            renderOperacaoForm();
+        }
+        
+        async function buscarPatrimonio() {
+            const prefixo = operacaoState.prefixo;
+            if (!prefixo) {
+                showToast('Digite o prefixo primeiro', 'error');
+                return;
+            }
+            
+            showToast('Buscando patrimônio...');
+            
+            try {
+                const response = await fetch(`/api/asbuilt/validate-patrimonio?prefixo=${encodeURIComponent(prefixo)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.patrimonio) {
+                        operacaoState.patrimonio = data.patrimonio;
+                        showToast('Patrimônio encontrado!', 'success');
+                        renderOperacaoForm();
+                    } else {
+                        showToast('Patrimônio não encontrado', 'error');
+                    }
+                } else {
+                    showToast('Erro ao buscar patrimônio', 'error');
+                }
+            } catch (e) {
+                showToast('Erro ao buscar patrimônio', 'error');
+            }
+        }
+        
+        function capturePhoto(campo, source = null) {
+            // Se não especificou source, mostrar modal de escolha
+            if (source === null) {
+                showPhotoSourceModal(campo);
+                return;
+            }
+            
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            // Se source = 'camera', forçar câmera; se 'gallery', não usar capture
+            if (source === 'camera') {
+                input.capture = 'environment';
+            }
+            // Se source = 'gallery', não adiciona capture (abre galeria)
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Comprimir imagem antes de armazenar (max 1920px, qualidade 0.8)
+                    comprimirImagemPWA(file, 1920, 0.8).then(dataUrl => {
+                        operacaoState.photos[campo] = dataUrl;
+                        renderOperacaoForm();
+                    }).catch(() => {
+                        // Fallback: usar imagem original
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                            operacaoState.photos[campo] = ev.target.result;
+                            renderOperacaoForm();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+            };
+            
+            input.click();
+        }
+        
+        /**
+         * Comprime imagem via Canvas para o PWA.
+         * @param {File} file - Arquivo de imagem
+         * @param {number} maxDim - Dimensão máxima em pixels
+         * @param {number} quality - Qualidade JPEG (0.0 a 1.0)
+         * @returns {Promise<string>} - Data URL da imagem comprimida
+         */
+        function comprimirImagemPWA(file, maxDim, quality) {
+            return new Promise((resolve, reject) => {
+                const img = new window.Image();
+                const url = URL.createObjectURL(file);
+                img.onload = function() {
+                    URL.revokeObjectURL(url);
+                    let w = img.width, h = img.height;
+                    
+                    // Não comprimir se já é pequena
+                    if (w <= maxDim && h <= maxDim && file.size <= 1024 * 1024) {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => resolve(ev.target.result);
+                        reader.onerror = () => reject();
+                        reader.readAsDataURL(file);
+                        return;
+                    }
+                    
+                    if (w > maxDim || h > maxDim) {
+                        const ratio = Math.min(maxDim / w, maxDim / h);
+                        w = Math.round(w * ratio);
+                        h = Math.round(h * ratio);
+                    }
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    console.log(`📦 PWA imagem comprimida: ${Math.round(file.size/1024)}KB → ~${Math.round(dataUrl.length*0.75/1024)}KB`);
+                    resolve(dataUrl);
+                };
+                img.onerror = () => { URL.revokeObjectURL(url); reject(); };
+                img.src = url;
+            });
+        }
+        
+        function showPhotoSourceModal(campo) {
+            // Modal para escolher entre câmera e galeria
+            const modal = document.createElement('div');
+            modal.id = 'photoSourceModal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            modal.innerHTML = `
+                <div style="background:var(--primary-dark);border-radius:16px;padding:24px;margin:16px;max-width:300px;width:100%;border:1px solid var(--card-border);">
+                    <h3 style="margin:0 0 16px 0;text-align:center;"><i class="bi bi-image"></i> Adicionar Foto</h3>
+                    <button onclick="capturePhoto('${campo}', 'camera'); closePhotoModal();" 
+                            style="width:100%;padding:14px;margin-bottom:12px;background:var(--accent-blue);color:white;border:none;border-radius:12px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <i class="bi bi-camera-fill"></i> Tirar Foto
+                    </button>
+                    <button onclick="capturePhoto('${campo}', 'gallery'); closePhotoModal();" 
+                            style="width:100%;padding:14px;margin-bottom:12px;background:var(--accent-green);color:white;border:none;border-radius:12px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <i class="bi bi-images"></i> Escolher da Galeria
+                    </button>
+                    <button onclick="closePhotoModal();" 
+                            style="width:100%;padding:12px;background:transparent;color:var(--text-secondary);border:1px solid var(--card-border);border-radius:12px;font-size:14px;cursor:pointer;">
+                        Cancelar
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.onclick = (e) => { if (e.target === modal) closePhotoModal(); };
+        }
+        
+        function closePhotoModal() {
+            const modal = document.getElementById('photoSourceModal');
+            if (modal) modal.remove();
+        }
+        
+        function removePhoto(campo) {
+            delete operacaoState.photos[campo];
+            renderOperacaoForm();
+        }
+        
+        async function salvarOperacao() {
+            // Validar fotos obrigatórias
+            const fotos = fotosConfig[operacaoState.tipoAsbuilt] || [];
+            const fotosFaltando = fotos.filter(f => f.required && !operacaoState.photos[f.field]);
+            
+            if (fotosFaltando.length > 0 && operacaoState.tipoAsbuilt !== 'Não necessário') {
+                showToast(`Fotos obrigatórias faltando: ${fotosFaltando.map(f => f.label).join(', ')}`, 'error');
+                return;
+            }
+            
+            // Confirmar antes de salvar
+            const confirmMsg = `Prefixo: ${operacaoState.prefixo}\nPatrimônio: ${operacaoState.patrimonio}\nTipo: ${operacaoState.tipoAtividade}\nFotos: ${Object.keys(operacaoState.photos).length}/${fotos.length}\n\nAo confirmar o chamado será encaminhado para envio em background\ne você poderá acompanhar o progresso na tela da garagem.`;
+            if (!confirm(confirmMsg)) return;
+            
+            // CORREÇÃO: Usar nome do técnico (não email)
+            const tecnicoNome = appState.tecnico?.nome || appState.user?.display_name || appState.user?.username || 'Técnico';
+            const userEmail = appState.user?.email || '';
+            
+            // Preparar FormData para upload com fotos
+            const formData = new FormData();
+            formData.append('rat_id', appState.currentRatId || '');
+            formData.append('prefixo', operacaoState.prefixo);
+            formData.append('patrimonio', operacaoState.patrimonio || '');
+            formData.append('patrimonio_retirado', operacaoState.patrimonioRetirado || '');
+            formData.append('garagem', appState.currentGaragem?.garagem || '');
+            formData.append('projeto', appState.currentGaragem?.projeto || '');
+            formData.append('tipo_atividade', operacaoState.tipoAtividade);
+            formData.append('tipo_asbuilt', operacaoState.tipoAsbuilt);
+            formData.append('conclusao', operacaoState.conclusao);
+            formData.append('inicio', operacaoState.dataInicio);
+            formData.append('termino', operacaoState.dataTermino);
+            formData.append('observacao', operacaoState.observacao || '');
+            formData.append('responsavel', tecnicoNome); // CORREÇÃO: nome do técnico (não email)
+            formData.append('usuario_criacao', userEmail);
+            formData.append('status', 'concluido');
+            // NOVOS CAMPOS:
+            formData.append('escritorio', operacaoState.escritorio || '');
+            formData.append('linha', operacaoState.linha || '');
+            formData.append('chamado_id', operacaoState.chamadoId || ''); // NOVO: ID do chamado para integração N4
+            
+            // Adicionar fotos (precisa de await para converter dataUrl em blob)
+            for (const [campo, dataUrl] of Object.entries(operacaoState.photos)) {
+                if (dataUrl) {
+                    const blobRes = await fetch(dataUrl);
+                    const blob = await blobRes.blob();
+                    formData.append(campo, blob, `${campo}.jpg`);
+                }
+            }
+            
+            // Criar item na fila de envio
+            const sendingItem = {
+                prefixo: operacaoState.prefixo,
+                patrimonio: operacaoState.patrimonio || '',
+                ratId: appState.currentRatId,
+                formData,
+                status: 'sending',
+                error: null,
+                timestamp: Date.now()
+            };
+            
+            // Navegar imediatamente para a tela de garagem
+            appState.currentScreen = 'garagemDetail';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenGaragemDetail').classList.add('active');
+            
+            // Adicionar à fila e renderizar
+            appState.sendingQueue.push(sendingItem);
+            renderGaragemDetail();
+            
+            // Liberar lock (prefixo está sendo concluído)
+            await releaseLock(operacaoState.prefixo, operacaoState.patrimonio);
+            
+            // Disparar envio em background (sem await)
+            _executarEnvioPrefixo(sendingItem);
+        }
+        
+        async function _executarEnvioPrefixo(item) {
+            try {
+                const response = await fetch('/api/mobile/operacao-com-asbuilt', {
+                    method: 'POST',
+                    body: item.formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        // Remover da fila de envio
+                        appState.sendingQueue = appState.sendingQueue.filter(i => i !== item);
+                        // Recarregar dados da RAT
+                        await loadRatDetail(item.ratId);
+                        if (appState.currentScreen === 'garagemDetail') renderGaragemDetail();
+                    } else {
+                        throw new Error(result.message || 'Erro ao salvar');
+                    }
+                } else {
+                    const errData = await response.json().catch(() => ({}));
+                    throw new Error(errData.detail || 'Erro ao salvar operação');
+                }
+            } catch (e) {
+                console.error('[_executarEnvioPrefixo] Erro:', e);
+                item.status = 'error';
+                item.error = e.message || 'Erro desconhecido';
+                if (appState.currentScreen === 'garagemDetail') renderGaragemDetail();
+            }
+        }
+        
+        function retrySendingItem(prefixo) {
+            const item = appState.sendingQueue.find(i => i.prefixo === prefixo);
+            if (!item) return;
+            item.status = 'sending';
+            item.error = null;
+            if (appState.currentScreen === 'garagemDetail') renderGaragemDetail();
+            _executarEnvioPrefixo(item);
+        }
+        
+        function renderSendingCard(item) {
+            const isSending = item.status === 'sending';
+            return `
+                <div class="chamado-card sending-card ${item.status === 'error' ? 'sending-error' : ''}">
+                    <div class="chamado-header">
+                        <span class="chamado-prefixo">${item.prefixo || '-'}</span>
+                        <span class="chamado-status" style="color: ${isSending ? '#3b82f6' : '#ef4444'}; display: flex; align-items: center; gap: 6px;">
+                            ${isSending
+                                ? `<div class="spinner-inline"></div> Enviando...`
+                                : `<i class="bi bi-exclamation-circle"></i> Erro`
+                            }
+                        </span>
+                    </div>
+                    <div class="chamado-patrimonio">
+                        <i class="bi bi-upc-scan"></i> ${item.patrimonio || 'N/A'}
+                    </div>
+                    ${item.status === 'error' ? `
+                    <div style="margin-top: 8px; font-size: 11px; color: #f87171;">
+                        <i class="bi bi-info-circle"></i> ${item.error || 'Falha ao enviar'}
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <button onclick="retrySendingItem('${item.prefixo}')" style="background: #dc2626; color: white; border: none; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">
+                            <i class="bi bi-arrow-repeat"></i> Tentar novamente
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        function voltarParaGaragem() {
+            // NOVO: Liberar lock se voltar sem salvar
+            if (operacaoState.prefixo) {
+                releaseLock(operacaoState.prefixo, operacaoState.patrimonio);
+            }
+            
+            appState.currentScreen = 'garagemDetail';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenGaragemDetail').classList.add('active');
+            renderGaragemDetail();
+        }
+        
+        // ========== FINALIZAR RAT ==========
+        // ========== ASSINATURA FUNCTIONS ==========
+        let signatureCanvas = null;
+        let signatureCtx = null;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let hasSignature = false;
+        
+        function showAssinaturaScreen() {
+            const rat = appState.currentRatData;
+            const items = rat?.items || [];
+            const statusConcluido = ['CONCLUIDO', 'CONCLUÍDO', 'CONCLUIDO_LOCAL'];
+            const sendingPrefixes = new Set((appState.sendingQueue || []).map(i => i.prefixo));
+            const concluidos = items.filter(i => !i.enviado && statusConcluido.includes((i.status_prefixo || '').toUpperCase()));
+            const encaminhadosN2 = items.filter(i => (i.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2');
+            // Excluir sendingQueue dos pendentes (estão sendo enviados em background)
+            const pendentes = items.filter(i => !sendingPrefixes.has(i.prefixo) && !i.enviado && !statusConcluido.includes((i.status_prefixo || '').toUpperCase()) && (i.status_prefixo || '').toUpperCase() !== 'ENCAMINHOU_N2');
+            const enviando = appState.sendingQueue.length;
+            const garagem = appState.currentGaragem?.garagem || '';
+            
+            appState.currentScreen = 'assinatura';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenAssinatura').classList.add('active');
+            
+            const screen = document.getElementById('screenAssinatura');
+            screen.innerHTML = `
+                <header class="app-header">
+                    <button class="sync-btn" onclick="voltarParaGaragemDetail()">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <h1 style="margin: 0; font-size: 18px; flex: 1; text-align: center;">Finalizar RAT</h1>
+                    <div style="width: 36px;"></div>
+                </header>
+                
+                <div class="app-content" style="padding: 16px;">
+                    <!-- Resumo -->
+                    <div class="finalize-summary">
+                        <h4><i class="bi bi-clipboard-check"></i> Resumo do Envio</h4>
+                        <div class="finalize-summary-item">
+                            <span>Garagem</span>
+                            <strong>${garagem}</strong>
+                        </div>
+                        <div class="finalize-summary-item">
+                            <span>Chamados Concluídos</span>
+                            <strong style="color: var(--accent-green);">${concluidos.length}</strong>
+                        </div>
+                        ${enviando > 0 ? `
+                        <div class="finalize-summary-item">
+                            <span>Enviando (background)</span>
+                            <strong style="color: #3b82f6;">${enviando}</strong>
+                        </div>
+                        <div style="margin-top: 4px; padding: 6px 8px; background: rgba(59,130,246,0.1); border-radius: 6px;">
+                            <small style="color: #93c5fd;"><i class="bi bi-hourglass-split"></i> Aguardando confirmação do servidor para ${enviando} prefixo(s).</small>
+                        </div>
+                        ` : ''}
+                        ${encaminhadosN2.length > 0 ? `
+                        <div class="finalize-summary-item">
+                            <span>Encaminhados ao BI (N2)</span>
+                            <strong style="color: #a855f7;">${encaminhadosN2.length}</strong>
+                        </div>
+                        <div style="margin-top: 4px; padding: 6px 8px; background: rgba(168,85,247,0.1); border-radius: 6px;">
+                            <small style="color: #c084fc;"><i class="bi bi-info-circle"></i> Encaminhados automaticamente ao setor de BI para atualização de base.</small>
+                        </div>
+                        ` : ''}
+                        ${pendentes.length > 0 ? `
+                        <div class="finalize-summary-item">
+                            <span>Chamados Pendentes</span>
+                            <strong style="color: var(--accent-orange);">${pendentes.length}</strong>
+                        </div>
+                        <div style="margin-top: 8px; padding: 8px; background: rgba(249, 115, 22, 0.1); border-radius: 8px;">
+                            <small style="color: var(--accent-orange);"><i class="bi bi-exclamation-triangle"></i> Envio parcial - chamados pendentes permanecerão abertos</small>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Nome do Responsável -->
+                    <div class="signature-container">
+                        <label class="signature-label">
+                            <i class="bi bi-person"></i>
+                            Nome do Responsável
+                        </label>
+                        <input type="text" id="inputResponsavelNome" class="input-responsavel" 
+                               placeholder="Digite o nome do responsável" 
+                               autocomplete="off">
+                    </div>
+                    
+                    <!-- Assinatura -->
+                    <div class="signature-container">
+                        <label class="signature-label">
+                            <i class="bi bi-pencil"></i>
+                            Assinatura do Responsável
+                        </label>
+                        <div class="signature-canvas-wrapper">
+                            <canvas id="signatureCanvas"></canvas>
+                        </div>
+                        <div class="signature-actions">
+                            <button class="btn-limpar-assinatura" onclick="limparAssinatura()">
+                                <i class="bi bi-eraser"></i> Limpar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Botão Enviar -->
+                    <button id="btnEnviarRAT" class="btn-nova-operacao" style="background: var(--accent-green); width: 100%; margin-top: 16px;" 
+                            onclick="confirmarEnvioRAT()">
+                        <i class="bi bi-send"></i>
+                        <span id="btnEnviarRATTexto">Enviar RAT Consolidada</span>
+                    </button>
+                </div>
+            `;
+            
+            // Inicializar canvas de assinatura
+            setTimeout(() => initSignatureCanvas(), 100);
+        }
+        
+        function iniciarFinalizarRAT() {
+            const rat = appState.currentRatData;
+            
+            if (!appState.currentRatId || !rat) {
+                showToast('RAT não encontrada', 'error');
+                return;
+            }
+            
+            const items = rat.items || [];
+            const statusConcluido = ['CONCLUIDO', 'CONCLUÍDO', 'CONCLUIDO_LOCAL'];
+            const concluidos = items.filter(i => !i.enviado && statusConcluido.includes((i.status_prefixo || '').toUpperCase()));
+            const encaminhadosN2Finalizacao = items.filter(i => (i.status_prefixo || '').toUpperCase() === 'ENCAMINHOU_N2');
+            
+            if (concluidos.length === 0 && encaminhadosN2Finalizacao.length === 0) {
+                showToast('Nenhum chamado concluído para enviar', 'error');
+                return;
+            }
+            
+            // Mostrar tela de assinatura
+            showAssinaturaScreen();
+        }
+        
+        function initSignatureCanvas() {
+            signatureCanvas = document.getElementById('signatureCanvas');
+            if (!signatureCanvas) return;
+            
+            signatureCtx = signatureCanvas.getContext('2d');
+            
+            // Ajustar tamanho do canvas para a resolução do dispositivo
+            const rect = signatureCanvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            signatureCanvas.width = rect.width * dpr;
+            signatureCanvas.height = rect.height * dpr;
+            signatureCtx.scale(dpr, dpr);
+            
+            // Estilo da linha
+            signatureCtx.strokeStyle = '#000000';
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            signatureCtx.lineJoin = 'round';
+            
+            hasSignature = false;
+            
+            // Eventos de mouse
+            signatureCanvas.addEventListener('mousedown', startDrawing);
+            signatureCanvas.addEventListener('mousemove', draw);
+            signatureCanvas.addEventListener('mouseup', stopDrawing);
+            signatureCanvas.addEventListener('mouseout', stopDrawing);
+            
+            // Eventos de touch
+            signatureCanvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            signatureCanvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            signatureCanvas.addEventListener('touchend', stopDrawing);
+        }
+        
+        function getCanvasCoords(e) {
+            const rect = signatureCanvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const coords = getCanvasCoords(e);
+            lastX = coords.x;
+            lastY = coords.y;
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const coords = getCanvasCoords(e);
+            signatureCtx.beginPath();
+            signatureCtx.moveTo(lastX, lastY);
+            signatureCtx.lineTo(coords.x, coords.y);
+            signatureCtx.stroke();
+            
+            lastX = coords.x;
+            lastY = coords.y;
+            hasSignature = true;
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            startDrawing(mouseEvent);
+        }
+        
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            draw(mouseEvent);
+        }
+        
+        function limparAssinatura() {
+            if (!signatureCanvas || !signatureCtx) return;
+            const rect = signatureCanvas.getBoundingClientRect();
+            signatureCtx.clearRect(0, 0, rect.width, rect.height);
+            hasSignature = false;
+        }
+        
+        function getSignatureDataUrl() {
+            if (!signatureCanvas || !hasSignature) return null;
+            return signatureCanvas.toDataURL('image/png');
+        }
+        
+        function voltarParaGaragemDetail() {
+            appState.currentScreen = 'garagemDetail';
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenGaragemDetail').classList.add('active');
+            renderGaragemDetail();
+        }
+        
+        async function confirmarEnvioRAT() {
+            const nomeResponsavel = document.getElementById('inputResponsavelNome')?.value?.trim();
+            const assinaturaData = getSignatureDataUrl();
+            const btnEnviar = document.getElementById('btnEnviarRAT');
+            const btnTexto = document.getElementById('btnEnviarRATTexto');
+            
+            if (!nomeResponsavel) {
+                showToast('Digite o nomedo responsável', 'error');
+                document.getElementById('inputResponsavelNome')?.focus();
+                return;
+            }
+            
+            if (!hasSignature) {
+                showToast('Colete a assinatura do responsável', 'error');
+                return;
+            }
+            
+            // Confirmar envio
+            if (!confirm(`Confirma o envio da RAT?\n\nResponsável: ${nomeResponsavel}`)) {
+                return;
+            }
+            
+            // CORREÇÃO 08/02/2026: Desabilitar botão durante envio para prevenir duplo clique
+            if (btnEnviar) {
+                btnEnviar.disabled = true;
+                btnEnviar.style.opacity = '0.6';
+                btnEnviar.style.cursor = 'not-allowed';
+            }
+            if (btnTexto) {
+                btnTexto.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+            }
+            
+            try {
+                await enviarRATFinal(nomeResponsavel, assinaturaData);
+            } finally {
+                // Re-habilitar botão após conclusão (sucesso ou erro)
+                if (btnEnviar) {
+                    btnEnviar.disabled = false;
+                    btnEnviar.style.opacity = '1';
+                    btnEnviar.style.cursor = 'pointer';
+                }
+                if (btnTexto) {
+                    btnTexto.innerHTML = 'Enviar RAT Consolidada';
+                }
+            }
+        }
+        
+        async function enviarRATFinal(nomeResponsavel, assinaturaData) {
+            const ratId = appState.currentRatId;
+            const rat = appState.currentRatData;
+            const items = rat?.items || [];
+            const statusConcluido = ['CONCLUIDO', 'CONCLUÍDO', 'CONCLUIDO_LOCAL'];
+            const concluidos = items.filter(i => !i.enviado && statusConcluido.includes((i.status_prefixo || '').toUpperCase()));
+            // Excluir ENCAMINHOU_N2 dos pendentes (já tratados — foram escalados ao BI)
+            const pendentes = items.filter(i => !i.enviado && !statusConcluido.includes((i.status_prefixo || '').toUpperCase()) && (i.status_prefixo || '').toUpperCase() !== 'ENCAMINHOU_N2');
+            
+            showToast('Enviando RAT consolidada...');
+            
+            try {
+                const tecnicoNome = appState.tecnico?.nome || appState.user?.display_name || 'Técnico';
+                const garagem = appState.currentGaragem?.garagem || '';
+                
+                const response = await fetch('/api/mobile/finalizar-rat-global', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        rat_id: ratId,
+                        responsavel_nome: nomeResponsavel,  // Nome digitado na finalização
+                        assinatura_base64: assinaturaData,  // Assinatura em base64
+                        garagem: garagem,
+                        partial: pendentes.length > 0  // Parcial se ainda há pendentes
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('RAT enviada com sucesso! 📧', 'success');
+                    
+                    if (pendentes.length === 0) {
+                        // RAT completamente finalizada - voltar para home
+                        alert('RAT Finalizada!\\n\\n' + 
+                            `✅ ${concluidos.length} chamado(s) enviado(s)\\n` +
+                            (result.email_sent ? '📧 Email consolidado enviado' : '') +
+                            '\\n\\nA RAT foi finalizada com sucesso.');
+                        voltarParaHome();
+                    } else {
+                        // Envio parcial - recarregar detalhes
+                        alert('Envio Parcial Realizado!\\n\\n' + 
+                            `✅ ${concluidos.length} chamado(s) enviado(s)\\n` +
+                            `⏳ ${pendentes.length} chamado(s) ainda pendente(s)\\n` +
+                            (result.email_sent ? '📧 Email parcial enviado' : '') +
+                            '\\n\\nContinue atendendo os chamados pendentes.');
+                        voltarParaGaragemDetail();
+                        await loadRatDetail(ratId);
+                    }
+                } else {
+                    showToast(result.message || 'Erro ao enviar RAT', 'error');
+                    alert('Erro ao enviar RAT:\\n\\n' + (result.errors?.join('\\n') || result.message || 'Erro desconhecido'));
+                }
+            } catch (e) {
+                console.error('Erro ao finalizar RAT:', e);
+                showToast('Erro ao enviar RAT', 'error');
+                alert('Erro ao enviar RAT:\\n\\n' + e.message);
+            }
+        }
+        
+        // ========== NAVIGATION ==========
+        function voltarParaHome() {
+            appState.currentScreen = 'home';
+            appState.currentGaragem = null;
+            appState.currentRatId = null;
+            appState.currentRatData = null;
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screenHome').classList.add('active');
+            
+            loadGaragens(true);
+        }
+        
+        function navigateTo(screen) {
+            appState.currentScreen = screen;
+            
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            
+            const screenId = 'screen' + screen.charAt(0).toUpperCase() + screen.slice(1);
+            document.getElementById(screenId)?.classList.add('active');
+        }
+        
+        // ========== SYNC ==========
+        async function handleSync() {
+            if (appState.isSyncing) return;
+            
+            appState.isSyncing = true;
+            document.getElementById('syncBtn')?.classList.add('syncing');
+            
+            showToast('Sincronizando...');
+            
+            try {
+                if (appState.currentScreen === 'home') {
+                    await loadGaragens();
+                } else if (appState.currentScreen === 'garagemDetail' && appState.currentRatId) {
+                    await loadRatDetail(appState.currentRatId);
+                }
+                showToast('Sincronizado!', 'success');
+            } catch (e) {
+                showToast('Erro ao sincronizar', 'error');
+            }
+            
+            appState.isSyncing = false;
+            document.getElementById('syncBtn')?.classList.remove('syncing');
+        }
+        
+        // ========== LOGOUT ==========
+        async function handleLogout() {
+            if (!confirm('Deseja realmente sair?')) return;
+            
+            try {
+                await fetch('/logout', { method: 'GET' });
+            } catch (e) {}
+            
+            localStorage.removeItem('pwa_user');
+            localStorage.removeItem('pwa_garagens');
+            window.location.href = '/login';
+        }
+        
+        // ========== UTILITIES ==========
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'app-toast';
+            toast.textContent = message;
+            
+            if (type === 'error') {
+                toast.style.background = 'rgba(239, 68, 68, 0.95)';
+            } else if (type === 'success') {
+                toast.style.background = 'rgba(34, 197, 94, 0.95)';
+            }
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+        
+        // ========== EVENT LISTENERS ==========
+        function setupEventListeners() {
+            window.addEventListener('online', () => {
+                appState.isOnline = true;
+                document.getElementById('connectionStatus').classList.remove('offline');
+                showToast('Conexão restaurada', 'success');
+                handleSync();
+            });
+            
+            window.addEventListener('offline', () => {
+                appState.isOnline = false;
+                document.getElementById('connectionStatus').classList.add('offline');
+            });
+        }
+        
+        // ========== SERVICE WORKER ==========
+        async function registerSW() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    await navigator.serviceWorker.register('/static/sw.js');
+                    console.log('✅ Service Worker registrado');
+                } catch (e) {
+                    console.error('❌ Erro ao registrar SW:', e);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

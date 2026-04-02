@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOC — Video Wall</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <!-- Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- NOC Video Wall CSS -->
+    <link rel="stylesheet" href="/static/css/noc-videowall.css?v={{ cache_version }}">
+</head>
+<body>
+
+<div class="videowall">
+
+    <!-- ================================================================
+         LEFT COLUMN — SAÚDE POR PROJETO (spans 3 rows)
+         ================================================================ -->
+    <div class="screen screen-left" id="screen-left">
+        <div class="screen-header">
+            <span class="screen-title"><i class="bi bi-activity"></i> Saúde por Projeto</span>
+            <span class="screen-badge badge-live">LIVE</span>
+        </div>
+        <div class="screen-body">
+            <div class="project-health-list" id="projectHealthList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         SCREEN 2 — SYSTEM ALERTS + CLOCKS — Top Center
+         ================================================================ -->
+    <div class="screen" id="screen-2">
+        <div class="screen-header">
+            <span class="screen-title"><i class="bi bi-exclamation-triangle"></i> Alertas do Sistema</span>
+            <div class="clocks">
+                <div class="clock-item">
+                    <div class="clock-label">Local</div>
+                    <div class="clock-value" id="clockLocal">--:--:--</div>
+                </div>
+                <div class="clock-item">
+                    <div class="clock-label">UTC</div>
+                    <div class="clock-value" id="clockUTC">--:--:--</div>
+                </div>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="alerts-feed" id="alertsFeed">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         SCREEN 3 — SLA DOS CHAMADOS — Top Right
+         ================================================================ -->
+    <div class="screen" id="screen-3">
+        <div class="screen-header">
+            <span class="screen-title"><i class="bi bi-clock-history"></i> SLA dos Chamados</span>
+            <span class="screen-badge badge-info">SLA</span>
+        </div>
+        <div class="screen-body">
+            <div class="sla-panel" id="slaPanel">
+                <div class="sla-main-metric">
+                    <div class="sla-big-number" id="slaTempoMedio">--</div>
+                    <div class="sla-big-label">Tempo Médio de Resolução (horas)</div>
+                </div>
+                <div class="sla-grid">
+                    <div class="sla-card">
+                        <div class="sla-card-val color-green glow-green" id="slaCumprido">--</div>
+                        <div class="sla-card-lbl">SLA Cumprido</div>
+                    </div>
+                    <div class="sla-card">
+                        <div class="sla-card-val color-red glow-red" id="slaExcedido">--</div>
+                        <div class="sla-card-lbl">SLA Excedido</div>
+                    </div>
+                    <div class="sla-card">
+                        <div class="sla-card-val color-cyan glow-cyan" id="slaTotal">--</div>
+                        <div class="sla-card-lbl">Total Chamados</div>
+                    </div>
+                    <div class="sla-card">
+                        <div class="sla-card-val color-amber glow-amber" id="slaAbertos">--</div>
+                        <div class="sla-card-lbl">Em Aberto</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         SCREEN 5 — HEALTH SCORE (CENTER FOCAL POINT)
+         ================================================================ -->
+    <div class="screen" id="screen-5">
+        <div class="screen-body">
+            <div class="data-flow" id="dataFlow"></div>
+            <div class="health-center">
+                <div class="health-title">Monitoramento de Hotspots</div>
+                <div class="health-total" id="healthTotal">-- máquinas</div>
+
+                <div class="health-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle class="health-ring-track" cx="60" cy="60" r="52"></circle>
+                        <circle class="health-ring-value" id="healthRing" cx="60" cy="60" r="52"
+                                stroke-dasharray="326.73" stroke-dashoffset="326.73"></circle>
+                    </svg>
+                    <div class="health-score-text">
+                        <div class="health-pct" id="healthPct">--%</div>
+                        <div class="health-label">Health Score</div>
+                    </div>
+                </div>
+
+                <div class="health-kpis">
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-green glow-green" id="kpiOnline">--</div>
+                        <div class="health-kpi-lbl">Online</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-amber glow-amber" id="kpiAtencao">--</div>
+                        <div class="health-kpi-lbl">Atenção</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-red glow-red" id="kpiAlerta">--</div>
+                        <div class="health-kpi-lbl">Alerta</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-cyan glow-cyan" id="kpiManutencao">--</div>
+                        <div class="health-kpi-lbl">Manutenção</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-gray glow-gray" id="kpiInativo">--</div>
+                        <div class="health-kpi-lbl">Inativos</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-purple glow-purple" id="kpiDivergente">--</div>
+                        <div class="health-kpi-lbl">Divergentes</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-sinistro glow-sinistro" id="kpiSinistro">--</div>
+                        <div class="health-kpi-lbl">Sinistro</div>
+                    </div>
+                </div>
+
+                <div class="mini-map" id="hotspotMap"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         SCREEN 6 — STATUS DE CHAMADOS (Ring like Health Score) — Mid Right
+         ================================================================ -->
+    <div class="screen" id="screen-6">
+        <div class="screen-body">
+            <div class="health-center">
+                <div class="health-title">Status de Chamados</div>
+
+                <div class="health-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle class="health-ring-track" cx="60" cy="60" r="52"></circle>
+                        <circle class="chamados-ring-value" id="chamadosRing" cx="60" cy="60" r="52"
+                                stroke-dasharray="326.73" stroke-dashoffset="326.73"></circle>
+                    </svg>
+                    <div class="health-score-text">
+                        <div class="health-pct" id="chamadosPct">--</div>
+                        <div class="health-label">Total Chamados</div>
+                    </div>
+                </div>
+
+                <div class="health-kpis">
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-red glow-red" id="kpiChamadosAbertos">--</div>
+                        <div class="health-kpi-lbl">Abertos</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-amber glow-amber" id="kpiChamadosAndamento">--</div>
+                        <div class="health-kpi-lbl">Andamento</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-purple glow-purple" id="kpiChamadosPendentes">--</div>
+                        <div class="health-kpi-lbl">Pendentes</div>
+                    </div>
+                    <div class="health-kpi">
+                        <div class="health-kpi-val color-green glow-green" id="kpiChamadosResolvidos">--</div>
+                        <div class="health-kpi-lbl">Resolvidos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         BOTTOM CENTER+RIGHT — HISTÓRICO DE MÁQUINAS (spans 2 cols)
+         ================================================================ -->
+    <div class="screen screen-bottom-wide" id="screen-bottom">
+        <div class="screen-header">
+            <span class="screen-title"><i class="bi bi-graph-up"></i> Histórico de Máquinas — Últimos 7 dias</span>
+            <span class="screen-badge badge-live">TREND</span>
+        </div>
+        <div class="screen-body">
+            <div class="chart-wrap">
+                <canvas id="chartMachineHistory"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.videowall -->
+
+<div class="update-indicator">
+    <span id="lastUpdate">Aguardando dados...</span>
+</div>
+
+<!-- NOC Video Wall JS -->
+<script src="/static/js/noc_videowall.js?v={{ cache_version }}"></script>
+</body>
+</html>

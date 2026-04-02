@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Relatórios - WifiMaxx Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, rgba(26, 35, 126, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .navbar-brand img {
+            max-height: 55px;
+            width: auto;
+        }
+
+        .nav-link {
+            color: #bdc3c7 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #4CAF50 !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 2px;
+        }
+
+        /* Main Container */
+        .container-fluid {
+            padding: 2rem;
+        }
+
+        h2 {
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        /* Cards de Status */
+        .card-status {
+            border: none !important;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-status:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .card-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+        }
+
+        .card-status-total {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            box-shadow: 0 8px 25px rgba(26, 35, 126, 0.3);
+        }
+
+        .card-status-online {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .card-status-atencao {
+            background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+            color: #1a1a2e;
+        }
+
+        .card-status-alerta {
+            background: linear-gradient(135deg, #F44336 0%, #EF5350 100%);
+            box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+        }
+
+        .card-status-inativo {
+            background: linear-gradient(135deg, #9E9E9E 0%, #BDBDBD 100%);
+            box-shadow: 0 8px 25px rgba(158, 158, 158, 0.3);
+        }
+
+        .card-status-manutencao {
+            background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
+        }
+
+        .card-status-divergencia {
+            background: linear-gradient(135deg, #8a2be2 0%, #9932CC 100%);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.3);
+        }
+
+        .card-status .label {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-status .value {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* Filtros */
+        .filters-section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(22, 33, 62, 0.8));
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-label {
+            color: #a8dadc;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-select {
+            background: linear-gradient(135deg, rgba(50, 70, 100, 0.5), rgba(40, 60, 90, 0.5)) !important;
+            border: 2px solid rgba(76, 175, 80, 0.3) !important;
+            color: #ecf0f1 !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .form-select:focus {
+            border-color: #4CAF50 !important;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25) !important;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2)) !important;
+        }
+
+        .form-select option {
+            background: #1a1a2e;
+            color: #ecf0f1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.65rem 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%) !important;
+            border: none !important;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.65rem 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            color: white !important;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(33, 150, 243, 0.4);
+            background: linear-gradient(135deg, #42A5F5 0%, #64B5F6 100%) !important;
+            color: white !important;
+        }
+
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Cards de Gráficos */
+        .chart-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            height: 100%;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(76, 175, 80, 0.4);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.2);
+        }
+
+        .chart-card-header {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(102, 187, 106, 0.15));
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            padding: 1.5rem;
+        }
+
+        .chart-card-header h5 {
+            color: #4CAF50;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .chart-card-body {
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        /* Tabela */
+        .table-wrapper {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .table {
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2));
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .table thead th {
+            color: #4CAF50;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border: none;
+            padding: 1.5rem;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid rgba(76, 175, 80, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .table tbody td {
+            padding: 1.25rem 1.5rem;
+            color: #ecf0f1;
+            border: none;
+        }
+
+        .table tbody td:first-child {
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        /* Badges */
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.6rem 1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge.bg-danger {
+            background: linear-gradient(135deg, #F44336 0%, #EF5350 100%) !important;
+        }
+
+        .badge.bg-secondary {
+            background: linear-gradient(135deg, #757575 0%, #9E9E9E 100%) !important;
+        }
+
+        .badge.bg-warning {
+            background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%) !important;
+            color: #1a1a2e !important;
+        }
+
+        .badge.bg-dark {
+            background: linear-gradient(135deg, #424242 0%, #616161 100%) !important;
+        }
+
+        /* Alerts */
+        .alert-info {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(66, 165, 245, 0.15)) !important;
+            border: 1px solid rgba(33, 150, 243, 0.3) !important;
+            color: #B3E5FC !important;
+            border-radius: 10px;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(239, 83, 80, 0.15)) !important;
+            border: 1px solid rgba(244, 67, 54, 0.3) !important;
+            color: #FFCDD2 !important;
+            border-radius: 10px;
+        }
+
+        /* Spinner */
+        .spinner-border {
+            border-color: rgba(76, 175, 80, 0.3);
+            border-right-color: #4CAF50;
+        }
+
+        /* Chart Legend */
+        .chartjs-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .chartjs-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            font-weight: 600;
+        }
+
+        .chartjs-legend-item::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .card-status {
+                min-height: 90px;
+            }
+
+            .card-status .value {
+                font-size: 1.5rem;
+            }
+
+            .filters-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', path='logo.png') }}" alt="WifiMaxx Monitor">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                style="border-color: rgba(76, 175, 80, 0.5);">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="max-width: 1600px;">
+        <h2><i class="fas fa-file-chart-line me-2"></i>Relatórios por Projeto</h2>
+
+        <!-- Filtros -->
+        <div class="filters-section">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="fas fa-building me-2"></i>Empresa_db
+                    </label>
+                    <select id="empresaDbSelect" class="form-select">
+                        <option value="">Selecione uma empresa...</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="fas fa-folder me-2"></i>Projeto (Opcional)
+                    </label>
+                    <select id="projetoSelect" class="form-select">
+                        <option value="">Todos os projetos</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button id="btnRefresh" class="btn btn-primary flex-grow-1">
+                        <i class="fas fa-sync-alt me-2"></i>Atualizar
+                    </button>
+                    <button id="btnExportPDF" class="btn btn-success" title="Exportar relatório em PDF">
+                        <i class="fas fa-download me-2"></i>PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards de Status -->
+        <div class="row mb-4 g-3">
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-total">
+                    <div class="label">Total</div>
+                    <div class="value" id="cardTotal">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-online">
+                    <div class="label"><i class="fas fa-circle me-1"></i>Online</div>
+                    <div class="value" id="cardOnline">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-atencao">
+                    <div class="label"><i class="fas fa-exclamation-circle me-1"></i>Atenção</div>
+                    <div class="value" id="cardAtencao">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-alerta">
+                    <div class="label"><i class="fas fa-times-circle me-1"></i>Alerta</div>
+                    <div class="value" id="cardAlerta">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-inativo">
+                    <div class="label"><i class="fas fa-power-off me-1"></i>Inativo</div>
+                    <div class="value" id="cardInativo">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-manutencao">
+                    <div class="label"><i class="fas fa-tools me-1"></i>Manutenção</div>
+                    <div class="value" id="cardManutencao">-</div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="card-status card-status-divergencia">
+                    <div class="label"><i class="fas fa-not-equal me-1"></i>Divergência</div>
+                    <div class="value" id="cardDivergencia">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row mb-4 g-3">
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h5><i class="fas fa-chart-column me-2"></i>Status do Projeto</h5>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="statusColumnChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h5><i class="fas fa-chart-bar me-2"></i>Máquinas por Garagem</h5>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="garagemBarChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Ofensores -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="table-wrapper">
+                    <div class="chart-card-header">
+                        <h5><i class="fas fa-exclamation-triangle me-2"></i>Maiores Ofensores (Garagens)</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="offendersTable">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-warehouse me-2"></i>Garagem</th>
+                                    <th class="text-center"><i class="fas fa-times-circle me-1"></i>Alertas</th>
+                                    <th class="text-center"><i class="fas fa-power-off me-1"></i>Inativos</th>
+                                    <th class="text-center"><i class="fas fa-exclamation-circle me-1"></i>Atenção</th>
+                                    <th class="text-center"><i class="fas fa-chart-line me-1"></i>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading/Error Indicators -->
+        <div id="loadingIndicator" class="alert alert-info d-none" role="alert">
+            <div class="spinner-border spinner-border-sm me-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="fas fa-spinner fa-spin me-2"></i>Carregando dados...
+        </div>
+        <div id="errorIndicator" class="alert alert-danger d-none" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i><span id="errorMsg"></span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="{{ url_for('static', path='js/reports.js') }}?v={{ cache_version }}"></script>
+</body>
+</html>

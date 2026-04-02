@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📦 Estoque - WifiMaxx Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%);
+            min-height: 100vh;
+            padding: 0; margin: 0;
+            color: #ecf0f1;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, rgba(26, 35, 126, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            padding: 0; margin: 0;
+        }
+        .navbar-brand img { max-height: 55px; width: auto; }
+        .nav-link { color: #bdc3c7 !important; font-weight: 500; transition: all 0.3s ease; }
+        .nav-link:hover { color: #4CAF50 !important; }
+        .container-fluid { padding: 2rem; }
+        h2 { color: #fff; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); margin-bottom: 2rem; }
+
+        /* Stats Cards */
+        .stats-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover { transform: translateY(-3px); border-color: rgba(76, 175, 80, 0.5); }
+        .stats-card .number { font-size: 2rem; font-weight: 700; color: #4CAF50; }
+        .stats-card .label { color: #bdc3c7; font-size: 0.85rem; margin-top: 0.5rem; }
+        .stats-card.primary .number { color: #2196F3; }
+        .stats-card.warning .number { color: #FF9800; }
+        .stats-card.danger .number { color: #f44336; }
+        .stats-card.success .number { color: #4CAF50; }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            background: linear-gradient(90deg, rgba(76, 175, 80, 0.3), rgba(102, 187, 106, 0.2));
+            border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+        .card-body { padding: 1.5rem; }
+
+        /* Tabs */
+        .nav-tabs { border-bottom: 2px solid rgba(76, 175, 80, 0.3); margin-bottom: 1.5rem; }
+        .nav-tabs .nav-link {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(22, 33, 62, 0.6));
+            border: 1px solid rgba(76, 175, 80, 0.2) !important;
+            color: #bdc3c7 !important;
+            margin-right: 0.5rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .nav-tabs .nav-link:hover {
+            background: linear-gradient(135deg, rgba(76,175,80,0.2), rgba(102,187,106,0.2));
+            color: #4CAF50 !important;
+        }
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, rgba(76,175,80,0.3), rgba(102,187,106,0.3)) !important;
+            color: #4CAF50 !important;
+            border-bottom: 3px solid #4CAF50 !important;
+        }
+
+        /* Forms */
+        .form-label { color: #bdc3c7; font-weight: 500; margin-bottom: 0.5rem; }
+        .form-control, .form-select {
+            background-color: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(26, 26, 46, 0.95);
+            border-color: #4CAF50;
+            color: #ecf0f1;
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+        .form-control::placeholder { color: #7f8c8d; }
+
+        /* Table - Light background with dark text for readability */
+        .table { color: #1a1a1a; background: rgba(255, 255, 255, 0.95); border-radius: 8px; overflow: hidden; }
+        .table thead {
+            background: linear-gradient(90deg, #E8F5E9, #C8E6C9);
+        }
+        .table thead th { border-bottom: 2px solid #388E3C; color: #1a1a1a; font-weight: 600; padding: 1rem; }
+        .table tbody tr { transition: all 0.2s ease; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .table tbody tr:hover { background-color: rgba(76,175,80,0.08); }
+        .table td { padding: 0.85rem 1rem; vertical-align: middle; color: #1a1a1a; }
+        .table td strong { color: #111111; }
+        .table td code { color: #2E7D32; background: rgba(76,175,80,0.12); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; }
+        .table td small { color: #555555; }
+        .table .text-center { color: #555555; }
+
+        /* Badges */
+        .badge-status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+        .badge-em-estoque { background: rgba(76,175,80,0.2); color: #4CAF50; border: 1px solid rgba(76,175,80,0.3); }
+        .badge-reservado { background: rgba(255,152,0,0.2); color: #FF9800; border: 1px solid rgba(255,152,0,0.3); }
+        .badge-retirado { background: rgba(33,150,243,0.2); color: #2196F3; border: 1px solid rgba(33,150,243,0.3); }
+        .badge-descartado { background: rgba(244,67,54,0.2); color: #f44336; border: 1px solid rgba(244,67,54,0.3); }
+        .badge-em-manutencao { background: rgba(156,39,176,0.2); color: #9C27B0; border: 1px solid rgba(156,39,176,0.3); }
+        .badge-entrada { background: rgba(76,175,80,0.2); color: #4CAF50; }
+        .badge-saida { background: rgba(244,67,54,0.2); color: #f44336; }
+        .badge-transferencia { background: rgba(33,150,243,0.2); color: #2196F3; }
+        .badge-ajuste { background: rgba(255,152,0,0.2); color: #FF9800; }
+        .badge-baixa { background: rgba(158,158,158,0.2); color: #9E9E9E; }
+        .badge-devolucao { background: rgba(156,39,176,0.2); color: #9C27B0; }
+
+        /* Buttons */
+        .btn-success { background: #4CAF50; border-color: #4CAF50; }
+        .btn-success:hover { background: #388E3C; border-color: #388E3C; }
+
+        /* Low stock alert */
+        .low-stock-item {
+            background: rgba(244,67,54,0.1);
+            border: 1px solid rgba(244,67,54,0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal overrides */
+        .modal-content {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #ecf0f1;
+        }
+        .modal-header { border-bottom: 1px solid rgba(76, 175, 80, 0.3); }
+        .modal-footer { border-top: 1px solid rgba(76, 175, 80, 0.3); }
+        .btn-close { filter: invert(1); }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 3rem; color: #7f8c8d; }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
+
+        /* Override text-muted for dark theme */
+        .text-muted { color: #9eaab6 !important; }
+
+        /* Select options for dark theme */
+        .form-select option, .form-control option {
+            background-color: #1a1a2e;
+            color: #ecf0f1;
+        }
+
+        /* Low stock item text */
+        .low-stock-item strong { color: #ecf0f1; }
+        .low-stock-item { color: #dce1e8; }
+
+        /* Toast alerts */
+        .alert { border-radius: 8px; font-weight: 500; }
+
+        /* Btn outline fixes for tables (light bg) */
+        .table .btn-outline-primary { color: #1976D2; border-color: #1976D2; }
+        .table .btn-outline-primary:hover { background: #1976D2; color: #fff; }
+        .table .btn-outline-danger { color: #D32F2F; border-color: #D32F2F; }
+        .table .btn-outline-danger:hover { background: #D32F2F; color: #fff; }
+        .table .btn-outline-success { color: #388E3C; border-color: #388E3C; }
+        .table .btn-outline-success:hover { background: #388E3C; color: #fff; }
+
+        /* Btn outline fixes for dark theme (outside tables) */
+        .btn-outline-primary { color: #64B5F6; border-color: #64B5F6; }
+        .btn-outline-primary:hover { background: #64B5F6; color: #1a1a2e; }
+        .btn-outline-danger { color: #ef9a9a; border-color: #ef9a9a; }
+        .btn-outline-danger:hover { background: #ef5350; color: #fff; border-color: #ef5350; }
+        .btn-outline-success { color: #81C784; border-color: #81C784; }
+        .btn-outline-success:hover { background: #66BB6A; color: #1a1a2e; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-fluid { padding: 1rem; }
+            .stats-card .number { font-size: 1.5rem; }
+            .nav-tabs .nav-link { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="nav-link" href="/dashboard">
+                <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+            </a>
+            <a class="navbar-brand" href="/dashboard">
+                <img src="{{ url_for('static', path='logo.png') }}" alt="WifiMaxx" class="logo-image">
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">
+                    <i class="bi bi-person-circle me-1"></i>{{ user_email }}
+                </span>
+                <a href="/logout" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right me-1"></i>Sair
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="max-width: 1600px;">
+        <h2><i class="bi bi-box-seam-fill me-2"></i>Gestão de Estoque</h2>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4" id="statsContainer">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card primary">
+                    <div class="number" id="statTotalProdutos">-</div>
+                    <div class="label"><i class="bi bi-box me-1"></i>Produtos Cadastrados</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card success">
+                    <div class="number" id="statItensEstoque">-</div>
+                    <div class="label"><i class="bi bi-check-circle me-1"></i>Itens em Estoque</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card warning">
+                    <div class="number" id="statEstoqueBaixo">-</div>
+                    <div class="label"><i class="bi bi-exclamation-triangle me-1"></i>Estoque Baixo</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="number" id="statMovimentacoes30d">-</div>
+                    <div class="label"><i class="bi bi-arrow-left-right me-1"></i>Movimentações (30d)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="estoqueTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboardPane" type="button" role="tab">
+                    <i class="bi bi-speedometer2 me-1"></i>Visão Geral
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtosPane" type="button" role="tab">
+                    <i class="bi bi-box me-1"></i>Produtos
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="itens-tab" data-bs-toggle="tab" data-bs-target="#itensPane" type="button" role="tab">
+                    <i class="bi bi-upc-scan me-1"></i>Itens
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="movimentacoes-tab" data-bs-toggle="tab" data-bs-target="#movimentacoesPane" type="button" role="tab">
+                    <i class="bi bi-arrow-left-right me-1"></i>Movimentações
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="estoqueTabContent">
+
+            <!-- ============ DASHBOARD TAB ============ -->
+            <div class="tab-pane fade show active" id="dashboardPane" role="tabpanel">
+                <div class="row">
+                    <!-- Low Stock Alerts -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-exclamation-triangle me-2"></i>Alertas de Estoque Baixo
+                            </div>
+                            <div class="card-body" id="lowStockContainer">
+                                <div class="empty-state">
+                                    <i class="bi bi-check-circle"></i>
+                                    <p>Nenhum produto com estoque baixo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Recent Movements -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-clock-history me-2"></i>Últimas Movimentações
+                            </div>
+                            <div class="card-body" id="recentMovementsContainer">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <p>Nenhuma movimentação recente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ PRODUTOS TAB ============ -->
+            <div class="tab-pane fade" id="produtosPane" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0" style="color: #4CAF50;"><i class="bi bi-box me-2"></i>Produtos</h5>
+                    <button class="btn btn-success btn-sm" onclick="showProductModal()">
+                        <i class="bi bi-plus-lg me-1"></i>Novo Produto
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="productsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Equipamento</th>
+                                        <th>Modelo</th>
+                                        <th>Descrição</th>
+                                        <th>Estoque</th>
+                                        <th>Mín.</th>
+                                        <th>Serializado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody">
+                                    <tr><td colspan="8" class="text-center py-4">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ ITENS TAB ============ -->
+            <div class="tab-pane fade" id="itensPane" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h5 class="mb-0" style="color: #4CAF50;"><i class="bi bi-upc-scan me-2"></i>Itens em Estoque</h5>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" id="filterItemStatus" style="width:auto;" onchange="loadItems()">
+                            <option value="">Todos os Status</option>
+                            <option value="EM_ESTOQUE">Em Estoque</option>
+                            <option value="RESERVADO">Reservado</option>
+                            <option value="RETIRADO">Retirado</option>
+                            <option value="DESCARTADO">Descartado</option>
+                            <option value="EM_MANUTENCAO">Em Manutenção</option>
+                        </select>
+                        <select class="form-select form-select-sm" id="filterItemProduct" style="width:auto;" onchange="loadItems()">
+                            <option value="">Todos os Produtos</option>
+                        </select>
+                        <button class="btn btn-success btn-sm" onclick="showItemModal()">
+                            <i class="bi bi-plus-lg me-1"></i>Novo Item
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="itemsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Equipamento</th>
+                                        <th>Modelo</th>
+                                        <th>Serial/IMEI</th>
+                                        <th>Status</th>
+                                        <th>Qtd</th>
+                                        <th>Local</th>
+                                        <th>NF</th>
+                                        <th>Entrada</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsTableBody">
+                                    <tr><td colspan="10" class="text-center py-4">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ MOVIMENTAÇÕES TAB ============ -->
+            <div class="tab-pane fade" id="movimentacoesPane" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <h5 class="mb-0" style="color: #4CAF50;"><i class="bi bi-arrow-left-right me-2"></i>Movimentações</h5>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" id="filterMovType" style="width:auto;" onchange="loadMovements()">
+                            <option value="">Todos os Tipos</option>
+                            <option value="ENTRADA">Entrada</option>
+                            <option value="SAIDA">Saída</option>
+                            <option value="TRANSFERENCIA">Transferência</option>
+                            <option value="AJUSTE">Ajuste</option>
+                            <option value="BAIXA">Baixa</option>
+                            <option value="DEVOLUCAO">Devolução</option>
+                        </select>
+                        <button class="btn btn-success btn-sm" onclick="showMovementModal()">
+                            <i class="bi bi-plus-lg me-1"></i>Nova Movimentação
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="movementsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Responsável</th>
+                                        <th>Projeto</th>
+                                        <th>Referência</th>
+                                        <th>Itens</th>
+                                        <th>Observações</th>
+                                        <th>Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="movementsTableBody">
+                                    <tr><td colspan="8" class="text-center py-4">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============ MODAL: PRODUTO ============ -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalTitle"><i class="bi bi-box me-2"></i>Novo Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="productId">
+                    <div class="mb-3">
+                        <label class="form-label">Equipamento *</label>
+                        <input type="text" class="form-control" id="productEquipment" placeholder="Ex: Roteador, Switch, ONU...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Modelo *</label>
+                        <input type="text" class="form-control" id="productModel" placeholder="Ex: MikroTik hAP ac2">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" id="productDescription" rows="2" placeholder="Descrição opcional"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Estoque Mínimo</label>
+                            <input type="number" class="form-control" id="productMinStock" value="0" min="0">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Serializado?</label>
+                            <select class="form-select" id="productSerialized">
+                                <option value="true">Sim (tem serial/IMEI)</option>
+                                <option value="false">Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveProduct()">
+                        <i class="bi bi-check-lg me-1"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL: ITEM ============ -->
+    <div class="modal fade" id="itemModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalTitle"><i class="bi bi-upc-scan me-2"></i>Novo Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="itemId">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Produto *</label>
+                            <select class="form-select" id="itemProduct">
+                                <option value="">Selecione o produto...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Serial / IMEI</label>
+                            <input type="text" class="form-control" id="itemSerial" placeholder="Serial ou IMEI">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Quantidade</label>
+                            <input type="number" class="form-control" id="itemQuantity" value="1" min="1">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Localização</label>
+                            <input type="text" class="form-control" id="itemLocation" placeholder="Ex: Almoxarifado A">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Lote</label>
+                            <input type="text" class="form-control" id="itemBatch" placeholder="Lote">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Data de Entrada *</label>
+                            <input type="date" class="form-control" id="itemEntryDate">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nº da NF</label>
+                            <input type="text" class="form-control" id="itemInvoiceNumber" placeholder="Número NF">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Data da NF</label>
+                            <input type="date" class="form-control" id="itemInvoiceDate">
+                        </div>
+                    </div>
+                    <div class="mb-3" id="itemStatusGroup" style="display:none;">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="itemStatus">
+                            <option value="EM_ESTOQUE">Em Estoque</option>
+                            <option value="RESERVADO">Reservado</option>
+                            <option value="RETIRADO">Retirado</option>
+                            <option value="DESCARTADO">Descartado</option>
+                            <option value="EM_MANUTENCAO">Em Manutenção</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Observações</label>
+                        <textarea class="form-control" id="itemNotes" rows="2" placeholder="Observações"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveItem()">
+                        <i class="bi bi-check-lg me-1"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL: MOVIMENTAÇÃO ============ -->
+    <div class="modal fade" id="movementModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-arrow-left-right me-2"></i>Nova Movimentação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Tipo *</label>
+                            <select class="form-select" id="movType">
+                                <option value="ENTRADA">Entrada</option>
+                                <option value="SAIDA">Saída</option>
+                                <option value="TRANSFERENCIA">Transferência</option>
+                                <option value="AJUSTE">Ajuste</option>
+                                <option value="BAIXA">Baixa</option>
+                                <option value="DEVOLUCAO">Devolução</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Projeto</label>
+                            <input type="text" class="form-control" id="movProject" placeholder="Nome do projeto">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Solicitante</label>
+                            <input type="text" class="form-control" id="movRequester" placeholder="Nome do solicitante">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Tipo Referência</label>
+                            <select class="form-select" id="movRefType">
+                                <option value="">Nenhum</option>
+                                <option value="NF">NF</option>
+                                <option value="OS">OS</option>
+                                <option value="RAT">RAT</option>
+                                <option value="CHAMADO">Chamado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nº Referência</label>
+                            <input type="text" class="form-control" id="movRefId" placeholder="Número">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Observações</label>
+                        <textarea class="form-control" id="movNotes" rows="2" placeholder="Observações"></textarea>
+                    </div>
+                    <hr style="border-color: rgba(76,175,80,0.3);">
+                    <h6 style="color: #4CAF50;"><i class="bi bi-list-ul me-2"></i>Itens da Movimentação</h6>
+                    <div id="movLinesContainer">
+                        <div class="row mb-2 mov-line" data-index="0">
+                            <div class="col-md-5">
+                                <select class="form-select form-select-sm mov-product" onchange="onMovProductChange(this)">
+                                    <option value="">Selecione o produto...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control form-control-sm mov-serial" placeholder="Serial/IMEI (opcional)">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control form-control-sm mov-qty" value="1" min="1" placeholder="Qtd">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-danger btn-sm w-100" onclick="removeMovLine(this)" title="Remover">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-success btn-sm mt-2" onclick="addMovLine()">
+                        <i class="bi bi-plus-lg me-1"></i>Adicionar Item
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="saveMovement()">
+                        <i class="bi bi-check-lg me-1"></i>Registrar Movimentação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // ========================================================================
+    // ESTOQUE - Frontend JavaScript
+    // ========================================================================
+
+    const API_BASE = '/api/estoque';
+    const USER_EMAIL = '{{ user_email }}';
+    const USER_NAME = '{{ user_name }}';
+
+    let allProducts = [];
+
+    // ============ INIT ============
+    document.addEventListener('DOMContentLoaded', () => {
+        loadDashboard();
+        loadProducts();
+
+        // Load tab data on switch
+        document.querySelectorAll('#estoqueTabs button').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', (e) => {
+                const target = e.target.getAttribute('data-bs-target');
+                if (target === '#produtosPane') loadProducts();
+                else if (target === '#itensPane') loadItems();
+                else if (target === '#movimentacoesPane') loadMovements();
+                else if (target === '#dashboardPane') loadDashboard();
+            });
+        });
+
+        // Set default entry date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('itemEntryDate').value = today;
+    });
+
+    // ============ HELPERS ============
+    function showToast(msg, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+        toast.style.zIndex = '9999';
+        toast.style.minWidth = '300px';
+        toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function apiCall(endpoint, method = 'GET', body = null) {
+        const opts = { method, headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin' };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(`${API_BASE}${endpoint}`, opts);
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.detail || `Erro ${res.status}`);
+        }
+        return res.json();
+    }
+
+    function formatDate(dt) {
+        if (!dt) return '-';
+        const d = new Date(dt);
+        return d.toLocaleDateString('pt-BR');
+    }
+
+    function formatDateTime(dt) {
+        if (!dt) return '-';
+        const d = new Date(dt);
+        return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function statusBadge(status) {
+        const map = {
+            'EM_ESTOQUE': { label: 'Em Estoque', cls: 'badge-em-estoque' },
+            'RESERVADO': { label: 'Reservado', cls: 'badge-reservado' },
+            'RETIRADO': { label: 'Retirado', cls: 'badge-retirado' },
+            'DESCARTADO': { label: 'Descartado', cls: 'badge-descartado' },
+            'EM_MANUTENCAO': { label: 'Em Manutenção', cls: 'badge-em-manutencao' }
+        };
+        const s = map[status] || { label: status, cls: '' };
+        return `<span class="badge badge-status ${s.cls}">${s.label}</span>`;
+    }
+
+    function movTypeBadge(type) {
+        const map = {
+            'ENTRADA': { label: 'Entrada', cls: 'badge-entrada' },
+            'SAIDA': { label: 'Saída', cls: 'badge-saida' },
+            'TRANSFERENCIA': { label: 'Transferência', cls: 'badge-transferencia' },
+            'AJUSTE': { label: 'Ajuste', cls: 'badge-ajuste' },
+            'BAIXA': { label: 'Baixa', cls: 'badge-baixa' },
+            'DEVOLUCAO': { label: 'Devolução', cls: 'badge-devolucao' }
+        };
+        const s = map[type] || { label: type, cls: '' };
+        return `<span class="badge badge-status ${s.cls}">${s.label}</span>`;
+    }
+
+    // ============ DASHBOARD ============
+    async function loadDashboard() {
+        try {
+            const data = await apiCall('/dashboard');
+            if (!data.success) return;
+            const d = data.data;
+
+            document.getElementById('statTotalProdutos').textContent = d.total_products || 0;
+            document.getElementById('statItensEstoque').textContent = d.items_in_stock || 0;
+            document.getElementById('statEstoqueBaixo').textContent = (d.low_stock_products || []).length;
+
+            // Count 30d movements
+            const mov30d = Object.values(d.movements_by_type_30d || {}).reduce((a, b) => a + b, 0);
+            document.getElementById('statMovimentacoes30d').textContent = mov30d;
+
+            // Low stock
+            const lowContainer = document.getElementById('lowStockContainer');
+            if (d.low_stock_products && d.low_stock_products.length > 0) {
+                lowContainer.innerHTML = d.low_stock_products.map(p => `
+                    <div class="low-stock-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${p.equipment}</strong> - ${p.model}
+                        </div>
+                        <div>
+                            <span class="text-danger fw-bold">${p.current_stock}</span> / ${p.min_stock} mín.
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                lowContainer.innerHTML = '<div class="empty-state"><i class="bi bi-check-circle"></i><p>Nenhum produto com estoque baixo</p></div>';
+            }
+
+            // Recent movements
+            const movContainer = document.getElementById('recentMovementsContainer');
+            if (d.recent_movements && d.recent_movements.length > 0) {
+                movContainer.innerHTML = d.recent_movements.map(m => `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2"
+                         style="background:rgba(255,255,255,0.05); border-radius:8px;">
+                        <div>
+                            ${movTypeBadge(m.type)}
+                            <span class="ms-2">${m.user_name || '-'}</span>
+                            ${m.project_name ? `<small class="text-muted ms-1">(${m.project_name})</small>` : ''}
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted">${m.total_items || 0} itens</small><br>
+                            <small class="text-muted">${formatDateTime(m.occurred_at)}</small>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                movContainer.innerHTML = '<div class="empty-state"><i class="bi bi-inbox"></i><p>Nenhuma movimentação recente</p></div>';
+            }
+
+        } catch (err) {
+            console.error('Erro ao carregar dashboard:', err);
+        }
+    }
+
+    // ============ PRODUTOS ============
+    async function loadProducts() {
+        try {
+            const data = await apiCall('/products');
+            allProducts = data.data || [];
+
+            // Populate filter dropdowns
+            populateProductDropdowns();
+
+            const tbody = document.getElementById('productsTableBody');
+            if (allProducts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">Nenhum produto cadastrado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = allProducts.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td><strong>${p.equipment}</strong></td>
+                    <td>${p.model}</td>
+                    <td>${p.description || '-'}</td>
+                    <td>
+                        <span class="${(p.stock_count || 0) < (p.min_stock || 0) ? 'text-danger fw-bold' : ''}">
+                            ${p.stock_count || 0}
+                        </span>
+                    </td>
+                    <td>${p.min_stock || 0}</td>
+                    <td>${p.is_serialized ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-x-circle text-secondary"></i>'}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm me-1" onclick="editProduct(${p.id})" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="deleteProduct(${p.id})" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error('Erro ao carregar produtos:', err);
+            document.getElementById('productsTableBody').innerHTML =
+                '<tr><td colspan="8" class="text-center text-danger py-4">Erro ao carregar produtos</td></tr>';
+        }
+    }
+
+    function populateProductDropdowns() {
+        const optionsHTML = allProducts.map(p =>
+            `<option value="${p.id}">${p.equipment} - ${p.model}</option>`
+        ).join('');
+
+        // Item filter
+        const filterItemProduct = document.getElementById('filterItemProduct');
+        filterItemProduct.innerHTML = `<option value="">Todos os Produtos</option>${optionsHTML}`;
+
+        // Item modal
+        const itemProduct = document.getElementById('itemProduct');
+        itemProduct.innerHTML = `<option value="">Selecione o produto...</option>${optionsHTML}`;
+
+        // Movement modal product selects
+        document.querySelectorAll('.mov-product').forEach(sel => {
+            sel.innerHTML = `<option value="">Selecione o produto...</option>${optionsHTML}`;
+        });
+    }
+
+    function showProductModal(product = null) {
+        document.getElementById('productId').value = product ? product.id : '';
+        document.getElementById('productEquipment').value = product ? product.equipment : '';
+        document.getElementById('productModel').value = product ? product.model : '';
+        document.getElementById('productDescription').value = product ? (product.description || '') : '';
+        document.getElementById('productMinStock').value = product ? product.min_stock : 0;
+        document.getElementById('productSerialized').value = product ? String(product.is_serialized) : 'true';
+        document.getElementById('productModalTitle').innerHTML =
+            product ? '<i class="bi bi-pencil me-2"></i>Editar Produto' : '<i class="bi bi-box me-2"></i>Novo Produto';
+        new bootstrap.Modal(document.getElementById('productModal')).show();
+    }
+
+    async function editProduct(id) {
+        try {
+            const data = await apiCall(`/products/${id}`);
+            showProductModal(data.data || data);
+        } catch (err) {
+            showToast('Erro ao carregar produto: ' + err.message, 'danger');
+        }
+    }
+
+    async function saveProduct() {
+        const id = document.getElementById('productId').value;
+        const payload = {
+            equipment: document.getElementById('productEquipment').value.trim(),
+            model: document.getElementById('productModel').value.trim(),
+            description: document.getElementById('productDescription').value.trim() || null,
+            min_stock: parseInt(document.getElementById('productMinStock').value) || 0,
+            is_serialized: document.getElementById('productSerialized').value === 'true'
+        };
+
+        if (!payload.equipment || !payload.model) {
+            showToast('Equipamento e Modelo são obrigatórios', 'warning');
+            return;
+        }
+
+        try {
+            if (id) {
+                await apiCall(`/products/${id}`, 'PUT', payload);
+                showToast('Produto atualizado com sucesso!');
+            } else {
+                await apiCall('/products', 'POST', payload);
+                showToast('Produto criado com sucesso!');
+            }
+            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+            loadProducts();
+            loadDashboard();
+        } catch (err) {
+            showToast('Erro ao salvar produto: ' + err.message, 'danger');
+        }
+    }
+
+    async function deleteProduct(id) {
+        if (!confirm('Tem certeza que deseja excluir este produto?')) return;
+        try {
+            await apiCall(`/products/${id}`, 'DELETE');
+            showToast('Produto excluído com sucesso!');
+            loadProducts();
+            loadDashboard();
+        } catch (err) {
+            showToast('Erro ao excluir produto: ' + err.message, 'danger');
+        }
+    }
+
+    // ============ ITENS ============
+    async function loadItems() {
+        try {
+            const status = document.getElementById('filterItemStatus').value;
+            const productId = document.getElementById('filterItemProduct').value;
+            let query = '/items?limit=200';
+            if (status) query += `&status=${status}`;
+            if (productId) query += `&product_id=${productId}`;
+
+            const data = await apiCall(query);
+            const items = data.data || [];
+            const tbody = document.getElementById('itemsTableBody');
+
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4">Nenhum item encontrado</td></tr>';
+                return;
+            }
+            tbody.innerHTML = items.map(i => `
+                <tr>
+                    <td>${i.id}</td>
+                    <td>${i.equipment || '-'}</td>
+                    <td>${i.model || '-'}</td>
+                    <td><code>${i.serial_imei || '-'}</code></td>
+                    <td>${statusBadge(i.status)}</td>
+                    <td>${i.quantity}</td>
+                    <td>${i.location || '-'}</td>
+                    <td>${i.invoice_number || '-'}</td>
+                    <td>${formatDate(i.entry_date)}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm" onclick="editItem(${i.id})" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error('Erro ao carregar itens:', err);
+            document.getElementById('itemsTableBody').innerHTML =
+                '<tr><td colspan="10" class="text-center text-danger py-4">Erro ao carregar itens</td></tr>';
+        }
+    }
+
+    function showItemModal(item = null) {
+        document.getElementById('itemId').value = item ? item.id : '';
+        document.getElementById('itemProduct').value = item ? item.product_id : '';
+        document.getElementById('itemSerial').value = item ? (item.serial_imei || '') : '';
+        document.getElementById('itemQuantity').value = item ? item.quantity : 1;
+        document.getElementById('itemLocation').value = item ? (item.location || '') : '';
+        document.getElementById('itemBatch').value = item ? (item.batch || '') : '';
+        document.getElementById('itemEntryDate').value = item ? item.entry_date : new Date().toISOString().split('T')[0];
+        document.getElementById('itemInvoiceNumber').value = item ? (item.invoice_number || '') : '';
+        document.getElementById('itemInvoiceDate').value = item ? (item.invoice_date || '') : '';
+        document.getElementById('itemNotes').value = item ? (item.notes || '') : '';
+
+        // Show status field only when editing
+        document.getElementById('itemStatusGroup').style.display = item ? 'block' : 'none';
+        if (item) document.getElementById('itemStatus').value = item.status || 'EM_ESTOQUE';
+
+        document.getElementById('itemModalTitle').innerHTML =
+            item ? '<i class="bi bi-pencil me-2"></i>Editar Item' : '<i class="bi bi-upc-scan me-2"></i>Novo Item';
+        new bootstrap.Modal(document.getElementById('itemModal')).show();
+    }
+
+    async function editItem(id) {
+        try {
+            const data = await apiCall(`/items/${id}`);
+            showItemModal(data.data || data);
+        } catch (err) {
+            showToast('Erro ao carregar item: ' + err.message, 'danger');
+        }
+    }
+
+    async function saveItem() {
+        const id = document.getElementById('itemId').value;
+        const productId = document.getElementById('itemProduct').value;
+        const entryDate = document.getElementById('itemEntryDate').value;
+
+        if (!productId) { showToast('Selecione um produto', 'warning'); return; }
+        if (!entryDate) { showToast('Informe a data de entrada', 'warning'); return; }
+
+        if (id) {
+            // Update
+            const payload = {
+                serial_imei: document.getElementById('itemSerial').value.trim() || null,
+                batch: document.getElementById('itemBatch').value.trim() || null,
+                status: document.getElementById('itemStatus').value,
+                quantity: parseInt(document.getElementById('itemQuantity').value) || 1,
+                location: document.getElementById('itemLocation').value.trim() || null,
+                notes: document.getElementById('itemNotes').value.trim() || null
+            };
+            try {
+                await apiCall(`/items/${id}`, 'PUT', payload);
+                showToast('Item atualizado com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('itemModal')).hide();
+                loadItems();
+                loadDashboard();
+            } catch (err) {
+                showToast('Erro ao atualizar item: ' + err.message, 'danger');
+            }
+        } else {
+            // Create
+            const payload = {
+                product_id: parseInt(productId),
+                serial_imei: document.getElementById('itemSerial').value.trim() || null,
+                batch: document.getElementById('itemBatch').value.trim() || null,
+                quantity: parseInt(document.getElementById('itemQuantity').value) || 1,
+                location: document.getElementById('itemLocation').value.trim() || null,
+                entry_date: entryDate,
+                invoice_number: document.getElementById('itemInvoiceNumber').value.trim() || null,
+                invoice_date: document.getElementById('itemInvoiceDate').value || null,
+                notes: document.getElementById('itemNotes').value.trim() || null
+            };
+            try {
+                await apiCall('/items', 'POST', payload);
+                showToast('Item cadastrado com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('itemModal')).hide();
+                loadItems();
+                loadDashboard();
+            } catch (err) {
+                showToast('Erro ao cadastrar item: ' + err.message, 'danger');
+            }
+        }
+    }
+
+    // ============ MOVIMENTAÇÕES ============
+    async function loadMovements() {
+        try {
+            const type = document.getElementById('filterMovType').value;
+            let query = '/movements?limit=100';
+            if (type) query += `&type=${type}`;
+
+            const data = await apiCall(query);
+            const movements = data.data || [];
+            const tbody = document.getElementById('movementsTableBody');
+
+            if (movements.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4">Nenhuma movimentação encontrada</td></tr>';
+                return;
+            }
+            tbody.innerHTML = movements.map(m => `
+                <tr>
+                    <td>${m.id}</td>
+                    <td>${movTypeBadge(m.type)}</td>
+                    <td>${m.user_name || '-'}</td>
+                    <td>${m.project_name || '-'}</td>
+                    <td>${m.reference_type ? `${m.reference_type} ${m.reference_id || ''}` : '-'}</td>
+                    <td>${(m.lines || []).length || m.total_items || 0}</td>
+                    <td><small>${m.notes || '-'}</small></td>
+                    <td>${formatDateTime(m.occurred_at)}</td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error('Erro ao carregar movimentações:', err);
+            document.getElementById('movementsTableBody').innerHTML =
+                '<tr><td colspan="8" class="text-center text-danger py-4">Erro ao carregar movimentações</td></tr>';
+        }
+    }
+
+    function showMovementModal() {
+        document.getElementById('movType').value = 'ENTRADA';
+        document.getElementById('movProject').value = '';
+        document.getElementById('movRequester').value = '';
+        document.getElementById('movRefType').value = '';
+        document.getElementById('movRefId').value = '';
+        document.getElementById('movNotes').value = '';
+
+        // Reset lines to single empty line
+        const container = document.getElementById('movLinesContainer');
+        container.innerHTML = '';
+        addMovLine();
+
+        new bootstrap.Modal(document.getElementById('movementModal')).show();
+    }
+
+    function addMovLine() {
+        const container = document.getElementById('movLinesContainer');
+        const idx = container.children.length;
+        const optionsHTML = allProducts.map(p =>
+            `<option value="${p.id}">${p.equipment} - ${p.model}</option>`
+        ).join('');
+
+        const row = document.createElement('div');
+        row.className = 'row mb-2 mov-line';
+        row.dataset.index = idx;
+        row.innerHTML = `
+            <div class="col-md-5">
+                <select class="form-select form-select-sm mov-product" onchange="onMovProductChange(this)">
+                    <option value="">Selecione o produto...</option>
+                    ${optionsHTML}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control form-control-sm mov-serial" placeholder="Serial/IMEI (opcional)">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control form-control-sm mov-qty" value="1" min="1" placeholder="Qtd">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-danger btn-sm w-100" onclick="removeMovLine(this)" title="Remover">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        container.appendChild(row);
+    }
+
+    function removeMovLine(btn) {
+        const container = document.getElementById('movLinesContainer');
+        if (container.children.length > 1) {
+            btn.closest('.mov-line').remove();
+        }
+    }
+
+    function onMovProductChange(select) {
+        // Could potentially load items for serial autocomplete in the future
+    }
+
+    async function saveMovement() {
+        const lines = [];
+        document.querySelectorAll('.mov-line').forEach(row => {
+            const productId = row.querySelector('.mov-product').value;
+            const serial = row.querySelector('.mov-serial').value.trim();
+            const qty = parseInt(row.querySelector('.mov-qty').value) || 1;
+            if (productId) {
+                lines.push({
+                    product_id: parseInt(productId),
+                    quantity: qty,
+                    serial_imei: serial || null
+                });
+            }
+        });
+
+        if (lines.length === 0) {
+            showToast('Adicione pelo menos um item à movimentação', 'warning');
+            return;
+        }
+
+        const payload = {
+            type: document.getElementById('movType').value,
+            project_name: document.getElementById('movProject').value.trim() || null,
+            requester_name: document.getElementById('movRequester').value.trim() || null,
+            reference_type: document.getElementById('movRefType').value || null,
+            reference_id: document.getElementById('movRefId').value.trim() || null,
+            notes: document.getElementById('movNotes').value.trim() || null,
+            user_email: USER_EMAIL,
+            user_name: USER_NAME,
+            lines: lines
+        };
+
+        try {
+            await apiCall('/movements', 'POST', payload);
+            showToast('Movimentação registrada com sucesso!');
+            bootstrap.Modal.getInstance(document.getElementById('movementModal')).hide();
+            loadMovements();
+            loadDashboard();
+        } catch (err) {
+            showToast('Erro ao registrar movimentação: ' + err.message, 'danger');
+        }
+    }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎫 Chamados - WifiMaxx Monitor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            color: #ecf0f1;
+        }
+
+        /* Override Bootstrap text-muted para melhor contraste no tema escuro */
+        .text-muted {
+            color: #b8c0cc !important;
+        }
+
+        /* Override Bootstrap text-light para garantir legibilidade */
+        .text-light {
+            color: #e8eaed !important;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, rgba(26, 35, 126, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .navbar-brand img {
+            max-height: 55px;
+            width: auto;
+        }
+
+        .nav-link {
+            color: #bdc3c7 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #4CAF50 !important;
+        }
+
+        /* Container principal */
+        .container-fluid {
+            padding: 2rem;
+        }
+
+        h2 {
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        /* Cards de Estatísticas */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            color: #d1d9e0;
+        }
+
+        .stat-card.primary .stat-icon, .stat-card.primary .stat-value { color: #3b82f6; }
+        .stat-card.warning .stat-icon, .stat-card.warning .stat-value { color: #eab308; }
+        .stat-card.info .stat-icon, .stat-card.info .stat-value { color: #22d3ee; }
+        .stat-card.danger .stat-icon, .stat-card.danger .stat-value { color: #f97316; }
+        .stat-card.success .stat-icon, .stat-card.success .stat-value { color: #22c55e; }
+        .stat-card.secondary .stat-icon, .stat-card.secondary .stat-value { color: #8b5cf6; }
+
+        /* Cards clicáveis */
+        .clickable-stat-card {
+            cursor: pointer;
+            user-select: none;
+        }
+        .clickable-stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.3);
+        }
+        .clickable-stat-card.active {
+            border: 2px solid #22c55e;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Cores por Status */
+        .status-aberto { background: linear-gradient(135deg, #3b82f6, #60a5fa) !important; color: #ffffff !important; }
+        .status-em_andamento { background: linear-gradient(135deg, #eab308, #facc15) !important; color: #1a1a2e !important; }
+        .status-pendente { background: linear-gradient(135deg, #f97316, #fb923c) !important; color: #1a1a2e !important; }
+        .status-respondido { background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important; color: #ffffff !important; }
+        .status-atendido { background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important; color: #ffffff !important; }
+        .status-resolvido { background: linear-gradient(135deg, #22c55e, #4ade80) !important; color: #1a1a2e !important; }
+        .status-fechado { background: linear-gradient(135deg, #6b7280, #9ca3af) !important; color: #ffffff !important; }
+
+        /* Cores por Nível */
+        .nivel-n0, .nivel-n1 { background: linear-gradient(135deg, #22c55e, #4ade80) !important; color: #1a1a2e !important; }
+        .nivel-n2, .nivel-n3 { background: linear-gradient(135deg, #eab308, #facc15) !important; color: #1a1a2e !important; }
+        .nivel-n4, .nivel-n5 { background: linear-gradient(135deg, #f97316, #fb923c) !important; color: #1a1a2e !important; }
+        .nivel-n6 { background: linear-gradient(135deg, #ef4444, #f87171) !important; color: #ffffff !important; }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(102, 187, 106, 0.15));
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        /* Ticket Card */
+        .ticket-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+            border: 1px solid rgba(76, 175, 80, 0.25);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(76, 175, 80, 0.5);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+        }
+
+        .ticket-card .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .ticket-card .ticket-id {
+            font-weight: 700;
+            color: #4CAF50;
+            font-size: 1rem;
+        }
+
+        .ticket-card .ticket-type {
+            font-size: 0.8rem;
+            color: #d1d9e0;
+        }
+
+        .ticket-card .ticket-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .ticket-card .ticket-info span {
+            color: #c9d1d9;
+        }
+
+        .ticket-card .ticket-info strong {
+            color: #ecf0f1;
+        }
+
+        .ticket-card .ticket-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #4CAF50, rgba(76, 175, 80, 0.2));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 2px solid #1a1a2e;
+        }
+
+        .timeline-item .timeline-date {
+            font-size: 0.75rem;
+            color: #c9d1d9;
+        }
+
+        .timeline-item .timeline-action {
+            font-weight: 600;
+            color: #ecf0f1;
+        }
+
+        .timeline-item .timeline-responsible {
+            font-size: 0.85rem;
+            color: #4CAF50;
+        }
+
+        .timeline-item .timeline-notes {
+            font-size: 0.85rem;
+            color: #d1d9e0;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 0.5rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+        }
+
+        /* Formulários */
+        .form-label {
+            color: #a8dadc;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            background: linear-gradient(135deg, rgba(50, 70, 100, 0.5), rgba(40, 60, 90, 0.5)) !important;
+            border: 2px solid rgba(76, 175, 80, 0.3) !important;
+            color: #ecf0f1 !important;
+            border-radius: 8px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4CAF50 !important;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25) !important;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2)) !important;
+        }
+
+        /* Options do select - texto preto em fundo claro (dropdown nativo) */
+        .form-select option {
+            background-color: #1a1a2e !important;
+            color: #ecf0f1 !important;
+            padding: 10px;
+        }
+
+        .form-select option:hover,
+        .form-select option:focus,
+        .form-select option:checked {
+            background-color: rgba(76, 175, 80, 0.3) !important;
+            color: #ecf0f1 !important;
+        }
+
+        .form-control::placeholder {
+            color: #7f8c8d;
+        }
+
+        /* Botões */
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.65rem 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%) !important;
+            border: none;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #eab308 0%, #facc15 100%) !important;
+            color: #1a1a2e !important;
+            border: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%) !important;
+            border: none;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+            border: none;
+        }
+
+        /* Badges */
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-tabs .nav-link {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(22, 33, 62, 0.6));
+            border: 1px solid rgba(76, 175, 80, 0.2) !important;
+            color: #bdc3c7 !important;
+            margin-right: 0.5rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2));
+            color: #4CAF50 !important;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(102, 187, 106, 0.3)) !important;
+            color: #4CAF50 !important;
+            border-bottom: 3px solid #4CAF50 !important;
+        }
+
+        /* Table */
+        .table {
+            color: #ecf0f1;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(102, 187, 106, 0.2));
+        }
+
+        .table thead th {
+            color: #4CAF50;
+            font-weight: 700;
+            border: none;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid rgba(76, 175, 80, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        /* Select2 Customizado */
+        .select2-container--bootstrap-5 .select2-selection {
+            background: linear-gradient(135deg, rgba(50, 70, 100, 0.5), rgba(40, 60, 90, 0.5)) !important;
+            border: 2px solid rgba(76, 175, 80, 0.3) !important;
+            color: #ecf0f1 !important;
+        }
+        
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+            color: #ecf0f1 !important;
+        }
+        
+        .select2-container--bootstrap-5 .select2-dropdown {
+            background: #1a1a2e !important;
+            border: 2px solid rgba(76, 175, 80, 0.3) !important;
+        }
+        
+        .select2-container--bootstrap-5 .select2-results__option {
+            color: #ecf0f1 !important;
+        }
+        
+        .select2-container--bootstrap-5 .select2-results__option--highlighted {
+            background: rgba(76, 175, 80, 0.3) !important;
+        }
+
+        /* SLA Indicator */
+        .sla-ok {
+            color: #4ade80;
+        }
+
+        .sla-warning {
+            color: #fbbf24;
+        }
+
+        .sla-danger {
+            color: #f87171;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Offcanvas/Sheet */
+        .offcanvas {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98)) !important;
+            border-left: 2px solid rgba(76, 175, 80, 0.3) !important;
+        }
+
+        .offcanvas-header {
+            border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .offcanvas-title {
+            color: #4CAF50;
+        }
+
+        /* Detail Grid */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: rgba(76, 175, 80, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .detail-item .detail-label {
+            font-size: 0.75rem;
+            color: #c9d1d9;
+        }
+
+        .detail-item .detail-value {
+            font-weight: 600;
+            color: #ecf0f1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #c9d1d9;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Radio Action Group */
+        .action-option {
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-option:hover {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .action-option.selected {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+        }
+
+        /* ============================================ */
+        /* ENHANCED KANBAN DRAG & DROP                */
+        /* ============================================ */
+        
+        .kanban-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .kanban-column-wrapper {
+            min-width: 260px;
+            flex-shrink: 0;
+        }
+
+        .kanban-column {
+            min-height: 350px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .kanban-column.drag-over {
+            background: rgba(76, 175, 80, 0.15) !important;
+            border: 2px dashed #4CAF50 !important;
+            border-radius: 8px;
+        }
+
+        .kanban-column.drag-over::after {
+            content: 'Solte aqui';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Draggable Kanban Card */
+        .kanban-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+            border: 1px solid rgba(76, 175, 80, 0.25);
+            border-radius: 10px;
+            padding: 0.85rem;
+            cursor: grab;
+            transition: all 0.2s ease;
+            margin-bottom: 0.75rem;
+            user-select: none;
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(76, 175, 80, 0.5);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.15);
+        }
+
+        .kanban-card.dragging {
+            opacity: 0.6;
+            transform: rotate(3deg);
+            cursor: grabbing;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .kanban-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .kanban-card-id {
+            font-weight: 700;
+            color: #4CAF50;
+            font-size: 0.85rem;
+        }
+
+        .kanban-card-prefixo {
+            font-size: 0.8rem;
+            color: #d1d9e0;
+        }
+
+        .kanban-card-garagem {
+            font-size: 0.8rem;
+            color: #c9d1d9;
+        }
+
+        .kanban-card-sla {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(76, 175, 80, 0.15);
+        }
+
+        .kanban-column-count {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        /* ============================================ */
+        /* ENHANCED DETAIL OFFCANVAS                  */
+        /* ============================================ */
+        
+        .offcanvas-detail {
+            width: 550px !important;
+        }
+
+        @media (max-width: 600px) {
+            .offcanvas-detail {
+                width: 100% !important;
+            }
+        }
+
+        /* Creator Info Block */
+        .creator-info-block {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Level Card */
+        .level-card {
+            background: rgba(50, 70, 100, 0.4);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* SLA Status Card */
+        .sla-card {
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sla-card.sla-ok-bg {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .sla-card.sla-warning-bg {
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .sla-card.sla-danger-bg {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .sla-level-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0;
+            font-size: 0.8rem;
+        }
+
+        .sla-level-change .badge {
+            font-size: 0.65rem;
+            min-width: 30px;
+        }
+
+        /* Enhanced Detail Grid */
+        .detail-grid-enhanced {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-grid-enhanced .detail-item {
+            background: rgba(76, 175, 80, 0.08);
+            padding: 0.85rem;
+            border-radius: 8px;
+            border: 1px solid rgba(76, 175, 80, 0.15);
+        }
+
+        .detail-grid-enhanced .detail-item .detail-icon {
+            color: #4CAF50;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Description Box */
+        .description-box {
+            background: rgba(50, 70, 100, 0.35);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+            font-weight: 400;
+        }
+
+        /* Enhanced Timeline */
+        .timeline-enhanced {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-enhanced::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 5px;
+            bottom: 5px;
+            width: 3px;
+            background: linear-gradient(to bottom, #4CAF50, rgba(76, 175, 80, 0.2));
+            border-radius: 2px;
+        }
+
+        .timeline-enhanced-item {
+            position: relative;
+            padding-bottom: 1.25rem;
+        }
+
+        .timeline-enhanced-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-enhanced-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 6px;
+            width: 14px;
+            height: 14px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 3px solid #1a1a2e;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .timeline-enhanced-item .timeline-date {
+            font-size: 0.75rem;
+            color: #c9d1d9;
+            font-weight: 600;
+        }
+
+        .timeline-enhanced-item .timeline-action {
+            font-weight: 600;
+            color: #ecf0f1;
+            font-size: 0.95rem;
+        }
+
+        .timeline-enhanced-item .timeline-responsible {
+            font-size: 0.85rem;
+            color: #4CAF50;
+        }
+
+        .timeline-enhanced-item .timeline-duration {
+            font-size: 0.8rem;
+            color: #f39c12;
+            margin-top: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(243, 156, 18, 0.1);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .timeline-enhanced-item .timeline-notes-card {
+            background: rgba(76, 175, 80, 0.12);
+            border: 1px solid rgba(76, 175, 80, 0.25);
+            border-radius: 8px;
+            padding: 0.65rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #d1d9e0;
+        }
+
+        .timeline-enhanced-item .timeline-attachments {
+            margin-top: 0.65rem;
+            padding: 0.5rem;
+            background: rgba(33, 150, 243, 0.08);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+            border-radius: 6px;
+        }
+
+        .attachment-badge {
+            display: inline-block;
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid rgba(33, 150, 243, 0.4);
+            color: #90caf9;
+            padding: 0.3rem 0.6rem;
+            margin: 0.2rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .attachment-badge:hover {
+            background: rgba(33, 150, 243, 0.3);
+            border-color: rgba(33, 150, 243, 0.6);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Action Button Full Width */
+        .btn-action-full {
+            width: 100%;
+            padding: 0.85rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        /* ============================================ */
+        /* ENHANCED ACTION MODAL                      */
+        /* ============================================ */
+
+        .action-option-enhanced {
+            border: 2px solid rgba(76, 175, 80, 0.25);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: rgba(50, 70, 100, 0.2);
+        }
+
+        .action-option-enhanced:hover {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: rgba(76, 175, 80, 0.4);
+            transform: translateX(3px);
+        }
+
+        .action-option-enhanced.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.15);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .action-option-enhanced.selected-advance {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .action-option-enhanced.selected-goto {
+            border-color: #eab308;
+            background: rgba(234, 179, 8, 0.15);
+        }
+
+        .action-option-enhanced.selected-close {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+        }
+        
+        .action-option-enhanced.selected-update {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .action-icon-advance {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .action-icon-goto {
+            background: rgba(234, 179, 8, 0.2);
+            color: #facc15;
+        }
+
+        .action-icon-close {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+        
+        .action-icon-update {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .comment-required-indicator {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .comment-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .validation-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25) !important;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .drag-source-indicator {
+            padding: 0.5rem;
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px dashed #eab308;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Efeito visual para novos chamados */
+        @keyframes novoDestaque {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+                border-color: rgba(76, 175, 80, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 30px 5px rgba(76, 175, 80, 0.6);
+                border-color: rgba(76, 175, 80, 0.8);
+            }
+        }
+
+        .chamado-novo-destaque {
+            animation: novoDestaque 2s ease-in-out 3;
+            background: linear-gradient(135deg, 
+                rgba(76, 175, 80, 0.15), 
+                rgba(26, 26, 46, 0.9),
+                rgba(22, 33, 62, 0.9)
+            ) !important;
+        }
+
+        /* Indicador de atualização em tempo real */
+        .realtime-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+
+        .realtime-indicator.show {
+            display: block;
+        }
+
+        /* ============================================ */
+        /* SEÇÕES ORGANIZADAS DE CHAMADOS             */
+        /* ============================================ */
+        
+        .chamados-section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.7), rgba(22, 33, 62, 0.7));
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 15px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .chamados-section:hover {
+            border-color: rgba(76, 175, 80, 0.4);
+        }
+
+        .section-header {
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(76, 175, 80, 0.15);
+        }
+
+        .section-header h5 {
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .section-content {
+            padding-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state-mini {
+            text-align: center;
+            padding: 1.5rem;
+            color: #9ca3af;
+            font-size: 0.9rem;
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 10px;
+            border: 1px dashed rgba(76, 175, 80, 0.2);
+        }
+
+        .empty-state-mini i {
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        /* Cores específicas das seções */
+        #secaoMeusAtendimentos {
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+        #secaoMeusAtendimentos:hover {
+            border-color: rgba(234, 179, 8, 0.5);
+            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.1);
+        }
+
+        #secaoPendentes {
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+        #secaoPendentes:hover {
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.1);
+        }
+
+        #secaoNovos {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        #secaoNovos:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+        }
+
+        #secaoHistorico {
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        #secaoHistorico:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Ticket card dentro das seções - mais compacto */
+        .chamados-section .ticket-card {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Animação de colapso */
+        .section-content.collapsed {
+            max-height: 0;
+            overflow: hidden;
+            padding-top: 0;
+        }
+
+        /* ============================================ */
+        /* CHAMADOS RESPONDIDO - DESTAQUE ESPECIAL    */
+        /* ============================================ */
+        
+        /* Card de chamado com status RESPONDIDO */
+        .chamado-respondido {
+            border: 2px solid rgba(139, 92, 246, 0.5) !important;
+            background: linear-gradient(135deg, 
+                rgba(139, 92, 246, 0.15), 
+                rgba(26, 26, 46, 0.95),
+                rgba(22, 33, 62, 0.95)
+            ) !important;
+            position: relative;
+        }
+
+        .chamado-respondido::before {
+            content: '⚡ Aguardando Resposta';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chamado-respondido:hover {
+            border-color: rgba(139, 92, 246, 0.8) !important;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25) !important;
+        }
+
+        .border-respondido {
+            border-color: rgba(139, 92, 246, 0.4) !important;
+        }
+
+        /* Badge de status respondido mais destacado */
+        .status-respondido {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important;
+            color: #ffffff !important;
+            animation: pulseRespondido 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseRespondido {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+            }
+            50% { 
+                box-shadow: 0 0 10px 3px rgba(139, 92, 246, 0.4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Indicador de atualização em tempo real -->
+    <div id="realtimeIndicator" class="realtime-indicator">
+        <i class="fas fa-sync-alt fa-spin me-2"></i>
+        Atualizando...
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', path='logo.png') }}" alt="WifiMaxx Monitor">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    {% if user.departamento != 'Atendimento' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/asbuilt">
+                            <i class="fas fa-file-alt me-2"></i>Asbuilt
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/chamados">
+                            <i class="fas fa-ticket-alt me-2"></i>Chamados
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="max-width: 98%; margin: 0 auto;">
+        <h2><i class="fas fa-ticket-alt me-2"></i>Gestão de Chamados</h2>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4" id="statsSection">
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card primary clickable-stat-card" data-filter="all" title="Clique para ver todos">
+                    <i class="fas fa-list stat-icon"></i>
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card info clickable-stat-card" data-filter="aberto" title="Clique para filtrar Abertos">
+                    <i class="fas fa-folder-open stat-icon"></i>
+                    <div class="stat-value" id="statAbertos">0</div>
+                    <div class="stat-label">Abertos</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card warning clickable-stat-card" data-filter="em_andamento" title="Clique para filtrar Em Andamento">
+                    <i class="fas fa-clock stat-icon"></i>
+                    <div class="stat-value" id="statEmAndamento">0</div>
+                    <div class="stat-label">Em Andamento</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card danger clickable-stat-card" data-filter="pendente" title="Clique para filtrar Pendentes">
+                    <i class="fas fa-pause-circle stat-icon"></i>
+                    <div class="stat-value" id="statPendentes">0</div>
+                    <div class="stat-label">Pendentes</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card secondary clickable-stat-card" data-filter="respondido" title="Clique para filtrar Respondidos">
+                    <i class="fas fa-reply stat-icon"></i>
+                    <div class="stat-value" id="statRespondidos">0</div>
+                    <div class="stat-label">Respondidos</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card success clickable-stat-card" data-filter="resolvido" title="Clique para filtrar Resolvidos">
+                    <i class="fas fa-check-circle stat-icon"></i>
+                    <div class="stat-value" id="statResolvidos">0</div>
+                    <div class="stat-label">Resolvidos</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card success clickable-stat-card" data-filter="sla_ok" title="Clique para filtrar SLA OK">
+                    <i class="fas fa-bullseye stat-icon"></i>
+                    <div class="stat-value" id="statSlaCumprido">0</div>
+                    <div class="stat-label">SLA OK</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg mb-3">
+                <div class="stat-card danger clickable-stat-card" data-filter="sla_excedido" title="Clique para filtrar SLA Excedido">
+                    <i class="fas fa-exclamation-triangle stat-icon"></i>
+                    <div class="stat-value" id="statSlaExcedido">0</div>
+                    <div class="stat-label">SLA Excedido</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
+                    <i class="fas fa-th-large me-2"></i>Dashboard
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kanban-tab" data-bs-toggle="tab" data-bs-target="#kanban" type="button" role="tab">
+                    <i class="fas fa-columns me-2"></i>Visão Kanban
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tabela-tab" data-bs-toggle="tab" data-bs-target="#tabela" type="button" role="tab">
+                    <i class="fas fa-table me-2"></i>Tabela
+                </button>
+            </li>
+        </ul>
+
+        <!-- Filters -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-filter me-2"></i>Filtros</span>
+                <div>
+                    <button class="btn btn-sm btn-outline-success me-2" onclick="exportarRelatorioExcel()" title="Exportar relatório completo em Excel">
+                        <i class="fas fa-file-excel me-1"></i>Exportar Excel
+                    </button>
+                    <button class="btn btn-sm btn-outline-light me-2" onclick="limparFiltros()">
+                        <i class="fas fa-times me-1"></i>Limpar Filtros
+                    </button>
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNovoChamado">
+                        <i class="fas fa-plus me-1"></i>Novo Chamado
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Busca</label>
+                        <div class="input-group">
+                            <input type="text" id="filtroSearch" class="form-control" placeholder="ID, Prefixo, Patrimônio...">
+                            <button class="btn btn-primary" type="button" id="btnBuscarChamado" onclick="aplicarFiltros()" title="Buscar">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Status</label>
+                        <select id="filtroStatus" class="form-select">
+                            <option value="all">Todos</option>
+                            <option value="aberto">Aberto</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="respondido">Respondido</option>
+                            <option value="resolvido">Resolvido</option>
+                            <option value="fechado">Fechado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Nível</label>
+                        <select id="filtroNivel" class="form-select">
+                            <option value="all">Todos</option>
+                            <option value="N0">N0 - Acesso Remoto</option>
+                            <option value="N1">N1 - Verificação Chip</option>
+                            <option value="N2">N2 - Base/Sistema</option>
+                            <option value="N3">N3 - Checklist</option>
+                            <option value="N4">N4 - In Loco</option>
+                            <option value="N5">N5 - Erros Splash</option>
+                            <option value="N6">N6 - P&D</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Tipo</label>
+                        <select id="filtroTipo" class="form-select">
+                            <option value="all">Todos</option>
+                            <option value="prefixo_divergente">Prefixo Divergente</option>
+                            <option value="prefixo_inativo">Prefixo Inativo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Garagem</label>
+                        <select id="filtroGaragem" class="form-select">
+                            <option value="all">Todas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-3 mt-2">
+                    <div class="col-md-2">
+                        <label class="form-label">Departamento</label>
+                        <select id="filtroDepartamento" class="form-select">
+                            <option value="all">Todos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Origem</label>
+                        <select id="filtroOrigem" class="form-select" onchange="aplicarFiltros()">
+                            <option value="all">Todos</option>
+                            <option value="originais">Originais</option>
+                            <option value="transicoes">Transições</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- TAB: Dashboard View -->
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+                
+                <!-- Seção: Meus Chamados em Atendimento -->
+                <div class="chamados-section mb-4" id="secaoMeusAtendimentos">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user-clock me-2" style="color: #eab308;"></i>
+                            <span style="color: #facc15;">Meus Chamados em Atendimento</span>
+                            <span class="badge bg-warning text-dark ms-2" id="countMeusAtendimentos">0</span>
+                        </h5>
+                        <button class="btn btn-sm btn-outline-warning" onclick="toggleSection('meusAtendimentos')" id="btnToggleMeusAtendimentos">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="section-content" id="contentMeusAtendimentos">
+                        <div class="row" id="gridMeusAtendimentos">
+                            <div class="col-12">
+                                <div class="empty-state-mini">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="ms-2">Nenhum chamado em atendimento</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Chamados Pendentes (aguardando resposta) -->
+                <div class="chamados-section mb-4" id="secaoPendentes">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-pause-circle me-2" style="color: #f97316;"></i>
+                            <span style="color: #fb923c;">Chamados Pendentes</span>
+                            <span class="badge bg-warning text-dark ms-2" style="background: linear-gradient(135deg, #f97316, #fb923c) !important;" id="countPendentes">0</span>
+                        </h5>
+                        <button class="btn btn-sm btn-outline-warning" onclick="toggleSection('pendentes')" id="btnTogglePendentes" style="border-color: #f97316; color: #f97316;">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="section-content" id="contentPendentes">
+                        <div class="row" id="gridPendentes">
+                            <div class="col-12">
+                                <div class="empty-state-mini">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="ms-2">Nenhum chamado pendente</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Chamados Respondidos (apenas CCO) -->
+                {% if user.departamento and user.departamento.upper() == 'CCO' %}
+                <div class="chamados-section mb-4" id="secaoRespondidos">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-reply me-2" style="color: #a855f7;"></i>
+                            <span style="color: #c084fc;">Chamados Respondidos</span>
+                            <span class="badge ms-2" style="background: linear-gradient(135deg, #a855f7, #c084fc);" id="countRespondidos">0</span>
+                        </h5>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('respondidos')" id="btnToggleRespondidos" style="border-color: #a855f7; color: #a855f7;">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="section-content" id="contentRespondidos">
+                        <div class="row" id="gridRespondidos">
+                            <div class="col-12">
+                                <div class="empty-state-mini">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span class="ms-2">Nenhum chamado respondido</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Seção: Chamados Novos/Disponíveis -->
+                <div class="chamados-section mb-4" id="secaoNovos">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-folder-open me-2" style="color: #3b82f6;"></i>
+                            <span style="color: #60a5fa;">Chamados Novos / Disponíveis</span>
+                            <span class="badge ms-2" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);" id="countNovos">0</span>
+                        </h5>
+                        <button class="btn btn-sm btn-outline-info" onclick="toggleSection('novos')" id="btnToggleNovos">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="section-content" id="contentNovos">
+                        <div class="row" id="gridNovos">
+                            <div class="col-12">
+                                <div class="empty-state-mini">
+                                    <i class="fas fa-inbox"></i>
+                                    <span class="ms-2">Nenhum chamado disponível</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção: Histórico (chamados onde atuei) - colapsada por padrão -->
+                <div class="chamados-section mb-4" id="secaoHistorico">
+                    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2" style="color: #8b5cf6;"></i>
+                            <span style="color: #a78bfa;">Histórico (onde atuei)</span>
+                            <span class="badge ms-2" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);" id="countHistorico">0</span>
+                        </h5>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('historico')" id="btnToggleHistorico" style="border-color: #8b5cf6; color: #8b5cf6;">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="section-content" id="contentHistorico" style="display: none;">
+                        <div class="row" id="gridHistorico">
+                            <div class="col-12">
+                                <div class="empty-state-mini">
+                                    <i class="fas fa-folder-open"></i>
+                                    <span class="ms-2">Nenhum chamado no histórico</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total geral -->
+                <div class="text-center text-muted mt-3">
+                    <small><i class="fas fa-info-circle me-1"></i>Total: <span id="countChamados">0</span> chamados</small>
+                </div>
+            </div>
+
+            <!-- TAB: Kanban View -->
+            <div class="tab-pane fade" id="kanban" role="tabpanel">
+                <div class="kanban-container" id="kanbanContainer">
+                    <!-- N0 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n0">N0 - Acesso Remoto</span>
+                                    <span class="kanban-column-count" id="count-N0">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">CCO</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N0" 
+                                 data-nivel="N0"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N0')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N1 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n1">N1 - Verificação Chip</span>
+                                    <span class="kanban-column-count" id="count-N1">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">Atendimento</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N1" 
+                                 data-nivel="N1"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N1')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N2 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n2">N2 - Base/Sistema</span>
+                                    <span class="kanban-column-count" id="count-N2">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">Sistema</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N2" 
+                                 data-nivel="N2"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N2')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N3 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n3">N3 - Checklist</span>
+                                    <span class="kanban-column-count" id="count-N3">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">Garagem</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N3" 
+                                 data-nivel="N3"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N3')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N4 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n4">N4 - In Loco</span>
+                                    <span class="kanban-column-count" id="count-N4">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">Time de Campo</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N4" 
+                                 data-nivel="N4"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N4')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N5 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n5">N5 - Erros Splash</span>
+                                    <span class="kanban-column-count" id="count-N5">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">Tecnologia</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N5" 
+                                 data-nivel="N5"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N5')">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- N6 -->
+                    <div class="kanban-column-wrapper">
+                        <div class="card h-100">
+                            <div class="card-header text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="badge nivel-n6">N6 - P&D</span>
+                                    <span class="kanban-column-count" id="count-N6">0</span>
+                                </div>
+                                <small class="d-block mt-1 text-muted">P&D</small>
+                            </div>
+                            <div class="card-body kanban-column" 
+                                 id="kanban-N6" 
+                                 data-nivel="N6"
+                                 ondragover="handleDragOver(event)" 
+                                 ondragleave="handleDragLeave(event)" 
+                                 ondrop="handleDrop(event, 'N6')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Table View -->
+            <div class="tab-pane fade" id="tabela" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-table me-2"></i>Lista de Chamados
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tabelaChamados">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Prefixo</th>
+                                        <th>Patrimônio</th>
+                                        <th>Projeto</th>
+                                        <th>Garagem</th>
+                                        <th>Classificação</th>
+                                        <th>Nível</th>
+                                        <th>Status</th>
+                                        <th>SLA</th>
+                                        <th>Criado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyChamados">
+                                    <tr>
+                                        <td colspan="12" class="text-center text-muted">
+                                            Carregando chamados...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Paginação da Tabela -->
+                        <div id="tabelaPaginacao" class="justify-content-between align-items-center mt-3" style="display:none;">
+                            <div class="text-muted small" id="tabelaPaginacaoInfo"></div>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0" id="tabelaPaginacaoNav"></ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Novo Chamado -->
+    <div class="modal fade" id="modalNovoChamado" tabindex="-1" aria-labelledby="modalNovoChamadoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98)); border: 2px solid rgba(76, 175, 80, 0.3);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(76, 175, 80, 0.3);">
+                    <h5 class="modal-title" id="modalNovoChamadoLabel" style="color: #4CAF50;">
+                        <i class="fas fa-plus-circle me-2"></i>Abrir Novo Chamado
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tabs de navegação -->
+                    <ul class="nav nav-tabs mb-3" id="chamadoTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual" type="button" role="tab" aria-controls="individual" aria-selected="true">
+                                <i class="fas fa-ticket-alt me-2"></i>Criar Chamado
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="multiplo-tab" data-bs-toggle="tab" data-bs-target="#multiplo" type="button" role="tab" aria-controls="multiplo" aria-selected="false">
+                                <i class="fas fa-layer-group me-2"></i>Criar Múltiplos
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Conteúdo das tabs -->
+                    <div class="tab-content" id="chamadoTabContent">
+                        <!-- Tab: Criar Individual -->
+                        <div class="tab-pane fade show active" id="individual" role="tabpanel" aria-labelledby="individual-tab">
+                            <form id="formNovoChamado">
+                        <div class="row g-3">
+                            <!-- Campo para digitar patrimônios (um ou mais) -->
+                            <div class="col-12">
+                                <label class="form-label">Patrimônio(s) *</label>
+                                <textarea id="novoPatrimoniosInput" class="form-control" rows="2" 
+                                    placeholder="Digite um ou mais patrimônios (separados por vírgula ou um por linha)&#10;Ex: PAT-12345, PAT-67890 ou um por linha" required></textarea>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>Digite os patrimônios e clique em "Buscar Dados"
+                                    </small>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="buscarDadosPatrimonios()">
+                                        <i class="fas fa-search me-1"></i>Buscar Dados
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Preview dos equipamentos encontrados -->
+                            <div class="col-12" id="previewEquipamentosContainer" style="display: none;">
+                                <div class="alert alert-info mb-0">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong><i class="fas fa-check-circle me-2"></i>Equipamentos Encontrados</strong>
+                                        <span class="badge bg-success" id="contadorEquipamentosEncontrados">0</span>
+                                    </div>
+                                    <div id="listaEquipamentosEncontrados" style="max-height: 150px; overflow-y: auto; font-size: 0.85em;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Alerta para patrimônios não encontrados -->
+                            <div class="col-12" id="alertPatrimoniosNaoEncontrados" style="display: none;">
+                                <div class="alert alert-warning mb-0">
+                                    <strong><i class="fas fa-exclamation-triangle me-2"></i>Patrimônios não encontrados:</strong>
+                                    <span id="listaPatrimoniosNaoEncontrados"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Chamado *</label>
+                                <select id="novoTipo" class="form-select" required>
+                                    <option value="">Selecione o tipo...</option>
+                                    <option value="manutencao">🔧 Manutenção</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Campos ocultos que serão preenchidos automaticamente -->
+                            <input type="hidden" id="novoPatrimonio" value="">
+                            <input type="hidden" id="novoPrefixo" value="">
+                            <input type="hidden" id="novoProjeto" value="">
+                            <input type="hidden" id="novoGaragem" value="">
+                            <input type="hidden" id="novoSerial" value="">
+                            
+                            <div class="col-12">
+                                <label class="form-label">Departamento Destino *</label>
+                                <select id="novoDepartamentoDestino" class="form-select" required>
+                                    <option value="">Selecione o departamento...</option>
+                                </select>
+                            </div>
+                            <div class="col-12" id="novaClassificacaoContainer" style="display: none;">
+                                <label class="form-label">Classificação *</label>
+                                <select id="novaClassificacao" class="form-select" onchange="onNovaClassificacaoChange()">
+                                    <option value="">Selecione a classificação...</option>
+                                </select>
+                            </div>
+                            <!-- Campos N4 para criação de chamado -->
+                            <div class="col-12" id="novoCamposN4Container" style="display: none;">
+                                <div class="alert alert-info mb-2" style="background: rgba(0, 188, 212, 0.1); border-color: rgba(0, 188, 212, 0.3);">
+                                    <i class="fas fa-user-cog me-2"></i>
+                                    <strong>N4 - In Loco:</strong> Selecione o técnico responsável pela ordem de serviço
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Técnico Responsável *</label>
+                                    <select id="novoTecnicoResponsavel" class="form-select">
+                                        <option value="">Selecione o técnico...</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Equipe de Apoio</label>
+                                    <select id="novoEquipeEmails" class="form-select" multiple size="3">
+                                    </select>
+                                    <small class="text-muted">Segure Ctrl para selecionar múltiplos</small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Descrição</label>
+                                <textarea id="novoDescricao" class="form-control" rows="3" placeholder="Descreva o problema detalhadamente..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                        </div>
+                        
+                        <!-- Tab: Criar Múltiplos -->
+                        <div class="tab-pane fade" id="multiplo" role="tabpanel" aria-labelledby="multiplo-tab">
+                            <form id="formMultiplosChamados">
+                                <div class="alert alert-info mb-3" style="background: rgba(0, 188, 212, 0.1); border-color: rgba(0, 188, 212, 0.3);">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Criação em lote:</strong> Selecione os filtros abaixo para criar chamados automaticamente para todos os equipamentos encontrados.
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Projeto *</label>
+                                        <select id="multiploProjeto" class="form-select" required onchange="onMultiploProjetoChange()">
+                                            <option value="">Selecione o projeto...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Garagem *</label>
+                                        <select id="multiploGaragem" class="form-select" required>
+                                            <option value="">Selecione o projeto primeiro...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Status das Máquinas *</label>
+                                        <select id="multiploStatus" class="form-select" required>
+                                            <option value="">Selecione o status...</option>
+                                            <option value="ONLINE">🟢 Online</option>
+                                            <option value="ATENÇÃO">🟡 Atenção</option>
+                                            <option value="ALERTA">🟠 Alerta</option>
+                                            <option value="INATIVO">🔴 Inativo</option>
+                                            <option value="MANUTENCAO">🔧 Manutenção</option>
+                                            <option value="DIVERGENTES">⚠️ Divergentes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Departamento Destino *</label>
+                                        <select id="multiploDepartamento" class="form-select" required onchange="onMultiploDepartamentoChange()">
+                                            <option value="">Selecione o departamento...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12" id="multiploClassificacaoContainer" style="display: none;">
+                                        <label class="form-label">Classificação *</label>
+                                        <select id="multiploClassificacao" class="form-select">
+                                            <option value="">Selecione a classificação...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12" id="multiploCamposN4Container" style="display: none;">
+                                        <div class="alert alert-info mb-2" style="background: rgba(0, 188, 212, 0.1); border-color: rgba(0, 188, 212, 0.3);">
+                                            <i class="fas fa-user-cog me-2"></i>
+                                            <strong>N4 - In Loco:</strong> Selecione o técnico responsável (mesmo técnico para todos)
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Técnico Responsável *</label>
+                                            <select id="multiploTecnicoResponsavel" class="form-select">
+                                                <option value="">Selecione o técnico...</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Equipe de Apoio</label>
+                                            <select id="multiploEquipeApoio" class="form-select" multiple size="3">
+                                            </select>
+                                            <small class="text-muted">Segure Ctrl para selecionar múltiplos</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Descrição</label>
+                                        <textarea id="multiploDescricao" class="form-control" rows="2" placeholder="Descrição que será aplicada a todos os chamados..."></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(76, 175, 80, 0.3);">
+                                            <div class="card-body">
+                                                <h6 class="card-title text-muted mb-2"><i class="fas fa-search me-2"></i>Prévia de Equipamentos</h6>
+                                                <div id="multiploPreview" class="text-muted">
+                                                    <small>Selecione os filtros acima para ver quais equipamentos serão incluídos</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- Botão Individual -->
+                    <button type="button" id="btnCriarChamado" class="btn btn-primary" onclick="criarChamado()" style="display: none;">
+                        <i class="fas fa-check me-2"></i><span>Criar Chamado</span>
+                    </button>
+                    <!-- Botão Múltiplo -->
+                    <button type="button" id="btnCriarMultiplos" class="btn btn-primary" onclick="criarChamadosMultiplos()" style="display: none;">
+                        <i class="fas fa-check-double me-2"></i><span>Criar Chamados</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offcanvas: Detalhes do Chamado -->
+    <div class="offcanvas offcanvas-end offcanvas-detail" tabindex="-1" id="offcanvasDetalhe">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="detalheId">CHM-2024-001</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="offcanvasDetalheBody">
+            <!-- Conteúdo será preenchido via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal: Ação no Chamado -->
+    <div class="modal fade" id="modalAcao" tabindex="-1" aria-labelledby="modalAcaoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98)); border: 2px solid rgba(76, 175, 80, 0.3);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(76, 175, 80, 0.3);">
+                    <h5 class="modal-title" id="modalAcaoLabel" style="color: #4CAF50;">
+                        <i class="fas fa-cog me-2"></i>Ação no Chamado
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="acaoChamadoId">
+                    <input type="hidden" id="acaoFromDragDrop" value="false">
+                    <input type="hidden" id="acaoDragDropNivel">
+                    
+                    <!-- Drag & Drop Indicator -->
+                    <div class="drag-source-indicator d-none" id="dragSourceIndicator">
+                        <i class="fas fa-arrows-alt me-2 text-warning"></i>
+                        <span id="dragSourceText">Movendo chamado para nível...</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Selecione a Ação</label>
+                        <div id="acaoOptions">
+                            <div class="action-option-enhanced" id="optionGoto" onclick="selecionarAcao('goto')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="action-icon action-icon-goto">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input class="form-check-input d-none" type="radio" name="tipoAcao" id="acaoGoto" value="goto">
+                                        <div class="fw-bold">Enviar para nível específico</div>
+                                        <div class="text-muted small">Escolher o departamento e classificação de destino</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-muted"></i>
+                                </div>
+                            </div>
+                            <div class="action-option-enhanced" id="optionClose" onclick="selecionarAcao('close')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="action-icon action-icon-close">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input class="form-check-input d-none" type="radio" name="tipoAcao" id="acaoClose" value="close">
+                                        <div class="fw-bold">Finalizar Chamado</div>
+                                        <div class="text-muted small">Encerrar em qualquer fase</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-muted"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Opção especial para departamento Atendimento -->
+                            <div class="action-option-enhanced" id="optionComplete" onclick="selecionarAcao('complete')" style="display: none;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="action-icon action-icon-close">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input class="form-check-input d-none" type="radio" name="tipoAcao" id="acaoComplete" value="complete">
+                                        <div class="fw-bold">Concluir Verificação</div>
+                                        <div class="text-muted small">Retornar ao setor de origem para continuidade</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-muted"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Opção Atualizar: disponível para todos os departamentos -->
+                            <div class="action-option-enhanced" id="optionUpdate" onclick="selecionarAcao('update')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="action-icon action-icon-update">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input class="form-check-input d-none" type="radio" name="tipoAcao" id="acaoUpdate" value="update">
+                                        <div class="fw-bold">Atualizar Andamento</div>
+                                        <div class="text-muted small">Registrar progresso sem transferir responsabilidade</div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-muted"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <!-- Seleção de Departamento e Classificação -->
+                    <div class="mb-3" id="selectDepartamentoContainer" style="display: none;">
+                        <label class="form-label" style="color: #ffffff; font-weight: 500;">Departamento Destino *</label>
+                        <select id="acaoDepartamentoDestino" class="form-select" onchange="atualizarClassificacoesAcao()" style="background-color: #1a1a2e; color: #ffffff; border-color: rgba(76, 175, 80, 0.5);">
+                            <option value="" style="background-color: #1a1a2e; color: #ffffff;">Selecione o departamento...</option>
+                            <option value="CCO" style="background-color: #1a1a2e; color: #ffffff;">CCO</option>
+                            <option value="Operações" style="background-color: #1a1a2e; color: #ffffff;">Operações</option>
+                            <option value="TI" style="background-color: #1a1a2e; color: #ffffff;">TI</option>
+                            <option value="P&D" style="background-color: #1a1a2e; color: #ffffff;">P&amp;D</option>
+                            <option value="Atendimento" style="background-color: #1a1a2e; color: #ffffff;">Atendimento</option>
+                            <option value="Business Intelligence (BI)" style="background-color: #1a1a2e; color: #ffffff;">Business Intelligence (BI)</option>
+                            <option value="Prestador" style="background-color: #1a1a2e; color: #ffffff;">Prestador</option>
+                            <option value="Gerência" style="background-color: #1a1a2e; color: #ffffff;">Gerência</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3" id="selectClassificacaoContainer" style="display: none;">
+                        <label class="form-label" style="color: #ffffff; font-weight: 500;">Classificação *</label>
+                        <select id="acaoClassificacao" class="form-select" onchange="onClassificacaoChange()" style="background-color: #1a1a2e; color: #ffffff; border-color: rgba(76, 175, 80, 0.5);">
+                            <option value="" style="background-color: #1a1a2e; color: #ffffff;">Selecione a classificação...</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="acaoNivelDestino">
+                    
+                    <!-- ============================================= -->
+                    <!-- CAMPOS N4: Técnico Responsável e Equipe -->
+                    <!-- ============================================= -->
+                    <div id="camposN4Container" class="card bg-dark mb-3" style="display: none; border: 1px solid rgba(255, 193, 7, 0.5);">
+                        <div class="card-header bg-warning bg-opacity-25 py-2">
+                            <i class="fas fa-user-cog me-2"></i>
+                            <strong>Atribuição N4 - In Loco</strong>
+                            <span class="text-muted small ms-2">(obrigatório para N4)</span>
+                        </div>
+                        <div class="card-body py-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label class="form-label">
+                                        <i class="fas fa-user me-1 text-warning"></i>
+                                        Técnico Responsável <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="acaoTecnicoResponsavel" class="form-select" required>
+                                        <option value="">Selecione o técnico...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <i class="fas fa-users me-1 text-info"></i>
+                                        Equipe de Apoio <span class="text-muted small">(opcional)</span>
+                                    </label>
+                                    <select id="acaoEquipeEmails" class="form-select" multiple style="height: 100px;">
+                                    </select>
+                                    <div class="form-text text-muted small mt-1">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Segure Ctrl/Cmd para selecionar múltiplos técnicos.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Upload de Anexos -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-paperclip me-1"></i>Anexar Documentos/Imagens
+                            <span class="text-muted small">(opcional)</span>
+                        </label>
+                        <input type="file" id="acaoAnexos" class="form-control" multiple 
+                               accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt">
+                        <div class="form-text text-muted small mt-1">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Formatos aceitos: Imagens, PDF, Word, Excel, Texto. Máx: 10MB por arquivo.
+                        </div>
+                        <div id="listaAnexos" class="mt-2"></div>
+                    </div>
+
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Comentário <span class="comment-required-indicator">* OBRIGATÓRIO</span>
+                        </label>
+                        <textarea id="acaoComentario" class="form-control comment-textarea" rows="4" 
+                                  placeholder="Descreva o motivo da ação, observações relevantes ou próximos passos..."
+                                  required></textarea>
+                        <div class="form-text text-muted small mt-1">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Toda ação requer um comentário para registro no histórico.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(76, 175, 80, 0.3);">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btnExecutarAcao" onclick="executarAcao()" disabled>
+                        <i class="fas fa-check me-2"></i>Confirmar Ação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Variáveis de configuração passadas do backend -->
+    <script>
+        const USER_NAME = '{{ user.nome if user.nome else (user.email.split("@")[0] if user.email else "Usuário") }}';
+        const USER_EMAIL = '{{ user.email if user.email else "usuario@wifimaxx.com" }}';
+        const USER_DEPARTMENT = '{{ (user.departamento if user.departamento else "") | safe }}';
+        const USER_ROLE = '{{ user.role if user.role else "user" }}';
+        const IS_ADMIN = {{ 'true' if user.is_admin else 'false' }};
+        const USER_ALLOWED_COMPANIES = {{ allowed_companies | tojson | safe }};
+    </script>
+    
+    <script src="{{ url_for('static', path='js/chamados.js') }}?v={{ cache_version }}"></script>
+    <script src="{{ url_for('static', path='js/chamados_multiplos.js') }}?v={{ cache_version }}"></script>
+    <script src="/static/js/chat.js"></script>
+</body>
+</html>

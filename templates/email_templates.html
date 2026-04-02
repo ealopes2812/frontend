@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="format-detection" content="telephone=no">
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('wifimaxx-theme') || localStorage.getItem('theme');
+                if (!saved) saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+            } catch(e) { document.documentElement.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+
+    <title>Modelos de E-mail — WifiMaxx Monitor</title>
+    <link rel="icon" type="image/png" href="/static/logo.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon-180.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v={{ cache_version }}">
+    <link rel="stylesheet" href="/static/mobile-optimizations.css?v={{ cache_version }}">
+    <link rel="stylesheet" href="/static/css/glassmorphism.css?v={{ cache_version }}">
+    <link rel="stylesheet" href="/static/css/theme-toggle.css?v={{ cache_version }}">
+    <link rel="stylesheet" href="/static/css/theme-integration.css?v={{ cache_version }}">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preload" href="/static/mobile-optimizations.js" as="script">
+    <link rel="preload" href="/static/js/theme-controller.js" as="script">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <style>
+        /* ========== VARIÁVEIS DE COR ========== */
+        :root {
+            --em-bg: #f0f2f5;
+            --em-surface: #ffffff;
+            --em-surface-alt: #f8f9fb;
+            --em-border: #e2e5ea;
+            --em-text: #1e293b;
+            --em-text-secondary: #64748b;
+            --em-accent: #6366f1;
+            --em-accent-soft: rgba(99, 102, 241, 0.08);
+            --em-accent-hover: #4f46e5;
+            --em-success: #22c55e;
+            --em-warning: #f59e0b;
+            --em-danger: #ef4444;
+            --em-radius: 14px;
+            --em-radius-sm: 10px;
+            --em-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --em-shadow-lg: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        [data-theme="dark"] {
+            --em-bg: #0f172a;
+            --em-surface: #1e293b;
+            --em-surface-alt: #1a2332;
+            --em-border: #334155;
+            --em-text: #e2e8f0;
+            --em-text-secondary: #94a3b8;
+            --em-accent: #818cf8;
+            --em-accent-soft: rgba(129, 140, 248, 0.12);
+            --em-accent-hover: #a5b4fc;
+            --em-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.15);
+            --em-shadow-lg: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        body {
+            background: var(--em-bg) !important;
+            color: var(--em-text) !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        /* ========== HEADER ========== */
+        .em-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--em-border);
+            background: var(--em-surface);
+        }
+
+        .em-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .em-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--em-border);
+            background: transparent;
+            color: var(--em-text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .em-back-btn:hover {
+            background: var(--em-accent-soft);
+            color: var(--em-accent);
+            border-color: var(--em-accent);
+            text-decoration: none;
+        }
+
+        .em-page-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--em-text);
+        }
+
+        /* ========== TABS ========== */
+        .em-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--em-border);
+            background: var(--em-surface);
+        }
+
+        .em-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--em-text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .em-tab:hover {
+            color: var(--em-text);
+            background: var(--em-accent-soft);
+        }
+
+        .em-tab.active {
+            color: var(--em-accent);
+            border-bottom-color: var(--em-accent);
+        }
+
+        .em-tab-icon { font-size: 16px; }
+
+        /* ========== LAYOUT PRINCIPAL ========== */
+        .em-main {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 0;
+            height: calc(100vh - 110px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 991px) {
+            .em-main {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow: visible;
+            }
+        }
+
+        /* ========== PAINEL DE CONFIGURAÇÃO ========== */
+        .em-config {
+            padding: 24px;
+            border-right: 1px solid var(--em-border);
+            background: var(--em-surface);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 991px) {
+            .em-config {
+                border-right: none;
+                border-bottom: 1px solid var(--em-border);
+            }
+        }
+
+        .em-config-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--em-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 20px;
+        }
+
+        .em-field { margin-bottom: 18px; }
+
+        .em-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--em-text);
+            margin-bottom: 6px;
+        }
+
+        .em-field label .req { color: var(--em-danger); margin-left: 2px; }
+
+        .em-field select,
+        .em-field input[type="date"],
+        .em-field input[type="time"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--em-border);
+            border-radius: var(--em-radius-sm);
+            background: var(--em-surface);
+            color: var(--em-text);
+            font-size: 14px;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .em-field select:focus,
+        .em-field input:focus {
+            outline: none;
+            border-color: var(--em-accent);
+            box-shadow: 0 0 0 3px var(--em-accent-soft);
+        }
+
+        .em-field select[multiple] { min-height: 120px; }
+
+        .em-hint {
+            font-size: 12px;
+            color: var(--em-text-secondary);
+            margin-top: 4px;
+        }
+
+        .em-generate-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--em-radius-sm);
+            background: var(--em-accent);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .em-generate-btn:hover {
+            background: var(--em-accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--em-shadow-lg);
+        }
+
+        .em-generate-btn:active { transform: translateY(0); }
+
+        /* ========== PAINEL DE PREVIEW ========== */
+        .em-preview {
+            display: flex;
+            flex-direction: column;
+            background: var(--em-bg);
+            overflow: hidden;
+        }
+
+        .em-preview-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 24px;
+            background: var(--em-surface);
+            border-bottom: 1px solid var(--em-border);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .em-toolbar-status {
+            font-size: 13px;
+            color: var(--em-text-secondary);
+        }
+
+        .em-toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .em-copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border: 1.5px solid var(--em-border);
+            border-radius: 8px;
+            background: var(--em-surface);
+            color: var(--em-text);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .em-copy-btn:hover {
+            border-color: var(--em-accent);
+            color: var(--em-accent);
+            background: var(--em-accent-soft);
+        }
+
+        .em-copy-btn.copied {
+            border-color: var(--em-success) !important;
+            color: var(--em-success) !important;
+            background: rgba(34, 197, 94, 0.08) !important;
+        }
+
+        .em-copy-btn i { font-size: 14px; }
+
+        /* Email mockup */
+        .em-email-mockup {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .em-email-frame {
+            max-width: 720px;
+            margin: 0 auto;
+            background: var(--em-surface);
+            border-radius: var(--em-radius);
+            border: 1px solid var(--em-border);
+            box-shadow: var(--em-shadow-lg);
+            overflow: hidden;
+        }
+
+        .em-email-chrome {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--em-border);
+            background: var(--em-surface-alt);
+        }
+
+        .em-email-meta { display: flex; flex-direction: column; gap: 6px; }
+
+        .em-email-meta-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .em-email-meta-label {
+            color: var(--em-text-secondary);
+            font-weight: 500;
+            min-width: 55px;
+        }
+
+        .em-email-meta-value { color: var(--em-text); }
+        .em-email-meta-value.subject { font-weight: 600; }
+
+        .em-email-body {
+            padding: 28px 24px;
+            min-height: 200px;
+        }
+
+        /* Estilos que se aplicam DENTRO do preview para manter legibilidade */
+        .em-email-body p { color: var(--em-text); }
+        .em-email-body strong { color: var(--em-text); }
+        .em-email-body li { color: var(--em-text); }
+        .em-email-body th { background: var(--em-surface-alt) !important; color: var(--em-text) !important; border-color: var(--em-border) !important; }
+        .em-email-body td { color: var(--em-text); border-color: var(--em-border) !important; }
+
+        /* Estado vazio */
+        .em-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            color: var(--em-text-secondary);
+            text-align: center;
+        }
+
+        .em-empty-state i { font-size: 48px; opacity: 0.25; margin-bottom: 16px; }
+        .em-empty-state p { font-size: 14px; margin: 0; line-height: 1.7; }
+
+        /* ========== TOAST ========== */
+        .em-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            animation: emSlideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .em-toast.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .em-toast.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .em-toast.warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .em-toast.info    { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+
+        [data-theme="dark"] .em-toast.success { background: #052e16; color: #86efac; border-color: #166534; }
+        [data-theme="dark"] .em-toast.error   { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+        [data-theme="dark"] .em-toast.warning { background: #451a03; color: #fcd34d; border-color: #92400e; }
+        [data-theme="dark"] .em-toast.info    { background: #1e1b4b; color: #a5b4fc; border-color: #3730a3; }
+
+        @keyframes emSlideIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes emSlideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+
+        /* Row grid */
+        .em-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        /* Scrollbar */
+        .em-config::-webkit-scrollbar, .em-email-mockup::-webkit-scrollbar { width: 6px; }
+        .em-config::-webkit-scrollbar-thumb, .em-email-mockup::-webkit-scrollbar-thumb { background: var(--em-border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="em-header">
+        <div class="em-header-left">
+            <a href="/dashboard" class="em-back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Dashboard
+            </a>
+            <h1 class="em-page-title">Modelos de E-mail</h1>
+        </div>
+        <button class="em-back-btn" onclick="logout()" title="Sair">
+            <i class="bi bi-box-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- TABS DE SELEÇÃO DE TEMPLATE -->
+    <div class="em-tabs">
+        <button class="em-tab active" onclick="selectTemplate('solicitar_acesso', this)" id="tab-solicitar_acesso">
+            <i class="bi bi-key em-tab-icon"></i>
+            Solicitar Acesso
+        </button>
+        <button class="em-tab" onclick="selectTemplate('verificacao_hotspots', this)" id="tab-verificacao_hotspots">
+            <i class="bi bi-lightning-charge em-tab-icon"></i>
+            Verificação de Hotspots
+        </button>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL: CONFIG + PREVIEW -->
+    <div class="em-main">
+        <!-- PAINEL ESQUERDO: CONFIGURAÇÃO -->
+        <div class="em-config" id="configPanel">
+            <div class="em-config-title" id="configTitle">Solicitação de Acesso</div>
+            <div id="configBody"></div>
+        </div>
+
+        <!-- PAINEL DIREITO: PREVIEW DO EMAIL -->
+        <div class="em-preview">
+            <!-- Toolbar com botões de copiar -->
+            <div class="em-preview-toolbar">
+                <span class="em-toolbar-status" id="statusMessage">Preencha os campos e gere o e-mail</span>
+                <div class="em-toolbar-actions">
+                    <button class="em-copy-btn" onclick="copiarAssunto()" id="btnCopiarAssunto" title="Copiar linha de assunto">
+                        <i class="bi bi-tag"></i> Assunto
+                    </button>
+                    <button class="em-copy-btn" onclick="copiarEmail()" id="btnCopiarEmail" title="Copiar corpo do e-mail com formatação">
+                        <i class="bi bi-clipboard2"></i> Copiar E-mail
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mockup de cliente de e-mail -->
+            <div class="em-email-mockup">
+                <div class="em-email-frame" id="emailFrame">
+                    <div class="em-email-chrome">
+                        <div class="em-email-meta">
+                            <div class="em-email-meta-row">
+                                <span class="em-email-meta-label">De:</span>
+                                <span class="em-email-meta-value">WifiMaxx &lt;monitoramento@wifimaxx.com.br&gt;</span>
+                            </div>
+                            <div class="em-email-meta-row">
+                                <span class="em-email-meta-label">Assunto:</span>
+                                <span class="em-email-meta-value subject" id="assuntoDisplay">—</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="em-email-body" id="emailPreviewArea">
+                        <div class="em-empty-state">
+                            <i class="bi bi-envelope-open"></i>
+                            <p>O preview do e-mail aparecerá aqui após<br>preencher os campos e clicar em <strong>Gerar E-mail</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input oculto para valor do assunto -->
+    <input type="hidden" id="assuntoEmail" value="">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/toast-helper.js?v={{ cache_version }}"></script>
+    <script src="/static/js/session-manager.js?v={{ cache_version }}"></script>
+    <script src="/static/mobile-optimizations.js?v={{ cache_version }}"></script>
+
+    <script>
+        // ====================================================================
+        // ESTADO GLOBAL
+        // ====================================================================
+        let currentTemplate = 'solicitar_acesso';
+        let equipmentData = [];
+        let REFORCO_IDX = { projetos: [], porProjeto: {}, todos: [] };
+        let lastGeneratedEmailHtml = '';
+
+        // ====================================================================
+        // INICIALIZAÇÃO
+        // ====================================================================
+        document.addEventListener('DOMContentLoaded', async function() {
+            await carregarDadosEquipamentos();
+            configureWorkArea('solicitar_acesso');
+        });
+
+        async function carregarDadosEquipamentos() {
+            try {
+                const response = await fetch('/api/data');
+                if (!response.ok) throw new Error('Falha ao carregar dados');
+                const result = await response.json();
+                equipmentData = Array.isArray(result) ? result : (result.data || []);
+                buildIndex();
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                emToast('Erro ao carregar dados de equipamentos', 'error');
+            }
+        }
+
+        function buildIndex() {
+            const projetos = new Set();
+            const porProjeto = {};
+            const todos = new Set();
+
+            for (const row of equipmentData) {
+                const proj = (row.PROJETO ?? row.Projeto ?? '').toString().trim();
+                const gar = (row.GARAGEM ?? row.Garagem ?? '').toString().trim();
+                if (proj) projetos.add(proj);
+                if (gar) todos.add(gar);
+                if (proj && gar) {
+                    if (!porProjeto[proj]) porProjeto[proj] = new Set();
+                    porProjeto[proj].add(gar);
+                }
+            }
+
+            REFORCO_IDX = {
+                projetos: [...projetos].sort(),
+                porProjeto: Object.fromEntries(
+                    Object.entries(porProjeto).map(([k, v]) => [k, [...v].sort()])
+                ),
+                todos: [...todos].sort()
+            };
+        }
+
+        // ====================================================================
+        // SELEÇÃO DE TEMPLATE (TABS)
+        // ====================================================================
+        function selectTemplate(templateType, tabEl) {
+            currentTemplate = templateType;
+            document.querySelectorAll('.em-tab').forEach(t => t.classList.remove('active'));
+            if (tabEl) tabEl.classList.add('active');
+            resetPreview();
+            configureWorkArea(templateType);
+        }
+
+        function configureWorkArea(templateType) {
+            const configTitle = document.getElementById('configTitle');
+            const configBody = document.getElementById('configBody');
+
+            switch (templateType) {
+                case 'solicitar_acesso':
+                    configTitle.textContent = 'Solicitação de Acesso';
+                    configBody.innerHTML = getFormSolicitarAcesso();
+                    setupSolicitarAcessoEvents();
+                    break;
+                case 'verificacao_hotspots':
+                    configTitle.textContent = 'Verificação de Hotspots';
+                    configBody.innerHTML = getFormVerificacaoHotspots();
+                    setupVerificacaoHotspotsEvents();
+                    break;
+            }
+        }
+
+        function resetPreview() {
+            lastGeneratedEmailHtml = '';
+            document.getElementById('assuntoEmail').value = '';
+            document.getElementById('assuntoDisplay').textContent = '\u2014';
+            document.getElementById('emailPreviewArea').innerHTML = `
+                <div class="em-empty-state">
+                    <i class="bi bi-envelope-open"></i>
+                    <p>O preview do e-mail aparecerá aqui após<br>preencher os campos e clicar em <strong>Gerar E-mail</strong></p>
+                </div>`;
+            document.getElementById('statusMessage').textContent = 'Preencha os campos e gere o e-mail';
+        }
+
+        function setAssunto(text) {
+            document.getElementById('assuntoEmail').value = text;
+            document.getElementById('assuntoDisplay').textContent = text;
+        }
+
+        // ====================================================================
+        // FORMULÁRIO: SOLICITAR ACESSO
+        // ====================================================================
+        function getFormSolicitarAcesso() {
+            return `
+                <div class="em-field">
+                    <label>Projeto <span class="req">*</span></label>
+                    <select id="accessProject">
+                        <option value="">Selecione um projeto...</option>
+                    </select>
+                </div>
+                <div class="em-field">
+                    <label>Garagens / Estações / Terminais <span class="req">*</span></label>
+                    <select id="accessGarages" multiple size="5"></select>
+                    <div class="em-hint">Ctrl+clique para múltiplas seleções</div>
+                </div>
+                <div class="em-field">
+                    <label>Técnicos <span class="req">*</span></label>
+                    <select id="visitTechnicians" multiple size="3"></select>
+                    <div class="em-hint">Ctrl+clique para múltiplas seleções</div>
+                </div>
+                <div class="em-row-2">
+                    <div class="em-field">
+                        <label>Data <span class="req">*</span></label>
+                        <input type="date" id="accessDate">
+                    </div>
+                    <div class="em-field">
+                        <label>Horário <span class="req">*</span></label>
+                        <input type="time" id="accessTime" value="08:00">
+                    </div>
+                </div>
+                <button type="button" class="em-generate-btn" onclick="gerarEmailAcesso()">
+                    <i class="bi bi-envelope-paper"></i>
+                    Gerar E-mail
+                </button>
+            `;
+        }
+
+        function setupSolicitarAcessoEvents() {
+            const selectProjeto = document.getElementById('accessProject');
+            selectProjeto.innerHTML = '<option value="">Selecione um projeto...</option>';
+            REFORCO_IDX.projetos.forEach(proj => {
+                const opt = document.createElement('option');
+                opt.value = proj;
+                opt.textContent = proj;
+                selectProjeto.appendChild(opt);
+            });
+
+            selectProjeto.addEventListener('change', preencherGaragensAcesso);
+            preencherGaragensAcesso();
+            carregarTecnicos();
+
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('accessDate');
+            if (dateInput) { dateInput.value = today; dateInput.min = today; }
+        }
+
+        function preencherGaragensAcesso() {
+            const projeto = document.getElementById('accessProject')?.value || '';
+            const sel = document.getElementById('accessGarages');
+            sel.innerHTML = '';
+            const garagens = (projeto && REFORCO_IDX.porProjeto[projeto]) ? REFORCO_IDX.porProjeto[projeto] : REFORCO_IDX.todos;
+            garagens.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o); });
+        }
+
+        async function carregarTecnicos() {
+            try {
+                const resp = await fetch('/api/tecnico');
+                const result = await resp.json();
+                const sel = document.getElementById('visitTechnicians');
+                if (!sel) return;
+                sel.innerHTML = '';
+                if (result.success && result.data) {
+                    result.data.forEach(t => {
+                        const o = document.createElement('option');
+                        o.value = JSON.stringify({ nome: t.nome, cpf: t.cpf || '000.000.000-00', rg: t.rg || '00.000.000-0' });
+                        o.textContent = t.nome;
+                        sel.appendChild(o);
+                    });
+                }
+            } catch (e) { console.error('Erro ao carregar técnicos:', e); }
+        }
+
+        function gerarEmailAcesso() {
+            const garagens = Array.from(document.getElementById('accessGarages')?.selectedOptions || []).map(o => o.value);
+            const tecnicosRaw = Array.from(document.getElementById('visitTechnicians')?.selectedOptions || []).map(o => o.value);
+            const data = document.getElementById('accessDate')?.value || '';
+            const hora = document.getElementById('accessTime')?.value || '08:00';
+
+            if (!garagens.length) { emToast('Selecione ao menos uma garagem', 'warning'); return; }
+
+            const tecnicos = tecnicosRaw.map(t => { try { return JSON.parse(t); } catch { return { nome: t }; } });
+            const dataFmt = data ? new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '';
+            const greet = getGreeting();
+
+            let html = `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.8; color: #1e293b; max-width: 640px;">
+<p style="margin: 0 0 22px 0;"><strong>${greet},</strong></p>
+<p style="margin: 0 0 18px 0;">Gostaríamos de solicitar autorização de acesso para os técnicos da WifiMaxx realizarem manutenção nos equipamentos de monitoramento nas seguintes localidades:</p>
+<ul style="margin: 8px 0 22px 0; padding-left: 24px;">${garagens.map(g => `<li style="margin: 5px 0;"><strong>${g}</strong></li>`).join('')}</ul>
+<p style="margin: 0 0 10px 0;"><strong>Data:</strong> ${dataFmt}</p>
+<p style="margin: 0 0 22px 0;"><strong>Horário previsto:</strong> ${hora}</p>`;
+
+            if (tecnicos.length > 0) {
+                html += `<p style="margin: 0 0 10px 0;"><strong>Técnicos responsáveis:</strong></p>
+<table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; margin: 0 0 26px 0; font-size: 13px; max-width: 480px;">
+<thead><tr style="background-color: #f1f5f9;"><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">Nome</th><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">CPF</th><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">RG</th></tr></thead>
+<tbody>${tecnicos.map(t => `<tr><td style="border: 1px solid #cbd5e1; padding: 9px 14px;">${t.nome}</td><td style="border: 1px solid #cbd5e1; padding: 9px 14px;">${t.cpf || '-'}</td><td style="border: 1px solid #cbd5e1; padding: 9px 14px;">${t.rg || '-'}</td></tr>`).join('')}</tbody>
+</table>`;
+            }
+
+            html += `<p style="margin: 0 0 18px 0;">Agradecemos a colaboração.</p>
+<p style="margin: 22px 0 0 0;">Atenciosamente,<br><strong>Equipe WifiMaxx</strong></p>
+</div>`;
+
+            lastGeneratedEmailHtml = html;
+            document.getElementById('emailPreviewArea').innerHTML = html;
+            setAssunto(`Solicitação de Acesso \u2014 ${garagens.join(', ')} \u2014 ${dataFmt}`);
+            document.getElementById('statusMessage').textContent = 'E-mail gerado com sucesso';
+            emToast('E-mail gerado!', 'success');
+        }
+
+        // ====================================================================
+        // FORMULÁRIO: VERIFICAÇÃO DE HOTSPOTS
+        // ====================================================================
+        function getFormVerificacaoHotspots() {
+            return `
+                <div class="em-field">
+                    <label>Projeto <span class="req">*</span></label>
+                    <select id="verificacaoProject">
+                        <option value="">Selecione um projeto...</option>
+                    </select>
+                </div>
+                <div class="em-field">
+                    <label>Garagens para Verificação <span class="req">*</span></label>
+                    <select id="verificacaoGarages" multiple size="6"></select>
+                    <div class="em-hint">Selecione garagens com problemas de comunicação</div>
+                </div>
+                <button type="button" class="em-generate-btn" onclick="gerarEmailVerificacao()">
+                    <i class="bi bi-lightning-charge"></i>
+                    Gerar Verificação
+                </button>
+            `;
+        }
+
+        function setupVerificacaoHotspotsEvents() {
+            const sel = document.getElementById('verificacaoProject');
+            sel.innerHTML = '<option value="">Selecione um projeto...</option>';
+            REFORCO_IDX.projetos.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o); });
+            sel.addEventListener('change', preencherGaragensVerificacao);
+            preencherGaragensVerificacao();
+        }
+
+        function preencherGaragensVerificacao() {
+            const projeto = document.getElementById('verificacaoProject')?.value || '';
+            const sel = document.getElementById('verificacaoGarages');
+            sel.innerHTML = '';
+            const garagens = (projeto && REFORCO_IDX.porProjeto[projeto]) ? REFORCO_IDX.porProjeto[projeto] : REFORCO_IDX.todos;
+            garagens.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o); });
+        }
+
+        function gerarEmailVerificacao() {
+            const garagens = Array.from(document.getElementById('verificacaoGarages')?.selectedOptions || []).map(o => o.value.trim());
+            const projeto = document.getElementById('verificacaoProject')?.value || '';
+
+            if (!garagens.length) { emToast('Selecione ao menos uma garagem', 'warning'); return; }
+
+            const garSet = new Set(garagens.map(g => g.toLowerCase().trim()));
+            const projNorm = projeto.toLowerCase().trim();
+            const semComunicacao = [];
+            const emManutencao = [];
+            const seen = new Set();
+
+            for (const r of equipmentData) {
+                const proj = (r.PROJETO ?? r.Projeto ?? '').toString().trim();
+                const gar = (r.GARAGEM ?? r.Garagem ?? '').toString().trim();
+                const prefixo = (r.PREFIXO ?? r.Prefixo ?? '').toString().trim();
+                const monitorBI = (r['Monitoramento BI'] ?? '').toString().trim().toLowerCase();
+                const statusRaw = (r.Status ?? r.STATUS ?? '').toString().trim().toUpperCase();
+
+                if (!prefixo || seen.has(prefixo)) continue;
+                if (projeto && proj.toLowerCase().trim() !== projNorm) continue;
+                if (!garSet.has(gar.toLowerCase().trim())) continue;
+
+                const isManutencao = statusRaw.includes('GARAGEM_M') ||
+                    monitorBI.includes('manuten\u00e7\u00e3o') || monitorBI.includes('manutencao');
+                const isSemCom = monitorBI.includes('aten\u00e7\u00e3o') || monitorBI.includes('atencao') ||
+                    monitorBI.includes('alerta') || monitorBI.includes('inativ');
+
+                if (isManutencao) { emManutencao.push({ prefixo, status: 'Em Manuten\u00e7\u00e3o' }); seen.add(prefixo); }
+                else if (isSemCom) { semComunicacao.push({ prefixo, status: 'Sem comunica\u00e7\u00e3o' }); seen.add(prefixo); }
+            }
+
+            semComunicacao.sort((a, b) => a.prefixo.localeCompare(b.prefixo));
+            emManutencao.sort((a, b) => a.prefixo.localeCompare(b.prefixo));
+
+            const greet = getGreeting();
+            setAssunto(`Verificação de Hotspots \u2014 ${garagens.join(', ')}`);
+
+            const emailHtml = montarEmailVerificacaoHtml({ horario: greet, totalSemComunicacao: semComunicacao.length, semComunicacao, emManutencao });
+            lastGeneratedEmailHtml = emailHtml;
+            document.getElementById('emailPreviewArea').innerHTML = emailHtml;
+            document.getElementById('statusMessage').textContent = `${semComunicacao.length} sem comunicação, ${emManutencao.length} em manutenção`;
+            emToast('Verificação gerada!', 'success');
+        }
+
+        function montarEmailVerificacaoHtml({ horario, totalSemComunicacao, semComunicacao, emManutencao }) {
+            let html = `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.8; color: #1e293b; max-width: 640px;">
+<p style="margin: 0 0 22px 0;"><strong>${horario},</strong></p>`;
+
+            if (totalSemComunicacao > 0) {
+                html += `<p style="margin: 0 0 18px 0;">Identificamos <strong>${totalSemComunicacao} hotspots</strong> sem comunicação com nossa base. Solicitamos, por gentileza, que verifiquem a parte elétrica desses equipamentos e nos encaminhem uma foto comprovando que os dispositivos estão ligados.</p>`;
+            } else {
+                html += `<p style="margin: 0 0 18px 0;">Verificação de hotspots sem comunicação e em manutenção.</p>`;
+            }
+
+            if (semComunicacao.length > 0) {
+                html += `<p style="margin: 22px 0 10px 0; font-weight: 600; color: #dc2626;">Hotspots sem comunicação:</p>
+<table cellpadding="0" cellspacing="0" border="0" style="max-width: 400px; border-collapse: collapse; margin: 0 0 26px 0; font-size: 13px;">
+<thead><tr style="background-color: #f1f5f9;"><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">PREFIXO</th><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">STATUS</th></tr></thead>
+<tbody>`;
+                semComunicacao.forEach(i => { html += `<tr><td style="border: 1px solid #cbd5e1; padding: 9px 14px; font-family: Consolas, monospace;">${i.prefixo}</td><td style="border: 1px solid #cbd5e1; padding: 9px 14px; color: #dc2626; font-weight: 600;">${i.status}</td></tr>`; });
+                html += `</tbody></table>`;
+            }
+
+            if (emManutencao.length > 0) {
+                html += `<p style="margin: 22px 0 10px 0;">Favor confirmar se os seguintes prefixos permanecem em manutenção:</p>
+<table cellpadding="0" cellspacing="0" border="0" style="max-width: 400px; border-collapse: collapse; margin: 0 0 26px 0; font-size: 13px;">
+<thead><tr style="background-color: #f1f5f9;"><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">PREFIXO</th><th style="border: 1px solid #cbd5e1; padding: 9px 14px; text-align: left; font-weight: 600;">STATUS</th></tr></thead>
+<tbody>`;
+                emManutencao.forEach(i => { html += `<tr><td style="border: 1px solid #cbd5e1; padding: 9px 14px; font-family: Consolas, monospace;">${i.prefixo}</td><td style="border: 1px solid #cbd5e1; padding: 9px 14px; color: #d97706; font-weight: 600;">${i.status}</td></tr>`; });
+                html += `</tbody></table>`;
+            }
+
+            if (semComunicacao.length === 0 && emManutencao.length === 0) {
+                html += `<p style="margin: 0 0 14px 0; color: #64748b;">Nenhum equipamento com problemas encontrado nas garagens selecionadas.</p>`;
+            }
+
+            html += `<p style="margin: 22px 0 0 0;">Atenciosamente,<br><strong>Equipe WifiMaxx</strong></p>
+</div>`;
+            return html;
+        }
+
+        // ====================================================================
+        // UTILITÁRIOS
+        // ====================================================================
+        function getGreeting() {
+            const h = new Date().getHours();
+            return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+        }
+
+        function copiarAssunto() {
+            const assunto = document.getElementById('assuntoEmail').value;
+            if (!assunto) { emToast('Gere um e-mail primeiro', 'warning'); return; }
+            navigator.clipboard.writeText(assunto).then(() => {
+                animateCopyBtn('btnCopiarAssunto');
+                emToast('Assunto copiado!', 'success');
+            }).catch(() => emToast('Erro ao copiar', 'error'));
+        }
+
+        function gerarHtmlParaCopia(htmlOriginal) {
+            const temp = document.createElement('div');
+            temp.innerHTML = htmlOriginal;
+            temp.querySelectorAll('.bi, .badge, .em-empty-state').forEach(el => el.remove());
+            const content = temp.querySelector('div[style]') || temp;
+            let html = content.outerHTML || content.innerHTML;
+            html = html.replace(/\sclass="[^"]*"/g, '');
+            html = html.replace(/color:\s*inherit/g, 'color: #333333');
+            html = html.replace(/currentColor/g, '#dddddd');
+            html = html.replace(/>\s+</g, '><');
+            html = html.replace(/\n\s*/g, '');
+            html = html.replace(/<\/p>/g, '</p>\n');
+            html = html.replace(/<\/tr>/g, '</tr>\n');
+            html = html.replace(/<\/table>/g, '</table>\n');
+            return html.trim();
+        }
+
+        function gerarTextoLimpo(html) {
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            temp.querySelectorAll('table').forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                let t = '\n';
+                rows.forEach(row => { const cells = row.querySelectorAll('th, td'); t += Array.from(cells).map(c => c.textContent.trim().padEnd(20)).join(' | ') + '\n'; });
+                table.replaceWith(document.createTextNode(t));
+            });
+            temp.querySelectorAll('li').forEach(li => { li.textContent = '\u2022 ' + li.textContent; });
+            let text = temp.textContent || temp.innerText;
+            text = text.replace(/\n{3,}/g, '\n\n');
+            text = text.split('\n').map(l => l.trim()).join('\n');
+            return text.trim();
+        }
+
+        async function copiarEmail() {
+            const preview = document.getElementById('emailPreviewArea');
+            if (!lastGeneratedEmailHtml && preview.querySelector('.em-empty-state')) {
+                emToast('Gere um e-mail primeiro', 'warning'); return;
+            }
+
+            try {
+                const htmlOriginal = lastGeneratedEmailHtml || preview.innerHTML;
+                const htmlLimpo = gerarHtmlParaCopia(htmlOriginal);
+                const textoLimpo = gerarTextoLimpo(htmlOriginal);
+
+                if (navigator.clipboard && navigator.clipboard.write) {
+                    try {
+                        const hb = new Blob([htmlLimpo], { type: 'text/html' });
+                        const tb = new Blob([textoLimpo], { type: 'text/plain' });
+                        await navigator.clipboard.write([new ClipboardItem({ 'text/html': hb, 'text/plain': tb })]);
+                        animateCopyBtn('btnCopiarEmail');
+                        emToast('E-mail copiado com formatação!', 'success');
+                        return;
+                    } catch (e) { console.warn('ClipboardItem fallback:', e); }
+                }
+
+                // Fallback execCommand
+                const div = document.createElement('div');
+                div.innerHTML = htmlLimpo;
+                div.style.cssText = 'position:fixed;left:-9999px;top:0';
+                div.setAttribute('contenteditable', 'true');
+                document.body.appendChild(div);
+                const sel = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(div);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                const ok = document.execCommand('copy');
+                sel.removeAllRanges();
+                document.body.removeChild(div);
+                if (ok) { animateCopyBtn('btnCopiarEmail'); emToast('E-mail copiado!', 'success'); return; }
+
+                await navigator.clipboard.writeText(textoLimpo);
+                emToast('E-mail copiado como texto', 'info');
+            } catch (error) {
+                console.error('Erro ao copiar:', error);
+                emToast('Erro ao copiar e-mail', 'error');
+            }
+        }
+
+        function animateCopyBtn(btnId) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.classList.add('copied');
+            const icon = btn.querySelector('i');
+            const origClass = icon?.className;
+            if (icon) icon.className = 'bi bi-check-lg';
+            setTimeout(() => { btn.classList.remove('copied'); if (icon && origClass) icon.className = origClass; }, 2000);
+        }
+
+        function emToast(message, type = 'info') {
+            const icons = { success: 'check-circle-fill', error: 'x-circle-fill', warning: 'exclamation-triangle-fill', info: 'info-circle-fill' };
+            const t = document.createElement('div');
+            t.className = `em-toast ${type}`;
+            t.innerHTML = `<i class="bi bi-${icons[type] || 'info-circle-fill'}"></i>${message}`;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.animation = 'emSlideOut 0.3s ease forwards'; setTimeout(() => t.remove(), 300); }, 3000);
+        }
+
+        function logout() { window.location.href = '/logout'; }
+    </script>
+</body>
+</html>
